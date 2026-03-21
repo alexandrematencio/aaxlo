@@ -50,7 +50,7 @@ onMounted(() => {
     <HomeEmotional :skip="skipAnimations" />
 
     <!-- S7: Audit Form — Conversion -->
-    <AuditCTA :skip="skipAnimations" />
+    <AuditFlow mode="teaser" :skip="skipAnimations" />
 
     <!-- S8: Social Proof — Trust -->
     <HomeSocialProof :skip="skipAnimations" />
