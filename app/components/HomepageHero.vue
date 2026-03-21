@@ -118,7 +118,7 @@ watch(() => props.animate, (val) => {
             class="hero-cta tw-hide"
             @click.prevent="navigateWithStripes('/audit')"
           >
-            See what we'd fix first →
+            Get your free audit →
           </a>
         </div>
       </div>
@@ -140,7 +140,7 @@ watch(() => props.animate, (val) => {
             </svg>
           </span>
           <span class="nav-plus" aria-hidden="true">+</span>
-          <span class="nav-label tw-hide">SEE WHAT WE'D FIX FIRST</span>
+          <span class="nav-label tw-hide">GET YOUR FREE AUDIT</span>
           <span class="nav-plus" aria-hidden="true">+</span>
         </a>
         <a

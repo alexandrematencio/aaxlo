@@ -120,7 +120,7 @@ onMounted(() => {
     <section class="cta-section">
       <p class="cta-text tw-hide">Not sure which service you need?</p>
       <NuxtLink to="/audit" class="cta-link tw-hide">
-        Get a free audit and we'll tell you &rarr;
+        Get your free audit &rarr;
       </NuxtLink>
     </section>
   </div>

@@ -117,7 +117,7 @@ onMounted(() => {
       <h2 class="cta-title tw-hide">Ready to work with us?</h2>
       <p class="cta-text tw-hide">Start with a free audit or get in touch directly.</p>
       <div class="cta-links">
-        <NuxtLink to="/audit" class="cta-btn cta-btn--primary tw-hide">Get a free audit &rarr;</NuxtLink>
+        <NuxtLink to="/audit" class="cta-btn cta-btn--primary tw-hide">Get your free audit &rarr;</NuxtLink>
         <NuxtLink to="/contact" class="cta-btn cta-btn--secondary tw-hide">Contact us &rarr;</NuxtLink>
       </div>
     </section>

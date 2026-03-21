@@ -160,7 +160,7 @@ onMounted(() => {
     <section class="cta-section">
       <h2 class="cta-title tw-hide">Ready to level up your content?</h2>
       <p class="cta-text tw-hide">Get a free audit and see what your content strategy is missing.</p>
-      <NuxtLink to="/audit" class="cta-btn tw-hide">Get my free audit &rarr;</NuxtLink>
+      <NuxtLink to="/audit" class="cta-btn tw-hide">Get your free audit &rarr;</NuxtLink>
     </section>
   </div>
 </template>

@@ -153,7 +153,7 @@ onMounted(() => {
           style="opacity: 0; transform: translateY(12px)"
           @click.prevent="navigateWithStripes('/audit')"
         >
-          See what we'd fix first →
+          Get your free audit →
         </a>
       </div>
     </div>
