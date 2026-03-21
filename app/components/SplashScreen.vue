@@ -195,24 +195,35 @@ onMounted(async () => {
     const oTargetLeft = svgRect.left + 141 * pxPerUnit - groupRect.left
     const targetTop = svgRect.top - groupRect.top
 
-    // Single smooth scale+reposition — one continuous ease, no interruptions
+    // Single smooth scale+reposition using transform only (GPU-accelerated)
+    // Animating fontSize/left/top causes layout thrashing and stutters.
     const scaleDur = 0.6
     const scaleEase = 'power3.inOut'
+    const scaleFactor = targetFontSize / currentFontSize
+
+    // Calculate translation needed (from current position to target position)
+    // After scaling, the origin shifts — account for scale offset
+    const lDx = lTargetLeft - lStartLeft
+    const lDy = targetTop - lStartTop
+    const oDx = oTargetLeft - oStartLeft
+    const oDy = targetTop - oStartTop
 
     gsap.to(labKeepL, {
-      fontSize: targetFontSize,
-      left: lTargetLeft,
-      top: targetTop,
+      scale: scaleFactor,
+      x: lDx,
+      y: lDy,
       duration: scaleDur,
       ease: scaleEase,
+      transformOrigin: '0 0',
     })
 
     gsap.to(labKeepO, {
-      fontSize: targetFontSize,
-      left: oTargetLeft,
-      top: targetTop,
+      scale: scaleFactor,
+      x: oDx,
+      y: oDy,
       duration: scaleDur,
       ease: scaleEase,
+      transformOrigin: '0 0',
     })
 
     // Cross-fade near end of scale: HTML letters → SVG letters
