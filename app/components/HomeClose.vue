@@ -72,31 +72,41 @@ onMounted(() => {
 <template>
   <section ref="section" class="home-close">
     <div class="close-container">
-      <span class="close-label tw-hide">ONE MORE THING</span>
-      <h2 class="close-headline tw-hide">
-        Still here?
-      </h2>
+      <div class="close-cell">
+        <span class="close-label tw-hide">ONE MORE THING</span>
+        <h2 class="close-headline tw-hide">
+          Still here?
+        </h2>
+      </div>
 
-      <div class="close-paragraphs">
+      <div class="close-cell">
         <p class="close-para tw-hide">
           Good. Something on this page resonated.
         </p>
+      </div>
+
+      <div class="close-cell">
         <p class="close-para tw-hide">
           Most people who end up working with us didn't reach out the first time they landed here. They came back a month later, after watching a competitor pull ahead in search results, or after another week of meaning to sort out the website.
         </p>
+      </div>
+
+      <div class="close-cell">
         <p class="close-para tw-hide">
           You already picked out your problems up top. The audit turns them into a plan.
         </p>
       </div>
 
-      <a
-        href="/audit"
-        class="close-cta"
-        style="opacity: 0; transform: translateY(12px)"
-        @click.prevent="navigateWithStripes('/audit')"
-      >
-        Get your free audit →
-      </a>
+      <div class="close-cell">
+        <a
+          href="/audit"
+          class="close-cta"
+          style="opacity: 0; transform: translateY(12px)"
+          @click.prevent="navigateWithStripes('/audit')"
+        >
+          Get your free audit →
+        </a>
+      </div>
     </div>
 
   </section>
@@ -105,9 +115,27 @@ onMounted(() => {
 <style scoped>
 .home-close {
   position: relative;
-  background: var(--color-white);
-  padding: 120px clamp(32px, 6vw, 96px) 160px;
+  background: var(--color-cream);
+  padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
+  display: flex;
+  justify-content: center;
+}
+
+.tw-hide {
+  clip-path: inset(-0.1em 100% -0.25em 0);
+}
+
+.close-container {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-cell {
+  border: 0.5px solid #24272e;
+  padding: 12px;
 }
 
 .close-label {
@@ -117,26 +145,13 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: 32px;
-}
-
-.tw-hide {
-  clip-path: inset(-0.1em 100% -0.25em 0);
-}
-
-.close-container {
-  max-width: 560px;
-  margin: 0 auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  color: rgba(36, 39, 46, 0.5);
+  margin-bottom: 8px;
 }
 
 .close-headline {
   font-family: var(--font);
-  font-size: clamp(32px, 5vw, 52px);
+  font-size: clamp(32px, 5vw, 48px);
   font-weight: 600;
   color: var(--color-dark);
   line-height: 1.1;
@@ -144,76 +159,40 @@ onMounted(() => {
   margin: 0;
 }
 
-.close-paragraphs {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-top: 40px;
-}
-
 .close-para {
   font-family: var(--font);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300;
-  color: var(--color-muted);
+  color: var(--color-dark);
   line-height: 1.6;
   margin: 0;
-  text-align: center;
 }
 
 .close-cta {
   display: inline-block;
-  position: relative;
   font-family: var(--font);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 16px 40px;
-  background: var(--color-accent);
   color: var(--color-dark);
   text-decoration: none;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  overflow: hidden;
-  z-index: 1;
-  transition: color 0.4s;
-  margin-top: 40px;
-}
-.close-cta::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--color-dark);
-  transform: translate(-101%, 101%);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: -1;
-}
-.close-cta:hover::before {
-  transform: translate(0, 0);
+  transition: color 0.3s;
 }
 .close-cta:hover {
-  color: var(--color-cream);
+  color: var(--color-accent);
 }
 
 @media (max-width: 768px) {
   .home-close {
-    padding: 80px 20px 120px;
+    padding: 80px 20px;
   }
   .close-headline {
     font-size: clamp(28px, 7vw, 38px);
   }
   .close-para {
-    font-size: 16px;
+    font-size: 17px;
   }
-  .close-paragraphs {
-    gap: 20px;
-    margin-top: 32px;
-  }
-  .close-cta {
-    padding: 14px 32px;
-    font-size: 14px;
-    margin-top: 32px;
+  .close-cell {
+    padding: 10px;
   }
 }
 </style>
