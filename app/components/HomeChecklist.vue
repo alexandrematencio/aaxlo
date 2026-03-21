@@ -9,64 +9,68 @@ const section = ref(null)
 const { navigateWithStripes } = useStripeTransition()
 
 const checked = ref([false, false, false, false, false, false])
-const revealVisible = ref(false)
-const untilNowVisible = ref(false)
-const ctaVisible = ref(false)
 
 const statements = [
-  "Your website exists, but you wouldn't point a new customer to it right now.",
-  "You meant to post on social media this month. You didn't.",
-  "There are reviews about your business sitting unanswered.",
-  "You're not totally sure what comes up when someone Googles your business.",
-  "You've looked into getting help before. The quotes felt like they were meant for a bigger company.",
-  "You know something needs to change. You just don't know what to tackle first.",
+  {
+    text: "Your website exists, but you wouldn't point a new customer to it right now.",
+    service: 'Web',
+    fix: "We build fast, modern sites that make a strong first impression — designed to convert visitors into customers.",
+    link: '/services/web',
+  },
+  {
+    text: "You meant to post on social media this month. You didn't.",
+    service: 'Content',
+    fix: "We manage your social media end-to-end — strategy, creation, scheduling — so your brand stays visible without the effort.",
+    link: '/services/content',
+  },
+  {
+    text: "There are reviews about your business sitting unanswered.",
+    service: 'Automation',
+    fix: "We set up automated review monitoring and response workflows so nothing slips through the cracks.",
+    link: '/services/automation',
+  },
+  {
+    text: "You're not totally sure what comes up when someone Googles your business.",
+    service: 'Visibility',
+    fix: "We optimize your Google Business Profile, local SEO, and directory listings so you control what people find.",
+    link: '/services/visibility',
+  },
+  {
+    text: "You've looked into getting help before. The quotes felt like they were meant for a bigger company.",
+    service: 'Consulting',
+    fix: "AI handles the production work now. We deliver the same scope at a fraction of what agencies used to charge.",
+    link: '/services/consulting',
+  },
+  {
+    text: "You know something needs to change. You just don't know what to tackle first.",
+    service: 'Free Audit',
+    fix: "That's exactly what the audit is for — we analyze everything and tell you what to fix first.",
+    link: '/audit',
+  },
 ]
 
 function toggleCard(index) {
   checked.value[index] = !checked.value[index]
-}
 
-watch(checked, (val) => {
-  if (val.some(Boolean) && !revealVisible.value) {
-    revealVisible.value = true
+  // Animate the fix cell if opening
+  if (checked.value[index]) {
     nextTick(() => {
       const el = section.value
       if (!el) return
-      const revealEl = el.querySelector('.checklist-reveal')
-      const untilEl = el.querySelector('.checklist-until')
-      const ctaEl = el.querySelector('.checklist-cta')
-      if (revealEl) {
-        gsap.to(revealEl, {
-          clipPath: 'inset(-0.1em 0% -0.25em 0)',
-          duration: 0.18,
-          ease: 'steps(60)',
-        })
-      }
-      if (untilEl) {
-        gsap.to(untilEl, {
-          clipPath: 'inset(-0.1em 0% -0.25em 0)',
-          duration: 0.15,
-          ease: 'steps(8)',
-          delay: 0.25,
-          onComplete: () => {
-            untilNowVisible.value = true
-          },
-        })
-      }
-      if (ctaEl) {
-        gsap.to(ctaEl, {
-          opacity: 1,
-          y: 0,
-          duration: 0.2,
-          delay: 0.4,
-          onComplete: () => {
-            ctaVisible.value = true
-          },
+      const fixCells = el.querySelectorAll('.card-fix')
+      const fixCell = fixCells[index]
+      if (fixCell) {
+        gsap.from(fixCell, {
+          clipPath: 'inset(0 0 100% 0)',
+          duration: 0.3,
+          ease: 'power2.out',
         })
       }
     })
   }
-}, { deep: true })
+}
+
+const hasAnyChecked = computed(() => checked.value.some(Boolean))
 
 function showFinalState() {
   const el = section.value
@@ -118,42 +122,56 @@ onMounted(() => {
 <template>
   <section ref="section" class="home-checklist">
     <div class="checklist-container">
-      <h2 class="checklist-headline tw-hide">
-        Does any of this sound familiar?
-      </h2>
-
-      <div class="checklist-cards">
-        <button
-          v-for="(statement, i) in statements"
-          :key="i"
-          class="checklist-card"
-          :class="{ 'checklist-card--checked': checked[i] }"
-          style="opacity: 0; transform: translateY(8px)"
-          @click="toggleCard(i)"
-        >
-          <span class="checklist-check" aria-hidden="true">
-            <svg v-if="checked[i]" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8.5L6.5 12L13 4" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span class="checklist-text">{{ statement }}</span>
-        </button>
+      <div class="checklist-cell">
+        <h2 class="checklist-headline tw-hide">
+          Does any of this sound familiar?
+        </h2>
       </div>
 
-      <div v-if="revealVisible" class="checklist-reveal-wrap">
-        <p class="checklist-reveal tw-hide">
-          If even one of those hit home — you're not behind because you've been careless. You're behind because nobody gave you a realistic way to catch up.
-        </p>
-        <p class="checklist-until tw-hide">
-          Until now.
-        </p>
+      <div class="checklist-cards">
+        <div v-for="(statement, i) in statements" :key="i" class="card-group">
+          <button
+            class="checklist-card"
+            :class="{ 'checklist-card--checked': checked[i] }"
+            style="opacity: 0; transform: translateY(8px)"
+            @click="toggleCard(i)"
+          >
+            <span class="checklist-check" aria-hidden="true">
+              <svg v-if="checked[i]" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8.5L6.5 12L13 4" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="checklist-text">{{ statement.text }}</span>
+          </button>
+
+          <!-- Fix suggestion cell — appears when checked -->
+          <div v-if="checked[i]" class="card-fix">
+            <span class="fix-service">{{ statement.service }}</span>
+            <p class="fix-text">{{ statement.fix }}</p>
+            <a
+              :href="statement.link"
+              class="fix-link"
+              @click.prevent="navigateWithStripes(statement.link)"
+            >
+              {{ statement.service === 'Free Audit' ? 'GET YOUR FREE AUDIT →' : 'LEARN MORE →' }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA — appears when any checkbox is checked -->
+      <div v-if="hasAnyChecked" class="checklist-bottom">
+        <div class="checklist-cell">
+          <p class="checklist-summary">
+            The audit covers all of this — and tells you exactly what to fix first.
+          </p>
+        </div>
         <a
           href="/audit"
           class="checklist-cta"
-          style="opacity: 0; transform: translateY(12px)"
           @click.prevent="navigateWithStripes('/audit')"
         >
-          Get your free audit →
+          GET YOUR FREE AUDIT →
         </a>
       </div>
     </div>
@@ -167,6 +185,8 @@ onMounted(() => {
   background: var(--color-white);
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
+  display: flex;
+  justify-content: center;
 }
 
 .tw-hide {
@@ -174,8 +194,19 @@ onMounted(() => {
 }
 
 .checklist-container {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.checklist-cell {
+  border: 0.5px solid #24272e;
+  border-top: none;
+  padding: 12px;
+}
+.checklist-cell:first-child {
+  border-top: 0.5px solid #24272e;
 }
 
 .checklist-headline {
@@ -185,11 +216,16 @@ onMounted(() => {
   color: var(--color-dark);
   line-height: 1.15;
   letter-spacing: -0.02em;
-  margin: 0 0 48px 0;
-  text-align: left;
+  margin: 0;
 }
 
+/* ── Card grid ── */
 .checklist-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-group {
   display: flex;
   flex-direction: column;
 }
@@ -198,22 +234,25 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  padding: 20px 24px;
+  padding: 14px 12px;
   border: 0.5px solid #24272e;
+  border-top: none;
   background: transparent;
   cursor: pointer;
-  margin-bottom: 12px;
   text-align: left;
   font-family: var(--font);
   font-size: 16px;
   font-weight: 300;
   color: var(--color-dark);
   line-height: 1.5;
-  transition: background 0.25s, border-color 0.25s, border-left-width 0.25s;
+  transition: background 0.25s;
+}
+
+.card-group:first-child .checklist-card {
+  border-top: none; /* headline cell above handles top border */
 }
 
 .checklist-card--checked {
-  border-left: 0.5px solid #24272e;
   background: var(--color-cream);
 }
 
@@ -231,51 +270,89 @@ onMounted(() => {
   flex: 1;
 }
 
-.checklist-reveal-wrap {
-  margin-top: 48px;
+/* ── Fix suggestion cell ── */
+.card-fix {
+  border: 0.5px solid #24272e;
+  border-top: none;
+  padding: 12px 12px 12px 48px; /* 48px left = aligns with text after checkbox */
+  background: var(--color-cream);
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
 }
 
-.checklist-reveal {
+.fix-service {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.fix-text {
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--color-dark);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.fix-link {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+.fix-link:hover {
+  color: var(--color-dark);
+}
+
+/* ── Bottom CTA section ── */
+.checklist-bottom {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+}
+
+.checklist-summary {
   font-family: var(--font);
   font-size: 18px;
   font-weight: 300;
   color: var(--color-dark);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
-.checklist-until {
-  font-family: var(--font);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color-accent);
-  line-height: 1.6;
-  margin: 12px 0 0 0;
-}
-
 .checklist-cta {
-  display: inline-block;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 16px 40px;
-  background: var(--color-accent);
+  background: #FF8270;
   color: var(--color-dark);
   text-decoration: none;
-  border: none;
+  border: 0.5px solid #24272e;
+  border-top: none;
   border-radius: 0;
   cursor: pointer;
+  position: relative;
   overflow: hidden;
   z-index: 1;
   transition: color 0.4s;
-  margin-top: 32px;
-  align-self: flex-start;
 }
 .checklist-cta::before {
   content: '';
@@ -299,15 +376,23 @@ onMounted(() => {
   }
   .checklist-headline {
     font-size: clamp(24px, 6vw, 32px);
-    margin-bottom: 32px;
   }
   .checklist-card {
-    padding: 16px 18px;
+    padding: 12px 10px;
     font-size: 15px;
+  }
+  .card-fix {
+    padding: 10px 10px 10px 38px;
+  }
+  .fix-text {
+    font-size: 14px;
   }
   .checklist-cta {
     padding: 14px 32px;
     font-size: 14px;
+  }
+  .checklist-cell {
+    padding: 10px;
   }
 }
 </style>
