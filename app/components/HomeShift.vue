@@ -14,8 +14,6 @@ function showFinalState() {
   el.querySelectorAll('.tw-hide').forEach(t => {
     gsap.set(t, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   })
-  const standaloneLine = el.querySelector('.shift-standalone')
-  if (standaloneLine) gsap.set(standaloneLine, { opacity: 1 })
 }
 
 onMounted(() => {
@@ -43,19 +41,17 @@ onMounted(() => {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.12, ease: 'steps(22)',
           }, '-=0.1')
 
-          /* Block A typewriter (slower) */
-          tl.to(el.querySelector('.shift-block-a'), {
-            clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.45, ease: 'steps(60)',
-          }, '+=0.08')
+          /* Block A typewriter (all .shift-block-a elements) */
+          const blocks = el.querySelectorAll('.shift-block-a')
+          blocks.forEach((b, i) => {
+            tl.to(b, {
+              clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.45, ease: 'steps(60)',
+            }, i === 0 ? '+=0.08' : '-=0.1')
+          })
 
-          /* Block B typewriter */
-          tl.to(el.querySelector('.shift-block-b'), {
-            clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, ease: 'steps(50)',
-          }, '+=0.06')
-
-          /* Standalone line fade in */
+          /* Standalone line typewriter */
           tl.to(el.querySelector('.shift-standalone'), {
-            opacity: 1, duration: 0.12,
+            clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, ease: 'steps(30)',
           }, '+=0.08')
 
           observer.disconnect()
@@ -71,22 +67,27 @@ onMounted(() => {
 <template>
   <section ref="section" class="home-shift">
     <div class="shift-container">
-      <span class="shift-label tw-hide">THE SHIFT</span>
-      <h2 class="shift-headline tw-hide">
-        Something changed recently.
-      </h2>
+      <div class="shift-cell">
+        <span class="shift-label tw-hide">THE SHIFT</span>
+        <h2 class="shift-headline tw-hide">
+          Something changed recently.
+        </h2>
+      </div>
 
-      <p class="shift-block-a tw-hide">
-        Two years ago, getting a decent website built, your social media running properly, your search rankings sorted, and your customer communications automated would have meant hiring four or five people. The bill would have looked like it.
-      </p>
+      <div class="shift-cell">
+        <p class="shift-block-a tw-hide">
+          Two years ago, getting a decent website built, your social media running properly, your search rankings sorted, and your customer communications automated would have meant hiring four or five people. The bill would have looked like it.
+        </p>
+        <p class="shift-block-a tw-hide" style="margin-top: 24px">
+          Today, AI does roughly 80% of that production work. Not the thinking. Not the decisions about what makes sense for your business. The repetitive, time-heavy part that used to eat most of the budget.
+        </p>
+      </div>
 
-      <p class="shift-block-b tw-hide">
-        Today, AI does roughly 80% of that production work. Not the thinking. Not the decisions about what makes sense for your business. The repetitive, time-heavy part that used to eat most of the budget.
-      </p>
-
-      <p class="shift-standalone" style="opacity: 0">
-        Some businesses have already figured this out.
-      </p>
+      <div class="shift-cell">
+        <p class="shift-standalone tw-hide">
+          Some businesses have already figured this out.
+        </p>
+      </div>
     </div>
 
   </section>
@@ -95,9 +96,27 @@ onMounted(() => {
 <style scoped>
 .home-shift {
   position: relative;
-  background: var(--color-dark);
-  padding: 160px clamp(32px, 6vw, 96px);
+  background: var(--color-cream);
+  padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
+  display: flex;
+  justify-content: center;
+}
+
+.tw-hide {
+  clip-path: inset(-0.1em 100% -0.25em 0);
+}
+
+.shift-container {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.shift-cell {
+  border: 0.5px solid #24272e;
+  padding: 12px;
 }
 
 .shift-label {
@@ -107,23 +126,15 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-  margin-bottom: 32px;
-}
-
-.tw-hide {
-  clip-path: inset(-0.1em 100% -0.25em 0);
-}
-
-.shift-container {
-  max-width: 680px;
+  color: rgba(36, 39, 46, 0.5);
+  margin-bottom: 8px;
 }
 
 .shift-headline {
   font-family: var(--font);
-  font-size: clamp(32px, 4.5vw, 52px);
+  font-size: clamp(32px, 4.5vw, 48px);
   font-weight: 600;
-  color: var(--color-cream);
+  color: var(--color-dark);
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0;
@@ -133,49 +144,33 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 20px;
   font-weight: 300;
-  color: rgba(238, 238, 238, 0.7);
+  color: var(--color-dark);
   line-height: 1.6;
-  margin: 48px 0 0 0;
-}
-
-.shift-block-b {
-  font-family: var(--font);
-  font-size: 20px;
-  font-weight: 300;
-  color: rgba(238, 238, 238, 0.7);
-  line-height: 1.6;
-  margin: 64px 0 0 0;
+  margin: 0;
 }
 
 .shift-standalone {
   font-family: var(--font);
   font-size: 20px;
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--color-dark);
   line-height: 1.6;
-  margin: 80px 0 0 0;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
   .home-shift {
-    padding: 100px 20px;
+    padding: 80px 20px;
   }
   .shift-headline {
     font-size: clamp(26px, 6vw, 36px);
   }
   .shift-block-a,
-  .shift-block-b,
   .shift-standalone {
     font-size: 17px;
   }
-  .shift-block-a {
-    margin-top: 36px;
-  }
-  .shift-block-b {
-    margin-top: 48px;
-  }
-  .shift-standalone {
-    margin-top: 56px;
+  .shift-cell {
+    padding: 10px;
   }
 }
 </style>
