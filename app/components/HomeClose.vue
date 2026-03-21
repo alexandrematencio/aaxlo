@@ -174,17 +174,37 @@ onMounted(() => {
 
 .close-cta {
   display: inline-block;
+  position: relative;
   font-family: var(--font);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  color: var(--color-cream);
-  text-decoration: none;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: color 0.3s;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  background: #FF8270;
+  color: var(--color-dark);
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.4s;
+}
+.close-cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--color-cream);
+  transform: translate(-101%, 101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+.close-cta:hover::before {
+  transform: translate(0, 0);
 }
 .close-cta:hover {
-  color: var(--color-accent);
+  color: var(--color-dark);
 }
 
 @media (max-width: 768px) {
