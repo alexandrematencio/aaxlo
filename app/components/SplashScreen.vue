@@ -85,21 +85,21 @@ onMounted(async () => {
   tl.to(a1.value, { opacity: 1, duration: 0.2, ease: 'power2.out' })
   .to(a1.value, { x: impactX, duration: 0.7, ease: 'power2.in' })    // ~0.9s
 
-  // PHASE 2 ~0.9s
+  // PHASE 2 ~0.9s — A1 bounces back, A2 pops in with elastic overshoot
   gsap.set(a2.value, { opacity: 0, scale: 0, svgOrigin: '55.6 18.5' })
 
-  tl.to(a1.value, { x: 0, duration: 0.5, ease: 'power2.out' })
+  tl.to(a1.value, { x: 0, duration: 0.55, ease: 'elastic.out(1, 0.6)' })
   .to(a2.value, {
-    opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(2.5)',
+    opacity: 1, scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.55)',
   }, '<+=0.05')                                                        // ~1.45s
 
-  // PHASE 3 ~1.45s
+  // PHASE 3 ~1.45s — × spins in with bouncy scale
   gsap.set(xLetter.value, { opacity: 0 })
   gsap.set(multiEl.value, { scale: 0, rotation: -180 })
 
   tl.to(multiEl.value, {
     opacity: 1, scale: 1.1, rotation: 0,
-    duration: 0.25, ease: 'back.out(1.7)',
+    duration: 0.35, ease: 'elastic.out(1, 0.5)',
   }, '+=0.08')
   .to(multiEl.value, {
     rotation: 360 * 3 + 45, scale: 0.7, opacity: 0,
@@ -197,8 +197,8 @@ onMounted(async () => {
 
     // Single smooth scale+reposition using transform only (GPU-accelerated)
     // Animating fontSize/left/top causes layout thrashing and stutters.
-    const scaleDur = 0.6
-    const scaleEase = 'power3.inOut'
+    const scaleDur = 0.7
+    const scaleEase = 'elastic.out(1, 0.65)'
     const scaleFactor = targetFontSize / currentFontSize
 
     // Calculate translation needed (from current position to target position)
@@ -227,10 +227,10 @@ onMounted(async () => {
     })
 
     // Cross-fade near end of scale: HTML letters → SVG letters
-    gsap.to(labKeepL, { opacity: 0, duration: 0.15, delay: scaleDur - 0.18, ease: 'power1.in' })
-    gsap.to(labKeepO, { opacity: 0, duration: 0.15, delay: scaleDur - 0.18, ease: 'power1.in' })
-    gsap.to(lLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.18, ease: 'power1.out' })
-    gsap.to(oLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.18, ease: 'power1.out' })
+    gsap.to(labKeepL, { opacity: 0, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.in' })
+    gsap.to(labKeepO, { opacity: 0, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.in' })
+    gsap.to(lLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.out' })
+    gsap.to(oLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.out' })
   })
 
   // Reserve time on the timeline matching the scale animation duration
@@ -243,17 +243,17 @@ onMounted(async () => {
   gsap.set(stripeRects, { scaleY: 0 })
   gsap.set(glyphGroup.value, { opacity: 0 })
 
-  tl.to(solidDisk.value, { opacity: 1, duration: 0.25, ease: 'power2.inOut' }, '+=0.1')
-  .to(oLetter.value, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.15')
+  tl.to(solidDisk.value, { opacity: 1, scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.6)', svgOrigin: '158.5 18.5' }, '+=0.1')
+  .to(oLetter.value, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.2')
   .to(stripeRects, {
-    scaleY: 1, duration: 0.03, stagger: 0.02, ease: 'power1.out',
+    scaleY: 1, duration: 0.08, stagger: 0.025, ease: 'back.out(3)',
   }, '+=0.08')
   .to(morphGroup.value, {
     rotation: -45, svgOrigin: '158.5 18.5',
-    duration: 0.35, ease: 'power3.inOut',
+    duration: 0.45, ease: 'elastic.out(1, 0.7)',
   }, '+=0.08')
   .to(morphGroup.value, { opacity: 0, duration: 0.2, ease: 'power2.inOut' }, '+=0.05')
-  .to(glyphGroup.value, { opacity: 1, duration: 0.2, ease: 'power2.inOut' }, '<')  // ~4.1s
+  .to(glyphGroup.value, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.5)', svgOrigin: '158.5 18.5' }, '<')  // ~4.1s
 
   // PHASE 8: Logo scales down and flies to the header logo position
   tl.call(() => emit('reveal'), null, '+=0.15')
