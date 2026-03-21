@@ -15,6 +15,8 @@ function showFinalState() {
   el.querySelectorAll('.tw-hide').forEach(t => {
     gsap.set(t, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   })
+  const cta = el.querySelector('.shift-cta')
+  if (cta) gsap.set(cta, { opacity: 1, y: 0 })
 }
 
 onMounted(() => {
