@@ -191,6 +191,45 @@ function toggleChallenge(challenge) {
 
 const shakeChips = ref(false)
 
+// Referral options
+const referralOptions = ['Word of mouth', 'Google', 'Social media', 'Other']
+
+function selectReferral(source) {
+  formData.referralSource = source
+}
+
+const showingSuccess = ref(false)
+
+function showSuccess() {
+  const el = stepContainer.value
+  if (!el) { showingSuccess.value = true; return }
+  gsap.to(el, { opacity: 0, duration: 0.2, ease: 'power2.in', onComplete: () => {
+    showingSuccess.value = true
+    gsap.set(el, { opacity: 1 })
+    nextTick(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
+      const glyph = el.querySelector('.success-glyph')
+      if (glyph) tl.from(glyph, { scale: 0.8, opacity: 0, duration: 0.3 })
+      const headline = el.querySelector('.success-title')
+      if (headline) tl.to(headline, { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.3, ease: 'steps(12)' }, '-=0.1')
+      const body = el.querySelector('.success-text')
+      if (body) tl.from(body, { opacity: 0, y: 8, duration: 0.3 }, '-=0.1')
+      const trust = el.querySelector('.success-trust')
+      if (trust) tl.from(trust, { opacity: 0, duration: 0.25 }, '-=0.05')
+      const link = el.querySelector('.success-link')
+      if (link) tl.from(link, { opacity: 0, duration: 0.25 })
+    })
+  }})
+}
+
+function handlePersonalizeDone() {
+  showSuccess()
+}
+
+function skipPersonalize() {
+  showSuccess()
+}
+
 function onTeaserSubmit() {
   if (formData.businessName.trim().length >= 2) {
     navigateWithStripes('/audit?business=' + encodeURIComponent(formData.businessName.trim()))
@@ -400,6 +439,60 @@ onMounted(() => {
           </button>
         </div>
         <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+      </div>
+
+      <!-- Step 5: Email -->
+      <div v-if="currentStep === 5 && !submitted" class="step">
+        <label for="flow-email" class="step-label">Where should we send your report?</label>
+        <input
+          id="flow-email"
+          v-model="formData.email"
+          type="email"
+          class="flow-input"
+          placeholder="you@example.com"
+          :aria-describedby="errors.email ? 'err-email' : undefined"
+          @keydown.enter.prevent="goNext"
+        />
+        <span v-if="errors.email" id="err-email" class="flow-error" role="alert">{{ errors.email }}</span>
+        <button type="button" class="flow-next flow-next--submit" @click="goNext">Run my free audit &rarr;</button>
+      </div>
+
+      <!-- Step 6: Personalize (post-submit, optional) -->
+      <div v-if="currentStep === 6 && submitted && !showingSuccess" class="step">
+        <span class="step-label">Want us to personalize the report?</span>
+        <input
+          v-model="formData.name"
+          type="text"
+          class="flow-input"
+          placeholder="Your name"
+        />
+        <span class="step-hint">How did you hear about us?</span>
+        <div class="chip-grid">
+          <button
+            v-for="source in referralOptions"
+            :key="source"
+            type="button"
+            class="chip"
+            :class="{ 'chip-selected': formData.referralSource === source }"
+            :aria-pressed="formData.referralSource === source"
+            @click="selectReferral(source)"
+          >
+            {{ source }}
+          </button>
+        </div>
+        <div class="personalize-actions">
+          <button type="button" class="flow-next" @click="handlePersonalizeDone">Done</button>
+          <button type="button" class="skip-link" @click="skipPersonalize">No thanks, I'm good</button>
+        </div>
+      </div>
+
+      <!-- Success State -->
+      <div v-if="showingSuccess" class="step success-step">
+        <img src="/logo-glyph.svg" alt="" class="success-glyph" />
+        <h3 class="success-title tw-hide">We're on it.</h3>
+        <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
+        <p class="success-trust">No commitment. No card. No calls unless you ask.</p>
+        <NuxtLink to="/" class="success-link">&larr; Back to homepage</NuxtLink>
       </div>
     </div>
   </div>
@@ -704,6 +797,71 @@ onMounted(() => {
   color: var(--color-muted);
   margin-top: -8px;
 }
+
+/* ── Submit button variant ── */
+.flow-next--submit {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+/* ── Personalize ── */
+.personalize-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 8px;
+}
+.skip-link {
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--color-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.skip-link:hover { color: var(--color-dark); }
+/* ── Success ── */
+.success-step {
+  text-align: center;
+  align-items: center;
+  padding: 32px 0;
+}
+.success-glyph {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 24px;
+}
+.success-title {
+  font-family: var(--font);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+.success-text {
+  font-family: var(--font);
+  font-size: 16px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+.success-trust {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--color-muted);
+  opacity: 0.6;
+  margin-top: 16px;
+}
+.success-link {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-top: 24px;
+}
+.success-link:hover { text-decoration: underline; }
 
 @media (max-width: 768px) {
   .flow-card { padding: 32px 24px; }
