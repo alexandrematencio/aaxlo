@@ -97,7 +97,7 @@ onMounted(() => {
         </p>
       </div>
 
-      <div class="close-cell">
+      <div class="close-cell close-cell--cta">
         <a
           href="/audit"
           class="close-cta"
@@ -141,6 +141,9 @@ onMounted(() => {
 .close-cell:first-child {
   border-top: 0.5px solid rgba(255, 255, 255, 0.15);
 }
+.close-cell--cta {
+  padding: 0;
+}
 
 .close-label {
   display: block;
@@ -173,8 +176,11 @@ onMounted(() => {
 }
 
 .close-cta {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  width: 100%;
   font-family: var(--font);
   font-size: 16px;
   font-weight: 500;
