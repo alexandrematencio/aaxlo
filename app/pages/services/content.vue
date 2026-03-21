@@ -169,7 +169,7 @@ onMounted(() => {
 .detail-page { position: relative; min-height: 100vh; background: var(--color-cream); }
 .tw-hide { clip-path: inset(-0.1em 100% -0.25em 0); }
 
-.hero { position: relative; border-bottom: 0.5px solid #24272e; }
+.hero { position: relative; }
 .hero-header { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; }
 .back-link { font-family: var(--font); font-size: 12px; font-weight: 300; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
 .back-link:hover { color: var(--color-dark); }

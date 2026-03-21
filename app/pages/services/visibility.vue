@@ -196,7 +196,7 @@ onMounted(() => {
 .tw-hide { clip-path: inset(-0.1em 100% -0.25em 0); }
 
 /* ── HERO HEADER ── */
-.hero { position: relative; border-bottom: 0.5px solid #24272e; }
+.hero { position: relative; }
 
 .hero-header {
   position: relative;
