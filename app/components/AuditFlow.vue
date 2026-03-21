@@ -321,37 +321,46 @@ onMounted(() => {
 <template>
   <section v-if="mode === 'teaser'" ref="section" class="audit-cta-section">
     <div class="audit-cta-inner">
-      <span class="audit-label tw-hide">FREE AUDIT</span>
-      <h2 class="cta-headline tw-hide">
-        Find out what's costing you customers right now.
-      </h2>
-      <p class="cta-subtitle tw-hide">
-        We scan your full digital presence — website, search visibility, reviews, social media, how you stack up against competitors — and put it in a clear report with scores and a plan. Takes us 24 hours. Costs you nothing.
-      </p>
+      <div class="audit-cell">
+        <span class="audit-label tw-hide">FREE AUDIT</span>
+        <h2 class="cta-headline tw-hide">
+          Find out what's costing you customers right now.
+        </h2>
+      </div>
 
-      <form class="audit-form" @submit.prevent="onTeaserSubmit">
-        <div class="audit-form-fields">
-          <input
-            v-model="formData.businessName"
-            type="text"
-            class="audit-input"
-            placeholder="Your business name"
+      <div class="audit-cell">
+        <p class="cta-subtitle tw-hide">
+          We scan your full digital presence — website, search visibility, reviews, social media, how you stack up against competitors — and put it in a clear report with scores and a plan. Takes us 24 hours. Costs you nothing.
+        </p>
+      </div>
+
+      <div class="audit-cell">
+        <form class="audit-form" @submit.prevent="onTeaserSubmit">
+          <div class="audit-form-fields">
+            <input
+              v-model="formData.businessName"
+              type="text"
+              class="audit-input"
+              placeholder="Your business name"
+              style="opacity: 0; transform: translateY(8px)"
+            />
+          </div>
+          <button
+            type="submit"
+            class="cta-button"
             style="opacity: 0; transform: translateY(8px)"
-          />
-        </div>
-        <button
-          type="submit"
-          class="cta-button"
-          style="opacity: 0; transform: translateY(8px)"
-        >
-          Start my free audit →
-        </button>
-      </form>
+          >
+            Start my free audit →
+          </button>
+        </form>
+      </div>
 
-      <p class="cta-small" style="opacity: 0">
-        No commitment. No card. No calls unless you ask for them.<br />
-        You get a full report with specific recommendations within 24 hours — whether you work with us after that or not.
-      </p>
+      <div class="audit-cell">
+        <p class="cta-small" style="opacity: 0">
+          No commitment. No card. No calls unless you ask for them.<br />
+          You get a full report with specific recommendations within 24 hours — whether you work with us after that or not.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -501,9 +510,11 @@ onMounted(() => {
 <style scoped>
 .audit-cta-section {
   position: relative;
-  background: var(--color-accent);
+  background: var(--color-cream);
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
+  display: flex;
+  justify-content: center;
 }
 
 /* -- tw-hide -- */
@@ -519,21 +530,24 @@ onMounted(() => {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(36, 39, 46, 0.5);
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 }
 
 .audit-cta-inner {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+}
+
+.audit-cell {
+  border: 0.5px solid #24272e;
+  padding: 12px;
 }
 
 .cta-headline {
   font-family: var(--font);
-  font-size: clamp(32px, 5vw, 52px);
+  font-size: clamp(32px, 5vw, 48px);
   font-weight: 600;
   color: var(--color-dark);
   line-height: 1.1;
@@ -542,19 +556,16 @@ onMounted(() => {
 
 .cta-subtitle {
   font-family: var(--font);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300;
-  color: rgba(36, 39, 46, 0.7);
-  line-height: 1.5;
-  max-width: 580px;
-  margin-top: 24px;
+  color: var(--color-dark);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* -- Form -- */
 .audit-form {
   width: 100%;
-  max-width: 420px;
-  margin-top: 48px;
 }
 
 .audit-form-fields {
@@ -565,10 +576,10 @@ onMounted(() => {
 
 .audit-input {
   width: 100%;
-  padding: 16px 20px;
+  padding: 14px 16px;
   font-family: var(--font);
   font-size: 16px;
-  background: var(--color-white, #fcfcfc);
+  background: transparent;
   border: 0.5px solid #24272e;
   border-radius: 0;
   color: var(--color-dark);
@@ -590,39 +601,24 @@ onMounted(() => {
 .cta-button {
   display: block;
   width: 100%;
-  position: relative;
   font-family: var(--font);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 18px;
+  padding: 16px;
   background: var(--color-dark);
   color: var(--color-cream);
   text-decoration: none;
   border: none;
   border-radius: 0;
   cursor: pointer;
-  overflow: hidden;
-  z-index: 1;
-  transition: color 0.4s;
-  margin-top: 24px;
-}
-.cta-button::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--color-accent);
-  transform: translate(-101%, 101%);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: -1;
-}
-.cta-button:hover::before {
-  transform: translate(0, 0);
+  transition: background 0.3s;
+  margin-top: 16px;
 }
 .cta-button:hover {
+  background: var(--color-accent);
   color: var(--color-dark);
-  border: 0.5px solid #24272e;
 }
 
 .cta-small {
@@ -631,7 +627,7 @@ onMounted(() => {
   font-weight: 300;
   color: rgba(36, 39, 46, 0.5);
   line-height: 1.6;
-  margin-top: 32px;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -642,15 +638,10 @@ onMounted(() => {
     font-size: clamp(26px, 6vw, 36px);
   }
   .cta-subtitle {
-    font-size: 16px;
+    font-size: 17px;
   }
-  .audit-input {
-    padding: 14px 16px;
-    font-size: 15px;
-  }
-  .cta-button {
-    padding: 16px;
-    font-size: 14px;
+  .audit-cell {
+    padding: 10px;
   }
 }
 
