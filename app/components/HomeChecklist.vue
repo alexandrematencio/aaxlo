@@ -252,7 +252,12 @@ onMounted(() => {
   border-top: none; /* headline cell above handles top border */
 }
 
-.checklist-card--checked {
+.checklist-card:hover {
+  background: rgba(36, 39, 46, 0.03);
+}
+
+.checklist-card--checked,
+.checklist-card--checked:hover {
   background: var(--color-cream);
 }
 
