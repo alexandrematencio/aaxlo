@@ -580,7 +580,7 @@ onMounted(() => {
   appearance: none;
 }
 .audit-input::placeholder { color: var(--color-muted, #6e7381); }
-.audit-input:focus { border-color: var(--color-dark); }
+.audit-input:focus { border-color: var(--color-accent); }
 
 .cta-button {
   display: block;
