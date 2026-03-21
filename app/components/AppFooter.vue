@@ -164,7 +164,7 @@ onMounted(() => {
   position: relative;
   background: var(--color-dark);
   padding: 96px;
-  border-top: 0.5px solid #24272e;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 
 .footer-inner {
