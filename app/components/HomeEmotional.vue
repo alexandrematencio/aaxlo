@@ -96,7 +96,7 @@ onMounted(() => {
 <style scoped>
 .home-emotional {
   position: relative;
-  background: var(--color-cream);
+  background: #FFF1EF;
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
   display: flex;

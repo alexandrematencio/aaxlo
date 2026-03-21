@@ -510,7 +510,7 @@ onMounted(() => {
 <style scoped>
 .audit-cta-section {
   position: relative;
-  background: var(--color-cream);
+  background: #FFDAD4;
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
   display: flex;

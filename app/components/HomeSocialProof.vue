@@ -109,7 +109,7 @@ onMounted(() => {
 <style scoped>
 .home-social-proof {
   position: relative;
-  background: var(--color-cream);
+  background: #F2F3F5;
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
   display: flex;

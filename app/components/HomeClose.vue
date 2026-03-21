@@ -115,7 +115,7 @@ onMounted(() => {
 <style scoped>
 .home-close {
   position: relative;
-  background: var(--color-cream);
+  background: #24272e;
   padding: 120px clamp(32px, 6vw, 96px);
   border-top: 0.5px solid #24272e;
   display: flex;
@@ -134,7 +134,7 @@ onMounted(() => {
 }
 
 .close-cell {
-  border: 0.5px solid #24272e;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
   padding: 12px;
 }
 
@@ -145,7 +145,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(36, 39, 46, 0.5);
+  color: rgba(255, 255, 255, 0.3);
   margin-bottom: 8px;
 }
 
@@ -153,7 +153,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: clamp(32px, 5vw, 48px);
   font-weight: 600;
-  color: var(--color-dark);
+  color: var(--color-cream);
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0;
@@ -163,7 +163,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 20px;
   font-weight: 300;
-  color: var(--color-dark);
+  color: rgba(238, 238, 238, 0.7);
   line-height: 1.6;
   margin: 0;
 }
@@ -173,7 +173,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 18px;
   font-weight: 500;
-  color: var(--color-dark);
+  color: var(--color-cream);
   text-decoration: none;
   transition: color 0.3s;
 }
