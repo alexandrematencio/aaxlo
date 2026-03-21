@@ -200,7 +200,9 @@ watch(() => props.animate, (val) => {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
   background: var(--color-cream);
 }
 
@@ -309,7 +311,7 @@ watch(() => props.animate, (val) => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr 1fr;
-  flex: 1;
+  flex-shrink: 0;
 }
 
 /* ── Nav cells ── */
@@ -439,7 +441,9 @@ watch(() => props.animate, (val) => {
 
 @media (max-width: 768px) {
   .homepage-hero {
-    min-height: auto;
+    height: auto;
+    max-height: none;
+    overflow: visible;
   }
   .hero-copy-area {
     padding: 48px 20px;
