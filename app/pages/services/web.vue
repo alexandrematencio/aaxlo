@@ -182,7 +182,7 @@ onMounted(() => {
 .hero-title { font-family: var(--font); font-size: 48px; font-weight: 600; color: var(--color-dark); line-height: 1.05; letter-spacing: -0.02em; }
 .hero-desc { font-family: var(--font); font-size: 18px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 
-.features-section { padding: 96px 80px; }
+.features-section { padding: 96px 80px; border-top: 0.5px solid #24272e; }
 .section-label { display: block; font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 48px; }
 .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 64px; }
 .feat-card { display: flex; flex-direction: column; gap: 12px; }
