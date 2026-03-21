@@ -263,6 +263,7 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   padding: 16px 40px;
   background: var(--color-accent);
   color: var(--color-dark);

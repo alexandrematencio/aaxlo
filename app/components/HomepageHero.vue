@@ -108,7 +108,7 @@ watch(() => props.animate, (val) => {
       <div class="hero-copy-area">
         <div class="hero-copy">
           <h1 class="hero-headline tw-hide">
-            You already know what's wrong with your online presence.
+            You might already know what's wrong with your online presence.
           </h1>
           <p class="hero-sub hero-sub-delayed tw-hide">
             You just haven't had time to fix it.
@@ -267,6 +267,7 @@ watch(() => props.animate, (val) => {
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   padding: 16px 40px;
   background: var(--color-accent);
   color: var(--color-dark);

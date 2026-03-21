@@ -173,6 +173,8 @@ onMounted(() => {
   font-weight: 500;
   color: var(--color-dark);
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   transition: color 0.3s;
 }
 .social-cta:hover {

@@ -414,17 +414,19 @@ onUnmounted(() => {
   font-family: var(--font, 'Switzer', sans-serif);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--color-dark, #24272e);
-  background: none;
+  background: #FF8270;
   border-left: 0.5px solid #24272e;
   text-decoration: none;
   overflow: hidden;
-  transition: color 0.3s;
+  transition: color 0.4s;
+  cursor: pointer;
 }
 
 .header-cta:hover {
-  color: var(--color-accent, #ff8270);
+  color: var(--color-cream, #fff1ef);
 }
 
 .cta-label {
@@ -433,7 +435,16 @@ onUnmounted(() => {
 }
 
 .cta-wipe {
-  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--color-dark, #24272e);
+  transform: translate(-101%, 101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.header-cta:hover .cta-wipe {
+  transform: translate(0, 0);
 }
 
 /* ─── Hamburger ─── */
@@ -528,7 +539,8 @@ onUnmounted(() => {
   background: none;
   border: 0.5px solid #24272e;
   text-decoration: none;
-  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   transition: color 0.2s;
 }
 .mobile-cta:hover {

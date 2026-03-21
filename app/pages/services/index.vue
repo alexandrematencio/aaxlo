@@ -297,6 +297,8 @@ onMounted(() => {
   font-weight: 600;
   color: var(--color-dark);
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   padding: 16px 40px;
   border: 0.5px solid #24272e;
   transition: background 0.4s, color 0.4s;

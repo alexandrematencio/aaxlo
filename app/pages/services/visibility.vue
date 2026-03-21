@@ -411,6 +411,8 @@ onMounted(() => {
   background: var(--color-dark);
   padding: 16px 40px;
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   transition: background 0.4s, transform 0.3s;
 }
 .cta-btn:hover {

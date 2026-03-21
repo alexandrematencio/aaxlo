@@ -264,6 +264,8 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 16px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   padding: 16px 36px;
   text-decoration: none;
   transition: background 0.4s, color 0.4s, transform 0.3s;
