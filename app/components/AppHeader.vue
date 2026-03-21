@@ -577,6 +577,9 @@ onUnmounted(() => {
 
 /* ─── Responsive ─── */
 @media (max-width: 860px) {
+  .draw-h {
+    display: none;
+  }
   .header-nav,
   .header-cta,
   .lang-toggle {
