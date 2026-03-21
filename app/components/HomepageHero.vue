@@ -272,7 +272,7 @@ watch(() => props.animate, (val) => {
   background: var(--color-accent);
   color: var(--color-dark);
   text-decoration: none;
-  border: none;
+  border: 0.5px solid #24272e;
   border-radius: 0;
   cursor: pointer;
   overflow: hidden;
