@@ -203,7 +203,7 @@ onMounted(() => {
 .checklist-cell {
   border: 0.5px solid #24272e;
   border-top: none;
-  padding: 12px;
+  padding: 16px;
 }
 .checklist-cell:first-child {
   border-top: 0.5px solid #24272e;
@@ -234,7 +234,7 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  padding: 14px 12px;
+  padding: 14px 16px;
   border: 0.5px solid #24272e;
   border-top: none;
   background: transparent;
@@ -279,7 +279,7 @@ onMounted(() => {
 .card-fix {
   border: 0.5px solid #24272e;
   border-top: none;
-  padding: 12px 12px 12px 48px; /* 48px left = aligns with text after checkbox */
+  padding: 16px 16px 16px 52px; /* 48px left = aligns with text after checkbox */
   background: var(--color-cream);
   display: flex;
   flex-direction: column;

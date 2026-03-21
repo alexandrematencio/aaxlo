@@ -136,7 +136,7 @@ onMounted(() => {
 .close-cell {
   border: 0.5px solid rgba(255, 255, 255, 0.15);
   border-top: none;
-  padding: 12px;
+  padding: 16px;
 }
 .close-cell:first-child {
   border-top: 0.5px solid rgba(255, 255, 255, 0.15);
