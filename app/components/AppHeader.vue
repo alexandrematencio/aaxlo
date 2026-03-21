@@ -170,6 +170,12 @@ onUnmounted(() => {
         <NuxtLink to="/blog" class="nav-link tw-hide">Blog</NuxtLink>
       </nav>
 
+      <!-- Mobile CTA (between logo and burger) -->
+      <NuxtLink to="/audit" class="mobile-header-cta">
+        <span class="mobile-header-cta-label">Free Audit</span>
+        <span class="mobile-header-cta-wipe" aria-hidden="true"></span>
+      </NuxtLink>
+
       <!-- Right side -->
       <div class="header-right">
         <button class="lang-toggle tw-hide" @click="toggleLang" :aria-label="`Switch language to ${lang === 'EN' ? 'French' : 'English'}`">
@@ -575,10 +581,58 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+/* ─── Mobile header CTA ─── */
+.mobile-header-cta {
+  display: none;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 0;
+  height: calc(100% - 20px);
+  flex: 1;
+  border-radius: 0;
+  border: 0.5px solid #24272e;
+  font-family: var(--font, 'Switzer', sans-serif);
+  font-size: clamp(10px, 3vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #24272e;
+  background: #FF8270;
+  text-decoration: none;
+  overflow: hidden;
+  transition: color 0.4s;
+  cursor: pointer;
+}
+
+.mobile-header-cta:hover {
+  color: var(--color-cream, #fff1ef);
+}
+
+.mobile-header-cta-label {
+  position: relative;
+  z-index: 2;
+}
+
+.mobile-header-cta-wipe {
+  position: absolute;
+  inset: 0;
+  background: var(--color-dark, #24272e);
+  transform: translate(-101%, 101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.mobile-header-cta:hover .mobile-header-cta-wipe {
+  transform: translate(0, 0);
+}
+
 /* ─── Responsive ─── */
 @media (max-width: 860px) {
   .draw-h {
-    display: none;
+    transform: scaleX(1);
   }
   .header-nav,
   .header-cta,
@@ -588,6 +642,10 @@ onUnmounted(() => {
 
   .hamburger {
     display: flex;
+  }
+
+  .mobile-header-cta {
+    display: inline-flex;
   }
 }
 
