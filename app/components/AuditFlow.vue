@@ -22,7 +22,145 @@ const formData = reactive({
   referralSource: '',
 })
 
+const route = useRoute()
+const currentStep = ref(1)
+const submitted = ref(false)
+const errors = reactive({})
+const stepContainer = ref(null)
+
 const { navigateWithStripes } = useStripeTransition()
+
+const isMobile = ref(false)
+const stepDistance = computed(() => isMobile.value ? 20 : 40)
+
+function animateStepForward(onComplete) {
+  const el = stepContainer.value
+  if (!el) { onComplete?.(); return }
+  const d = stepDistance.value
+  const tl = gsap.timeline({ onComplete })
+  tl.to(el, { x: -d, opacity: 0, duration: 0.25, ease: 'power2.in' })
+  tl.set(el, { x: d })
+  tl.to(el, { x: 0, opacity: 1, duration: 0.3, ease: 'power2.out' })
+}
+
+function animateStepBackward(onComplete) {
+  const el = stepContainer.value
+  if (!el) { onComplete?.(); return }
+  const d = stepDistance.value
+  const tl = gsap.timeline({ onComplete })
+  tl.to(el, { x: d, opacity: 0, duration: 0.25, ease: 'power2.in' })
+  tl.set(el, { x: -d })
+  tl.to(el, { x: 0, opacity: 1, duration: 0.3, ease: 'power2.out' })
+}
+
+function animateChipsIn() {
+  nextTick(() => {
+    const el = stepContainer.value
+    if (!el) return
+    const chips = el.querySelectorAll('.chip')
+    if (!chips.length) return
+    gsap.from(chips, { scale: 0.9, opacity: 0, duration: 0.2, stagger: 0.02, ease: 'power2.out' })
+  })
+}
+
+function animateError(fieldId) {
+  nextTick(() => {
+    const errEl = document.getElementById(fieldId)
+    if (errEl) gsap.from(errEl, { y: -4, opacity: 0, duration: 0.15, ease: 'power2.out' })
+  })
+}
+
+watch(() => formData.businessName, () => { errors.businessName = '' })
+watch(() => formData.websiteUrl, () => { errors.websiteUrl = '' })
+watch(() => formData.email, () => { errors.email = '' })
+
+function validateStep(step) {
+  if (step === 1) {
+    if (formData.businessName.trim().length < 2) {
+      errors.businessName = 'Please enter your business name'
+      animateError('err-business')
+      return false
+    }
+  } else if (step === 2) {
+    try {
+      new URL(formData.websiteUrl)
+    } catch {
+      errors.websiteUrl = 'Please enter a valid URL (e.g. https://example.com)'
+      animateError('err-url')
+      return false
+    }
+  } else if (step === 3) {
+    if (!formData.businessType) {
+      return false
+    }
+  } else if (step === 5) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      errors.email = 'Please enter a valid email'
+      animateError('err-email')
+      return false
+    }
+  }
+  return true
+}
+
+function goNext() {
+  if (!validateStep(currentStep.value)) return
+  if (currentStep.value === 5) {
+    submitted.value = true
+    animateStepForward(() => {
+      currentStep.value = 6
+      nextTick(() => {
+        const el = stepContainer.value
+        if (el) {
+          const firstInput = el.querySelector('input, button[type="button"]')
+          firstInput?.focus()
+        }
+        animateChipsIn()
+      })
+    })
+    return
+  }
+  animateStepForward(() => {
+    currentStep.value++
+    nextTick(() => {
+      const el = stepContainer.value
+      if (el) {
+        const firstInput = el.querySelector('input, button[type="button"]')
+        firstInput?.focus()
+      }
+      if ([3, 4].includes(currentStep.value)) animateChipsIn()
+    })
+  })
+}
+
+function goBack() {
+  if (currentStep.value <= 1) return
+  animateStepBackward(() => {
+    currentStep.value--
+    nextTick(() => {
+      const el = stepContainer.value
+      if (el) {
+        const firstInput = el.querySelector('input, button[type="button"]')
+        firstInput?.focus()
+      }
+    })
+  })
+}
+
+const progressWidth = computed(() => {
+  if (submitted.value) return '100%'
+  return `${(currentStep.value / 5) * 100}%`
+})
+
+const summaryLines = computed(() => {
+  const lines = []
+  if (currentStep.value > 1 && formData.businessName) lines.push(formData.businessName)
+  if (currentStep.value > 2 && formData.websiteUrl) lines.push(formData.websiteUrl)
+  if (currentStep.value > 3 && formData.businessType) lines.push(formData.businessType)
+  if (currentStep.value > 4 && formData.challenges.length) lines.push(formData.challenges.join(', '))
+  return lines
+})
 
 function onTeaserSubmit() {
   if (formData.businessName.trim().length >= 2) {
@@ -44,7 +182,23 @@ function showFinalState() {
 }
 
 onMounted(() => {
-  if (props.mode !== 'teaser') return
+  if (props.mode === 'full') {
+    isMobile.value = window.innerWidth <= 768
+    const business = route.query.business
+    if (business && typeof business === 'string' && business.trim().length >= 2) {
+      formData.businessName = business.trim()
+      setTimeout(() => {
+        animateStepForward(() => {
+          currentStep.value = 2
+          nextTick(() => {
+            const el = stepContainer.value
+            if (el) el.querySelector('input')?.focus()
+          })
+        })
+      }, 300)
+    }
+    return
+  }
 
   const el = section.value
   if (!el) return
@@ -133,7 +287,54 @@ onMounted(() => {
     </div>
   </section>
 
-  <div v-else class="flow-card"><!-- Full mode: built in next task --></div>
+  <div v-else class="flow-card">
+    <!-- Progress bar -->
+    <div class="progress-track" role="progressbar" :aria-valuenow="currentStep" aria-valuemin="1" aria-valuemax="5" aria-label="Form progress">
+      <div class="progress-fill" :style="{ width: progressWidth }" />
+    </div>
+
+    <!-- Back + Summary -->
+    <div v-if="currentStep > 1 && !submitted" class="flow-nav">
+      <button type="button" class="back-btn" aria-label="Go to previous step" @click="goBack">&larr;</button>
+      <div class="summary-lines">
+        <span v-for="line in summaryLines" :key="line" class="summary-line">{{ line }}</span>
+      </div>
+    </div>
+
+    <div ref="stepContainer" class="step-container" aria-live="polite">
+      <!-- Step 1: Business Name -->
+      <div v-if="currentStep === 1 && !submitted" class="step">
+        <label for="flow-business" class="step-label">What's your business called?</label>
+        <input
+          id="flow-business"
+          v-model="formData.businessName"
+          type="text"
+          class="flow-input"
+          placeholder="e.g. Joe's Coffee House"
+          :aria-describedby="errors.businessName ? 'err-business' : undefined"
+          @keydown.enter.prevent="goNext"
+        />
+        <span v-if="errors.businessName" id="err-business" class="flow-error" role="alert">{{ errors.businessName }}</span>
+        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+      </div>
+
+      <!-- Step 2: Website URL -->
+      <div v-if="currentStep === 2 && !submitted" class="step">
+        <label for="flow-url" class="step-label">What's your website?</label>
+        <input
+          id="flow-url"
+          v-model="formData.websiteUrl"
+          type="url"
+          class="flow-input"
+          placeholder="https://example.com"
+          :aria-describedby="errors.websiteUrl ? 'err-url' : undefined"
+          @keydown.enter.prevent="goNext"
+        />
+        <span v-if="errors.websiteUrl" id="err-url" class="flow-error" role="alert">{{ errors.websiteUrl }}</span>
+        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -290,5 +491,113 @@ onMounted(() => {
     padding: 16px;
     font-size: 14px;
   }
+}
+
+/* ═══ FULL MODE ═══ */
+.flow-card {
+  background: var(--color-white);
+  border: 0.5px solid #24272e;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-border, #d4d4d4);
+}
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.flow-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.back-btn {
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 20px;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+.back-btn:hover { color: var(--color-dark); }
+.summary-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.summary-line {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--color-muted);
+  opacity: 0.5;
+}
+.summary-line + .summary-line::before {
+  content: '·';
+  margin-right: 8px;
+}
+.step-container {
+  min-height: 180px;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.step-label {
+  font-family: var(--font);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-dark);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.flow-input {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-dark);
+  background: var(--color-cream);
+  border: 0.5px solid #24272e;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.flow-input::placeholder { color: var(--color-muted); opacity: 0.5; }
+.flow-input:focus { border-color: var(--color-accent); }
+.flow-error {
+  font-family: var(--font);
+  font-size: 13px;
+  color: #c0392b;
+  margin-top: -8px;
+}
+.flow-next {
+  align-self: flex-start;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-cream);
+  background: var(--color-dark);
+  border: none;
+  padding: 14px 32px;
+  cursor: pointer;
+  transition: background 0.4s, transform 0.3s;
+  margin-top: 8px;
+}
+.flow-next:hover { background: var(--color-accent); color: var(--color-dark); transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+  .flow-card { padding: 32px 24px; }
+  .step-label { font-size: 20px; }
 }
 </style>
