@@ -91,6 +91,8 @@ function validateStep(step) {
     }
   } else if (step === 3) {
     if (!formData.businessType) {
+      shakeChips.value = true
+      setTimeout(() => { shakeChips.value = false }, 400)
       return false
     }
   } else if (step === 5) {
@@ -161,6 +163,33 @@ const summaryLines = computed(() => {
   if (currentStep.value > 4 && formData.challenges.length) lines.push(formData.challenges.join(', '))
   return lines
 })
+
+// Business type options
+const businessTypes = ['Restaurant', 'Retail', 'Salon/Spa', 'Clinic', 'Gym/Fitness', 'Professional Services', 'Other']
+
+// Challenge options
+const challengeOptions = ['Not enough traffic', 'Poor Google ranking', 'Low conversions', 'Outdated website', 'Not sure where to start', 'Help me figure it out']
+
+function selectBusinessType(type) {
+  formData.businessType = type
+}
+
+function toggleChallenge(challenge) {
+  if (challenge === 'Help me figure it out') {
+    formData.challenges = formData.challenges.includes(challenge) ? [] : [challenge]
+  } else {
+    const filtered = formData.challenges.filter(c => c !== 'Help me figure it out')
+    const idx = filtered.indexOf(challenge)
+    if (idx >= 0) {
+      filtered.splice(idx, 1)
+    } else {
+      filtered.push(challenge)
+    }
+    formData.challenges = filtered
+  }
+}
+
+const shakeChips = ref(false)
 
 function onTeaserSubmit() {
   if (formData.businessName.trim().length >= 2) {
@@ -331,6 +360,45 @@ onMounted(() => {
           @keydown.enter.prevent="goNext"
         />
         <span v-if="errors.websiteUrl" id="err-url" class="flow-error" role="alert">{{ errors.websiteUrl }}</span>
+        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+      </div>
+
+      <!-- Step 3: Business Type -->
+      <div v-if="currentStep === 3 && !submitted" class="step">
+        <span class="step-label">What type of business?</span>
+        <div class="chip-grid" :class="{ 'chip-shake': shakeChips }">
+          <button
+            v-for="type in businessTypes"
+            :key="type"
+            type="button"
+            class="chip"
+            :class="{ 'chip-selected': formData.businessType === type }"
+            :aria-pressed="formData.businessType === type"
+            @click="selectBusinessType(type)"
+          >
+            {{ type }}
+          </button>
+        </div>
+        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+      </div>
+
+      <!-- Step 4: Biggest Challenge (optional) -->
+      <div v-if="currentStep === 4 && !submitted" class="step">
+        <span class="step-label">What's your biggest challenge right now?</span>
+        <p class="step-hint">Select all that apply, or skip to continue.</p>
+        <div class="chip-grid chip-grid--challenges">
+          <button
+            v-for="challenge in challengeOptions"
+            :key="challenge"
+            type="button"
+            class="chip"
+            :class="{ 'chip-selected': formData.challenges.includes(challenge) }"
+            :aria-pressed="formData.challenges.includes(challenge)"
+            @click="toggleChallenge(challenge)"
+          >
+            {{ challenge }}
+          </button>
+        </div>
         <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
       </div>
     </div>
@@ -596,8 +664,51 @@ onMounted(() => {
 }
 .flow-next:hover { background: var(--color-accent); color: var(--color-dark); transform: translateY(-2px); }
 
+/* ── Chips ── */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.chip {
+  background: var(--color-cream);
+  border: 0.5px solid #24272e;
+  color: var(--color-dark);
+  padding: 12px 20px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 0;
+  transition: border-color 0.25s, background 0.2s, color 0.2s;
+}
+.chip:hover { border-color: var(--color-accent); }
+.chip-selected {
+  background: var(--color-dark);
+  color: var(--color-cream);
+  border-color: var(--color-dark);
+}
+.chip-shake {
+  animation: chipShake 0.3s ease-in-out;
+}
+@keyframes chipShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+.step-hint {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-top: -8px;
+}
+
 @media (max-width: 768px) {
   .flow-card { padding: 32px 24px; }
   .step-label { font-size: 20px; }
+  .chip { flex: 1 1 calc(50% - 5px); text-align: center; }
+  .chip-grid--challenges .chip { flex: 1 1 100%; }
 }
 </style>
