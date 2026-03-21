@@ -6,6 +6,7 @@ const props = defineProps({
 })
 
 const section = ref(null)
+const { navigateWithStripes } = useStripeTransition()
 
 function showFinalState() {
   const el = section.value
@@ -54,6 +55,11 @@ onMounted(() => {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, ease: 'steps(30)',
           }, '+=0.08')
 
+          /* CTA fade in */
+          tl.to(el.querySelector('.shift-cta'), {
+            opacity: 1, y: 0, duration: 0.2,
+          }, '+=0.06')
+
           observer.disconnect()
         }
       })
@@ -87,6 +93,14 @@ onMounted(() => {
         <p class="shift-standalone tw-hide">
           Some businesses have already figured this out.
         </p>
+        <a
+          href="/audit"
+          class="shift-cta"
+          style="opacity: 0; transform: translateY(12px)"
+          @click.prevent="navigateWithStripes('/audit')"
+        >
+          Get your free audit →
+        </a>
       </div>
     </div>
 
@@ -160,6 +174,42 @@ onMounted(() => {
   color: var(--color-cream);
   line-height: 1.6;
   margin: 0;
+}
+
+.shift-cta {
+  display: inline-block;
+  position: relative;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  background: #FF8270;
+  color: var(--color-dark);
+  text-decoration: none;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.4s;
+  margin-top: 24px;
+}
+.shift-cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--color-cream);
+  transform: translate(-101%, 101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+.shift-cta:hover::before {
+  transform: translate(0, 0);
+}
+.shift-cta:hover {
+  color: var(--color-dark);
 }
 
 @media (max-width: 768px) {
