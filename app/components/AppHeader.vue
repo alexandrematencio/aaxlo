@@ -176,7 +176,7 @@ onUnmounted(() => {
           {{ lang }}
         </button>
 
-        <NuxtLink to="/contact" class="header-cta tw-hide">
+        <NuxtLink to="/audit" class="header-cta tw-hide">
           <span class="cta-label">Get your free audit</span>
           <span class="cta-wipe" aria-hidden="true"></span>
         </NuxtLink>

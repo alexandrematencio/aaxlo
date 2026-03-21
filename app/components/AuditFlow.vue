@@ -1,5 +1,7 @@
 <script setup>
 import { gsap } from 'gsap'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const props = defineProps({
   mode: {
@@ -17,8 +19,24 @@ const formData = reactive({
   websiteUrl: '',
   email: '',
   phone: '',
+  phoneFormatted: '',
   name: '',
 })
+
+const telInputOptions = {
+  mode: 'international',
+  preferredCountries: ['FR', 'US', 'GB', 'DE', 'ES', 'IT', 'SG'],
+  defaultCountry: 'FR',
+  dropdownOptions: { showSearchBox: true, showFlags: true },
+  inputOptions: { placeholder: 'Phone number' },
+}
+
+function onPhoneInput(phone, phoneObject) {
+  formData.phone = phone
+  if (phoneObject?.formatted) {
+    formData.phoneFormatted = phoneObject.formatted
+  }
+}
 
 const route = useRoute()
 const currentStep = ref(1)
@@ -369,11 +387,11 @@ onMounted(() => {
                 required
               />
               <span v-if="errors.email" class="flow-error">{{ errors.email }}</span>
-              <input
+              <VueTelInput
                 v-model="formData.phone"
-                type="tel"
-                class="popup-input"
-                placeholder="Phone number (international allowed)"
+                v-bind="telInputOptions"
+                class="tel-input-wrap"
+                @on-input="onPhoneInput"
               />
               <input
                 v-model="formData.name"
@@ -441,11 +459,11 @@ onMounted(() => {
           :aria-describedby="errors.email ? 'err-email' : undefined"
         />
         <span v-if="errors.email" id="err-email" class="flow-error" role="alert">{{ errors.email }}</span>
-        <input
+        <VueTelInput
           v-model="formData.phone"
-          type="tel"
-          class="flow-input"
-          placeholder="Phone number (international allowed)"
+          v-bind="telInputOptions"
+          class="tel-input-wrap"
+          @on-input="onPhoneInput"
         />
         <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
       </div>
@@ -686,6 +704,61 @@ onMounted(() => {
 }
 .popup-input::placeholder { color: var(--color-muted); opacity: 0.5; }
 .popup-input:focus { border-color: var(--color-accent); }
+
+/* ── Tel input overrides ── */
+.tel-input-wrap {
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  padding: 0 !important;
+}
+.tel-input-wrap :deep(.vti__input) {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--color-dark);
+  border: 0.5px solid #24272e;
+  border-radius: 0;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.25s;
+  background: transparent;
+}
+.tel-input-wrap :deep(.vti__input:focus) {
+  border-color: var(--color-accent);
+  box-shadow: none;
+}
+.tel-input-wrap :deep(.vti__dropdown) {
+  border: 0.5px solid #24272e;
+  border-right: none;
+  border-radius: 0;
+  background: var(--color-cream);
+  padding: 0 12px;
+}
+.tel-input-wrap :deep(.vti__dropdown:hover) {
+  background: var(--color-white);
+}
+.tel-input-wrap :deep(.vti__dropdown-list) {
+  border: 0.5px solid #24272e;
+  border-radius: 0;
+  background: var(--color-white);
+  z-index: 1010;
+}
+.tel-input-wrap :deep(.vti__search_box) {
+  font-family: var(--font);
+  border: 0.5px solid #24272e;
+  border-radius: 0;
+  padding: 8px 12px;
+  margin: 8px;
+}
+.tel-input-wrap :deep(.vti__dropdown-item) {
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 8px 12px;
+}
+.tel-input-wrap :deep(.vti__dropdown-item.highlighted) {
+  background: var(--color-cream);
+}
 
 .popup-submit {
   width: 100%;
