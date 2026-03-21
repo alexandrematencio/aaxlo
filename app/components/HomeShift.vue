@@ -177,7 +177,10 @@ onMounted(() => {
 }
 
 .shift-cta {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   position: relative;
   font-family: var(--font);
   font-size: 16px;
@@ -194,7 +197,7 @@ onMounted(() => {
   overflow: hidden;
   z-index: 1;
   transition: color 0.4s;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 .shift-cta::before {
   content: '';
