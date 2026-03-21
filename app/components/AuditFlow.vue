@@ -594,7 +594,7 @@ onMounted(() => {
   background: var(--color-dark);
   color: var(--color-cream);
   text-decoration: none;
-  border: none;
+  border: 0.5px solid #24272e;
   border-radius: 0;
   cursor: pointer;
   transition: background 0.3s;
