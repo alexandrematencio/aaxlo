@@ -5,6 +5,7 @@ const animsPlayed = useState('animsPlayed', () => false)
 const showSplash = ref(!splashPlayed.value)
 const heroReady = ref(splashPlayed.value)
 const skipAnimations = computed(() => animsPlayed.value)
+const showSocialProof = ref(false)
 
 function onSplashReveal() {
   heroReady.value = true
@@ -52,8 +53,8 @@ onMounted(() => {
     <!-- S7: Audit Form — Conversion -->
     <AuditFlow mode="teaser" :skip="skipAnimations" />
 
-    <!-- S8: Social Proof — Trust -->
-    <HomeSocialProof :skip="skipAnimations" />
+    <!-- S8: Social Proof — Trust (hidden, toggle showSocialProof to enable) -->
+    <HomeSocialProof v-if="showSocialProof" :skip="skipAnimations" />
 
     <!-- S9: The Close — Final push -->
     <HomeClose :skip="skipAnimations" />
