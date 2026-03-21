@@ -4,25 +4,11 @@ import { gsap } from 'gsap'
 useHead({
   title: 'Free AI Audit — AAXLO',
   meta: [
-    { name: 'description', content: 'Get a free AI-enhanced audit of your Google Business Profile, SEO, social media, reviews, and competitor landscape. Results in 48 hours.' },
+    { name: 'description', content: 'Get a free AI-enhanced audit of your Google Business Profile, SEO, social media, reviews, and competitor landscape. Results in 24 hours.' },
   ],
 })
 
 const page = ref(null)
-
-const form = reactive({
-  businessName: '',
-  websiteUrl: '',
-  name: '',
-  email: '',
-  phone: '',
-})
-
-const submitted = ref(false)
-
-function handleSubmit() {
-  submitted.value = true
-}
 
 const auditCovers = [
   'Google Business Profile completeness and optimization score',
@@ -42,7 +28,7 @@ const faqs = [
   },
   {
     question: 'How do you get the results so fast?',
-    answer: 'Our proprietary AI tools analyze publicly available data about your business, competitors, and market in minutes. A human strategist then reviews the findings, adds context, and prepares your personalized report. That is how we deliver in 48 hours.',
+    answer: 'Our proprietary AI tools analyze publicly available data about your business, competitors, and market in minutes. A human strategist then reviews the findings, adds context, and prepares your personalized report. That is how we deliver in 24 hours.',
     open: ref(false),
   },
   {
@@ -66,9 +52,6 @@ onMounted(() => {
   tl.to(el.querySelector('.hero-label'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, ease: 'steps(8)' }, '-=0.1')
   tl.to(el.querySelector('.hero-title'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.5, ease: 'steps(30)' }, '-=0.1')
   tl.to(el.querySelector('.hero-subtitle'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.4, ease: 'steps(40)' }, '-=0.2')
-
-  /* Form section */
-  tl.to(el.querySelector('.audit-form-card'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.35, ease: 'power2.out' }, '-=0.15')
 
   /* Covers list */
   const coversSection = el.querySelector('.covers-section')
@@ -110,90 +93,13 @@ onMounted(() => {
     <section class="hero">
       <span class="hero-label tw-hide">FREE AUDIT</span>
       <h1 class="hero-title tw-hide">See exactly what's holding your business back online.</h1>
-      <p class="hero-subtitle tw-hide">Our AI-enhanced audit analyzes your Google Business Profile, SEO, social media, reviews, and competitor landscape — all in 48 hours.</p>
+      <p class="hero-subtitle tw-hide">Our AI-enhanced audit analyzes your Google Business Profile, SEO, social media, reviews, and competitor landscape — all in 24 hours.</p>
     </section>
 
-    <!-- Form + Trust -->
+    <!-- Form -->
     <section class="form-section">
       <div class="form-layout">
-        <!-- Form card -->
-        <div class="audit-form-card tw-hide">
-          <div v-if="!submitted">
-            <form @submit.prevent="handleSubmit" class="audit-form">
-              <div class="form-group">
-                <label for="businessName" class="form-label">Business Name *</label>
-                <input
-                  id="businessName"
-                  v-model="form.businessName"
-                  type="text"
-                  class="form-input"
-                  required
-                  placeholder="e.g. Joe's Coffee House"
-                />
-              </div>
-              <div class="form-group">
-                <label for="websiteUrl" class="form-label">Website URL *</label>
-                <input
-                  id="websiteUrl"
-                  v-model="form.websiteUrl"
-                  type="url"
-                  class="form-input"
-                  required
-                  placeholder="https://example.com"
-                />
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="name" class="form-label">Your Name *</label>
-                  <input
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="form-input"
-                    required
-                    placeholder="Jane Doe"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="email" class="form-label">Email *</label>
-                  <input
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="form-input"
-                    required
-                    placeholder="jane@example.com"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="phone" class="form-label">Phone (optional)</label>
-                <input
-                  id="phone"
-                  v-model="form.phone"
-                  type="tel"
-                  class="form-input"
-                  placeholder="+65 9123 4567"
-                />
-              </div>
-              <button type="submit" class="form-submit">Run my free audit &rarr;</button>
-            </form>
-            <div class="trust-signals">
-              <span class="trust-item">100% free</span>
-              <span class="trust-sep">&middot;</span>
-              <span class="trust-item">No credit card</span>
-              <span class="trust-sep">&middot;</span>
-              <span class="trust-item">Results in 48 hours</span>
-            </div>
-          </div>
-
-          <!-- Success state -->
-          <div v-else class="form-success">
-            <h3 class="success-title">Audit requested!</h3>
-            <p class="success-text">We'll analyze your business and send your personalized report to <strong>{{ form.email }}</strong> within 48 hours.</p>
-            <NuxtLink to="/" class="success-link">&larr; Back to homepage</NuxtLink>
-          </div>
-        </div>
+        <AuditFlow mode="full" />
       </div>
     </section>
 
@@ -285,122 +191,6 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-.audit-form-card {
-  background: var(--color-white);
-  border: 0.5px solid #24272e;
-  padding: 48px;
-}
-
-.audit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-label {
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-dark);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.form-input {
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-dark);
-  background: var(--color-cream);
-  border: 0.5px solid #24272e;
-  padding: 14px 16px;
-  outline: none;
-  transition: border-color 0.3s;
-}
-.form-input::placeholder {
-  color: var(--color-muted);
-  opacity: 0.5;
-}
-.form-input:focus {
-  border-color: var(--color-accent);
-}
-
-.form-submit {
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--color-cream);
-  background: var(--color-dark);
-  border: none;
-  padding: 18px 40px;
-  cursor: pointer;
-  transition: background 0.4s, transform 0.3s;
-  margin-top: 8px;
-}
-.form-submit:hover {
-  background: var(--color-accent);
-  transform: translateY(-2px);
-}
-
-.trust-signals {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 24px;
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--color-muted);
-}
-
-.trust-sep {
-  color: var(--color-border);
-}
-
-/* ── SUCCESS STATE ── */
-.form-success {
-  text-align: center;
-  padding: 32px 0;
-}
-
-.success-title {
-  font-family: var(--font);
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--color-dark);
-  margin-bottom: 16px;
-}
-
-.success-text {
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-muted);
-  line-height: 1.6;
-  margin-bottom: 32px;
-}
-
-.success-link {
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-accent);
-  text-decoration: none;
-}
-
 /* ── COVERS ── */
 .covers-section {
   padding: 96px 80px;
@@ -460,11 +250,7 @@ onMounted(() => {
   .hero { padding: 48px 24px 32px; }
   .hero-title { font-size: 32px; }
   .form-section { padding: 0 24px 64px; }
-  .audit-form-card { padding: 32px 24px; }
-  .form-row { grid-template-columns: 1fr; }
   .covers-section { padding: 64px 24px; }
   .faq-section { padding: 64px 24px; }
-  .trust-signals { flex-direction: column; gap: 8px; }
-  .trust-sep { display: none; }
 }
 </style>
