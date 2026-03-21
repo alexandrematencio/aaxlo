@@ -230,7 +230,7 @@ onUnmounted(() => {
   justify-content: space-between;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 48px);
+  padding: 0;
   height: 64px;
 }
 
@@ -257,6 +257,9 @@ onUnmounted(() => {
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
+  padding: 0 clamp(20px, 4vw, 48px);
+  height: 100%;
+  border-right: 0.5px solid #24272e;
 }
 
 .logo-img {
@@ -269,11 +272,14 @@ onUnmounted(() => {
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 0;
+  height: 100%;
+  flex: 1;
 }
 
 .nav-link-wrap {
   position: relative;
+  height: 100%;
 }
 
 .nav-link {
@@ -285,7 +291,9 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 0;
+  padding: 0 24px;
+  height: 100%;
+  border-right: 0.5px solid #24272e;
   transition: color 0.2s;
 }
 
@@ -371,8 +379,9 @@ onUnmounted(() => {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0;
   flex-shrink: 0;
+  height: 100%;
 }
 
 /* ─── Language toggle ─── */
@@ -383,15 +392,16 @@ onUnmounted(() => {
   letter-spacing: 0.06em;
   color: var(--color-muted, #6e7381);
   background: none;
-  border: 0.5px solid #24272e;
-  padding: 4px 10px;
+  border: none;
+  border-left: 0.5px solid #24272e;
+  padding: 0 20px;
+  height: 100%;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.2s;
 }
 
 .lang-toggle:hover {
   color: var(--color-dark, #24272e);
-  border-color: var(--color-dark, #24272e);
 }
 
 /* ─── CTA button ─── */
@@ -399,16 +409,22 @@ onUnmounted(() => {
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 10px 22px;
+  padding: 0 28px;
+  height: 100%;
   font-family: var(--font, 'Switzer', sans-serif);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--color-white, #fcfcfc);
-  background: var(--color-accent, #ff8270);
+  color: var(--color-dark, #24272e);
+  background: none;
+  border-left: 0.5px solid #24272e;
   text-decoration: none;
   overflow: hidden;
   transition: color 0.3s;
+}
+
+.header-cta:hover {
+  color: var(--color-accent, #ff8270);
 }
 
 .cta-label {
@@ -417,17 +433,7 @@ onUnmounted(() => {
 }
 
 .cta-wipe {
-  position: absolute;
-  inset: 0;
-  background: var(--color-dark, #24272e);
-  transform: translateX(-100%) skewX(-12deg);
-  transform-origin: left center;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
-}
-
-.header-cta:hover .cta-wipe {
-  transform: translateX(0) skewX(-12deg);
+  display: none;
 }
 
 /* ─── Hamburger ─── */
@@ -436,12 +442,13 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   gap: 6px;
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 100%;
   background: none;
   border: none;
+  border-left: 0.5px solid #24272e;
   cursor: pointer;
-  padding: 4px;
+  padding: 4px 16px;
 }
 
 .hamburger-line {
@@ -517,10 +524,15 @@ onUnmounted(() => {
   font-family: var(--font, 'Switzer', sans-serif);
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-white, #fcfcfc);
-  background: var(--color-accent, #ff8270);
+  color: var(--color-dark, #24272e);
+  background: none;
+  border: 0.5px solid #24272e;
   text-decoration: none;
   letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.mobile-cta:hover {
+  color: var(--color-accent, #ff8270);
 }
 
 .mobile-lang {
