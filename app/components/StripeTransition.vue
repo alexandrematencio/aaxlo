@@ -166,7 +166,7 @@ watch(isActive, async (active) => {
   left: 50%;
   width: calc(71vw + 71vh);
   height: calc(71vw + 71vh);
-  transform: translate(-50%, -50%) rotate(-45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
   display: flex;
   flex-direction: column;
 }
@@ -179,7 +179,7 @@ watch(isActive, async (active) => {
 
 /* Dark charcoal — grows from bottom-left (the glyph's body) */
 .st-dark {
-  background: var(--color-dark, #24272e);
+  background: #ffffff;
 }
 
 /* Accent coral — grows from top-right (the glyph's stripes) */
