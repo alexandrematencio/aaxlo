@@ -116,7 +116,11 @@ onMounted(() => {
 
 .shift-cell {
   border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-top: none;
   padding: 12px;
+}
+.shift-cell:first-child {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 
 .shift-label {

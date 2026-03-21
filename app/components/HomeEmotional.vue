@@ -116,7 +116,11 @@ onMounted(() => {
 
 .emotional-cell {
   border: 0.5px solid #24272e;
+  border-top: none;
   padding: 12px;
+}
+.emotional-cell:first-child {
+  border-top: 0.5px solid #24272e;
 }
 
 .emotional-label {
