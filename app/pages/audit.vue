@@ -115,21 +115,25 @@ onMounted(() => {
 
     <!-- FAQ -->
     <section class="faq-section">
-      <span class="section-label tw-hide">FREQUENTLY ASKED</span>
-      <div class="faq-list">
-        <div
-          v-for="faq in faqs"
-          :key="faq.question"
-          class="faq-item tw-hide"
-          :class="{ 'faq-open': faq.open.value }"
-          @click="faq.open.value = !faq.open.value"
-        >
-          <div class="faq-question">
-            <span>{{ faq.question }}</span>
-            <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
-          </div>
-          <div v-show="faq.open.value" class="faq-answer">
-            <p>{{ faq.answer }}</p>
+      <div class="faq-container">
+        <div class="faq-label-cell">
+          <span class="section-label tw-hide">FREQUENTLY ASKED</span>
+        </div>
+        <div class="faq-list">
+          <div
+            v-for="faq in faqs"
+            :key="faq.question"
+            class="faq-item tw-hide"
+            :class="{ 'faq-open': faq.open.value }"
+            @click="faq.open.value = !faq.open.value"
+          >
+            <div class="faq-question">
+              <span>{{ faq.question }}</span>
+              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+            </div>
+            <div v-show="faq.open.value" class="faq-answer">
+              <p>{{ faq.answer }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -237,13 +241,16 @@ onMounted(() => {
 }
 
 /* ── FAQ ── */
-.faq-section { padding: 96px 80px; border-top: 0.5px solid #24272e; }
-.faq-list { display: flex; flex-direction: column; max-width: 720px; }
-.faq-item { border-bottom: 0.5px solid #24272e; cursor: pointer; padding: 24px 0; }
+.faq-section { padding: 96px 80px; border-top: 0.5px solid #24272e; display: flex; justify-content: center; }
+.faq-container { max-width: 700px; width: 100%; display: flex; flex-direction: column; }
+.faq-label-cell { border: 0.5px solid #24272e; padding: 12px; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border: 0.5px solid #24272e; border-top: none; cursor: pointer; padding: 14px 12px; transition: background 0.2s; }
+.faq-item:hover { background: var(--color-cream, #fff1ef); }
 .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
 .faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent); flex-shrink: 0; width: 24px; text-align: center; }
-.faq-answer { padding-top: 16px; }
-.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; max-width: 640px; }
+.faq-answer { padding-top: 12px; }
+.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
@@ -252,5 +259,7 @@ onMounted(() => {
   .form-section { padding: 0 24px 64px; }
   .covers-section { padding: 64px 24px; }
   .faq-section { padding: 64px 24px; }
+  .faq-item { padding: 12px 10px; }
+  .faq-label-cell { padding: 10px; }
 }
 </style>
