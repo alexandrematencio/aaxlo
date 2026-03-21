@@ -15,11 +15,9 @@ const section = ref(null)
 const formData = reactive({
   businessName: '',
   websiteUrl: '',
-  businessType: '',
-  challenges: [],
   email: '',
+  phone: '',
   name: '',
-  referralSource: '',
 })
 
 const route = useRoute()
@@ -30,6 +28,52 @@ const stepContainer = ref(null)
 
 const { navigateWithStripes } = useStripeTransition()
 
+/* ── Teaser mode ── */
+const showPopup = ref(false)
+
+function onTeaserSubmit() {
+  if (formData.businessName.trim().length < 2) return
+  // If URL is also filled, show popup for contact details
+  if (formData.websiteUrl.trim().length > 0) {
+    showPopup.value = true
+    return
+  }
+  // Otherwise navigate to audit with pre-filled data
+  const params = new URLSearchParams({ business: formData.businessName.trim() })
+  navigateWithStripes('/audit?' + params.toString())
+}
+
+function submitPopup() {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(formData.email)) {
+    errors.email = 'Please enter a valid email'
+    return
+  }
+  // Submit complete — show success
+  submitted.value = true
+  showPopup.value = false
+}
+
+function closePopup() {
+  showPopup.value = false
+}
+
+function showFinalState() {
+  const el = section.value
+  if (!el) return
+
+  const label = el.querySelector('.audit-label')
+  if (label) gsap.set(label, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  gsap.set(el.querySelector('.cta-headline'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  gsap.set(el.querySelector('.cta-subtitle'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  el.querySelectorAll('.audit-input').forEach(input => {
+    gsap.set(input, { opacity: 1, y: 0 })
+  })
+  gsap.set(el.querySelector('.cta-button'), { opacity: 1, y: 0 })
+  gsap.set(el.querySelector('.cta-small'), { opacity: 1 })
+}
+
+/* ── Full mode ── */
 const isMobile = ref(false)
 const stepDistance = computed(() => isMobile.value ? 20 : 40)
 
@@ -53,16 +97,6 @@ function animateStepBackward(onComplete) {
   tl.to(el, { x: 0, opacity: 1, duration: 0.3, ease: 'power2.out' })
 }
 
-function animateChipsIn() {
-  nextTick(() => {
-    const el = stepContainer.value
-    if (!el) return
-    const chips = el.querySelectorAll('.chip')
-    if (!chips.length) return
-    gsap.from(chips, { scale: 0.9, opacity: 0, duration: 0.2, stagger: 0.02, ease: 'power2.out' })
-  })
-}
-
 function animateError(fieldId) {
   nextTick(() => {
     const errEl = document.getElementById(fieldId)
@@ -81,21 +115,17 @@ function validateStep(step) {
       animateError('err-business')
       return false
     }
+    // URL is optional — validate only if filled
+    if (formData.websiteUrl.trim().length > 0) {
+      try {
+        new URL(formData.websiteUrl)
+      } catch {
+        errors.websiteUrl = 'Please enter a valid URL (e.g. https://example.com)'
+        animateError('err-url')
+        return false
+      }
+    }
   } else if (step === 2) {
-    try {
-      new URL(formData.websiteUrl)
-    } catch {
-      errors.websiteUrl = 'Please enter a valid URL (e.g. https://example.com)'
-      animateError('err-url')
-      return false
-    }
-  } else if (step === 3) {
-    if (!formData.businessType) {
-      shakeChips.value = true
-      setTimeout(() => { shakeChips.value = false }, 400)
-      return false
-    }
-  } else if (step === 5) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
       errors.email = 'Please enter a valid email'
@@ -103,99 +133,8 @@ function validateStep(step) {
       return false
     }
   }
+  // Step 3 — name is optional, always valid
   return true
-}
-
-function goNext() {
-  if (!validateStep(currentStep.value)) return
-  if (currentStep.value === 5) {
-    submitted.value = true
-    animateStepForward(() => {
-      currentStep.value = 6
-      nextTick(() => {
-        const el = stepContainer.value
-        if (el) {
-          const firstInput = el.querySelector('input, button[type="button"]')
-          firstInput?.focus()
-        }
-        animateChipsIn()
-      })
-    })
-    return
-  }
-  animateStepForward(() => {
-    currentStep.value++
-    nextTick(() => {
-      const el = stepContainer.value
-      if (el) {
-        const firstInput = el.querySelector('input, button[type="button"]')
-        firstInput?.focus()
-      }
-      if ([3, 4].includes(currentStep.value)) animateChipsIn()
-    })
-  })
-}
-
-function goBack() {
-  if (currentStep.value <= 1) return
-  animateStepBackward(() => {
-    currentStep.value--
-    nextTick(() => {
-      const el = stepContainer.value
-      if (el) {
-        const firstInput = el.querySelector('input, button[type="button"]')
-        firstInput?.focus()
-      }
-    })
-  })
-}
-
-const progressWidth = computed(() => {
-  if (submitted.value) return '100%'
-  return `${(currentStep.value / 5) * 100}%`
-})
-
-const summaryLines = computed(() => {
-  const lines = []
-  if (currentStep.value > 1 && formData.businessName) lines.push(formData.businessName)
-  if (currentStep.value > 2 && formData.websiteUrl) lines.push(formData.websiteUrl)
-  if (currentStep.value > 3 && formData.businessType) lines.push(formData.businessType)
-  if (currentStep.value > 4 && formData.challenges.length) lines.push(formData.challenges.join(', '))
-  return lines
-})
-
-// Business type options
-const businessTypes = ['Restaurant', 'Retail', 'Salon/Spa', 'Clinic', 'Gym/Fitness', 'Professional Services', 'Other']
-
-// Challenge options
-const challengeOptions = ['Not enough traffic', 'Poor Google ranking', 'Low conversions', 'Outdated website', 'Not sure where to start', 'Help me figure it out']
-
-function selectBusinessType(type) {
-  formData.businessType = type
-}
-
-function toggleChallenge(challenge) {
-  if (challenge === 'Help me figure it out') {
-    formData.challenges = formData.challenges.includes(challenge) ? [] : [challenge]
-  } else {
-    const filtered = formData.challenges.filter(c => c !== 'Help me figure it out')
-    const idx = filtered.indexOf(challenge)
-    if (idx >= 0) {
-      filtered.splice(idx, 1)
-    } else {
-      filtered.push(challenge)
-    }
-    formData.challenges = filtered
-  }
-}
-
-const shakeChips = ref(false)
-
-// Referral options
-const referralOptions = ['Word of mouth', 'Google', 'Social media', 'Other']
-
-function selectReferral(source) {
-  formData.referralSource = source
 }
 
 const showingSuccess = ref(false)
@@ -222,39 +161,61 @@ function showSuccess() {
   }})
 }
 
-function handlePersonalizeDone() {
-  showSuccess()
-}
-
-function skipPersonalize() {
-  showSuccess()
-}
-
-function onTeaserSubmit() {
-  if (formData.businessName.trim().length >= 2) {
-    navigateWithStripes('/audit?business=' + encodeURIComponent(formData.businessName.trim()))
+function goNext() {
+  if (!validateStep(currentStep.value)) return
+  if (currentStep.value === 3) {
+    // Final step — submit
+    submitted.value = true
+    showSuccess()
+    return
   }
-}
-
-function showFinalState() {
-  const el = section.value
-  if (!el) return
-
-  gsap.set(el.querySelector('.cta-headline'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
-  gsap.set(el.querySelector('.cta-subtitle'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
-  el.querySelectorAll('.audit-input').forEach(input => {
-    gsap.set(input, { opacity: 1, y: 0 })
+  animateStepForward(() => {
+    currentStep.value++
+    nextTick(() => {
+      const el = stepContainer.value
+      if (el) {
+        const firstInput = el.querySelector('input')
+        firstInput?.focus()
+      }
+    })
   })
-  gsap.set(el.querySelector('.cta-button'), { opacity: 1, y: 0 })
-  gsap.set(el.querySelector('.cta-small'), { opacity: 1 })
 }
+
+function goBack() {
+  if (currentStep.value <= 1) return
+  animateStepBackward(() => {
+    currentStep.value--
+    nextTick(() => {
+      const el = stepContainer.value
+      if (el) {
+        const firstInput = el.querySelector('input')
+        firstInput?.focus()
+      }
+    })
+  })
+}
+
+const progressWidth = computed(() => {
+  if (submitted.value) return '100%'
+  return `${(currentStep.value / 3) * 100}%`
+})
+
+const summaryLines = computed(() => {
+  const lines = []
+  if (currentStep.value > 1 && formData.businessName) lines.push(formData.businessName)
+  if (currentStep.value > 1 && formData.websiteUrl) lines.push(formData.websiteUrl)
+  if (currentStep.value > 2 && formData.email) lines.push(formData.email)
+  return lines
+})
 
 onMounted(() => {
   if (props.mode === 'full') {
     isMobile.value = window.innerWidth <= 768
     const business = route.query.business
+    const url = route.query.url
     if (business && typeof business === 'string' && business.trim().length >= 2) {
       formData.businessName = business.trim()
+      if (url && typeof url === 'string') formData.websiteUrl = url.trim()
       setTimeout(() => {
         animateStepForward(() => {
           currentStep.value = 2
@@ -282,10 +243,18 @@ onMounted(() => {
         if (entry.isIntersecting) {
           const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
+          /* Label typewriter */
+          const label = el.querySelector('.audit-label')
+          if (label) {
+            tl.to(label, {
+              clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.1, ease: 'steps(10)',
+            })
+          }
+
           /* Headline typewriter */
           tl.to(el.querySelector('.cta-headline'), {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.12, ease: 'steps(28)',
-          }, '-=0.15')
+          }, '-=0.05')
 
           /* Subheadline typewriter */
           tl.to(el.querySelector('.cta-subtitle'), {
@@ -319,6 +288,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- ═══ TEASER MODE ═══ -->
   <section v-if="mode === 'teaser'" ref="section" class="audit-cta-section">
     <div class="audit-cta-inner">
       <div class="audit-cell">
@@ -334,7 +304,7 @@ onMounted(() => {
         </p>
       </div>
 
-      <div class="audit-cell">
+      <div v-if="!submitted" class="audit-cell">
         <form class="audit-form" @submit.prevent="onTeaserSubmit">
           <div class="audit-form-fields">
             <input
@@ -344,29 +314,85 @@ onMounted(() => {
               placeholder="Your business name"
               style="opacity: 0; transform: translateY(8px)"
             />
+            <input
+              v-model="formData.websiteUrl"
+              type="url"
+              class="audit-input"
+              placeholder="Your website URL (if existing)"
+              style="opacity: 0; transform: translateY(8px)"
+            />
           </div>
           <button
             type="submit"
             class="cta-button"
             style="opacity: 0; transform: translateY(8px)"
           >
-            Start my free audit →
+            Get your free audit →
           </button>
         </form>
       </div>
 
-      <div class="audit-cell">
+      <div v-if="!submitted" class="audit-cell">
         <p class="cta-small" style="opacity: 0">
           No commitment. No card. No calls unless you ask for them.<br />
           You get a full report with specific recommendations within 24 hours — whether you work with us after that or not.
         </p>
       </div>
+
+      <!-- Success state (teaser popup submit) -->
+      <div v-if="submitted" class="audit-cell success-cell">
+        <img src="/logo-glyph.svg" alt="" class="success-glyph" />
+        <h3 class="success-title tw-hide">We're on it.</h3>
+        <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
+        <p class="success-trust">No commitment. No card. No calls unless you ask.</p>
+      </div>
     </div>
+
+    <!-- Popup overlay for contact details -->
+    <Teleport to="body">
+      <Transition name="popup">
+        <div v-if="showPopup" class="popup-overlay" @click.self="closePopup">
+          <div class="popup-card">
+            <button type="button" class="popup-close" @click="closePopup" aria-label="Close">&times;</button>
+            <span class="popup-label">ALMOST THERE</span>
+            <h3 class="popup-title">Where should we send your audit?</h3>
+            <p class="popup-summary">
+              <strong>{{ formData.businessName }}</strong>
+              <span v-if="formData.websiteUrl"> · {{ formData.websiteUrl }}</span>
+            </p>
+            <form class="popup-form" @submit.prevent="submitPopup">
+              <input
+                v-model="formData.email"
+                type="email"
+                class="popup-input"
+                placeholder="Email address *"
+                required
+              />
+              <span v-if="errors.email" class="flow-error">{{ errors.email }}</span>
+              <input
+                v-model="formData.phone"
+                type="tel"
+                class="popup-input"
+                placeholder="Phone number (international allowed)"
+              />
+              <input
+                v-model="formData.name"
+                type="text"
+                class="popup-input"
+                placeholder="Your name"
+              />
+              <button type="submit" class="popup-submit">Run my free audit →</button>
+            </form>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 
+  <!-- ═══ FULL MODE (3 steps) ═══ -->
   <div v-else class="flow-card">
     <!-- Progress bar -->
-    <div class="progress-track" role="progressbar" :aria-valuenow="currentStep" aria-valuemin="1" aria-valuemax="5" aria-label="Form progress">
+    <div class="progress-track" role="progressbar" :aria-valuenow="currentStep" aria-valuemin="1" aria-valuemax="3" aria-label="Form progress">
       <div class="progress-fill" :style="{ width: progressWidth }" />
     </div>
 
@@ -379,120 +405,62 @@ onMounted(() => {
     </div>
 
     <div ref="stepContainer" class="step-container" aria-live="polite">
-      <!-- Step 1: Business Name -->
+      <!-- Step 1: Business Name + URL -->
       <div v-if="currentStep === 1 && !submitted" class="step">
-        <label for="flow-business" class="step-label">What's your business called?</label>
+        <label for="flow-business" class="step-label">Tell us about your business</label>
         <input
           id="flow-business"
           v-model="formData.businessName"
           type="text"
           class="flow-input"
-          placeholder="e.g. Joe's Coffee House"
+          placeholder="Your business name *"
           :aria-describedby="errors.businessName ? 'err-business' : undefined"
-          @keydown.enter.prevent="goNext"
         />
         <span v-if="errors.businessName" id="err-business" class="flow-error" role="alert">{{ errors.businessName }}</span>
-        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
-      </div>
-
-      <!-- Step 2: Website URL -->
-      <div v-if="currentStep === 2 && !submitted" class="step">
-        <label for="flow-url" class="step-label">What's your website?</label>
         <input
           id="flow-url"
           v-model="formData.websiteUrl"
           type="url"
           class="flow-input"
-          placeholder="https://example.com"
+          placeholder="Your website URL (if existing)"
           :aria-describedby="errors.websiteUrl ? 'err-url' : undefined"
-          @keydown.enter.prevent="goNext"
         />
         <span v-if="errors.websiteUrl" id="err-url" class="flow-error" role="alert">{{ errors.websiteUrl }}</span>
         <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
       </div>
 
-      <!-- Step 3: Business Type -->
-      <div v-if="currentStep === 3 && !submitted" class="step">
-        <span class="step-label">What type of business?</span>
-        <div class="chip-grid" :class="{ 'chip-shake': shakeChips }">
-          <button
-            v-for="type in businessTypes"
-            :key="type"
-            type="button"
-            class="chip"
-            :class="{ 'chip-selected': formData.businessType === type }"
-            :aria-pressed="formData.businessType === type"
-            @click="selectBusinessType(type)"
-          >
-            {{ type }}
-          </button>
-        </div>
-        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
-      </div>
-
-      <!-- Step 4: Biggest Challenge (optional) -->
-      <div v-if="currentStep === 4 && !submitted" class="step">
-        <span class="step-label">What's your biggest challenge right now?</span>
-        <p class="step-hint">Select all that apply, or skip to continue.</p>
-        <div class="chip-grid chip-grid--challenges">
-          <button
-            v-for="challenge in challengeOptions"
-            :key="challenge"
-            type="button"
-            class="chip"
-            :class="{ 'chip-selected': formData.challenges.includes(challenge) }"
-            :aria-pressed="formData.challenges.includes(challenge)"
-            @click="toggleChallenge(challenge)"
-          >
-            {{ challenge }}
-          </button>
-        </div>
-        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
-      </div>
-
-      <!-- Step 5: Email -->
-      <div v-if="currentStep === 5 && !submitted" class="step">
-        <label for="flow-email" class="step-label">Where should we send your report?</label>
+      <!-- Step 2: Email + Phone -->
+      <div v-if="currentStep === 2 && !submitted" class="step">
+        <label for="flow-email" class="step-label">Where should we send your audit?</label>
         <input
           id="flow-email"
           v-model="formData.email"
           type="email"
           class="flow-input"
-          placeholder="you@example.com"
+          placeholder="Email address *"
           :aria-describedby="errors.email ? 'err-email' : undefined"
-          @keydown.enter.prevent="goNext"
         />
         <span v-if="errors.email" id="err-email" class="flow-error" role="alert">{{ errors.email }}</span>
-        <button type="button" class="flow-next flow-next--submit" @click="goNext">Run my free audit &rarr;</button>
+        <input
+          v-model="formData.phone"
+          type="tel"
+          class="flow-input"
+          placeholder="Phone number (international allowed)"
+        />
+        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
       </div>
 
-      <!-- Step 6: Personalize (post-submit, optional) -->
-      <div v-if="currentStep === 6 && submitted && !showingSuccess" class="step">
-        <span class="step-label">Want us to personalize the report?</span>
+      <!-- Step 3: Name + Submit -->
+      <div v-if="currentStep === 3 && !submitted" class="step">
+        <label for="flow-name" class="step-label">Who are we preparing this for?</label>
         <input
+          id="flow-name"
           v-model="formData.name"
           type="text"
           class="flow-input"
-          placeholder="Your name"
+          placeholder="Your name (optional)"
         />
-        <span class="step-hint">How did you hear about us?</span>
-        <div class="chip-grid">
-          <button
-            v-for="source in referralOptions"
-            :key="source"
-            type="button"
-            class="chip"
-            :class="{ 'chip-selected': formData.referralSource === source }"
-            :aria-pressed="formData.referralSource === source"
-            @click="selectReferral(source)"
-          >
-            {{ source }}
-          </button>
-        </div>
-        <div class="personalize-actions">
-          <button type="button" class="flow-next" @click="handlePersonalizeDone">Done</button>
-          <button type="button" class="skip-link" @click="skipPersonalize">No thanks, I'm good</button>
-        </div>
+        <button type="button" class="flow-next flow-next--submit" @click="goNext">Run my free audit &rarr;</button>
       </div>
 
       <!-- Success State -->
@@ -508,6 +476,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* ═══ TEASER MODE ═══ */
 .audit-cta-section {
   position: relative;
   background: #FFDAD4;
@@ -517,7 +486,6 @@ onMounted(() => {
   justify-content: center;
 }
 
-/* -- tw-hide -- */
 .tw-hide {
   clip-path: inset(-0.1em 100% -0.25em 0);
 }
@@ -567,7 +535,7 @@ onMounted(() => {
   margin: 0;
 }
 
-/* -- Form -- */
+/* -- Teaser Form -- */
 .audit-form {
   width: 100%;
 }
@@ -575,7 +543,7 @@ onMounted(() => {
 .audit-form-fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .audit-input {
@@ -583,6 +551,7 @@ onMounted(() => {
   padding: 14px 16px;
   font-family: var(--font);
   font-size: 16px;
+  font-weight: 300;
   background: transparent;
   border: 0.5px solid #24272e;
   border-radius: 0;
@@ -592,16 +561,9 @@ onMounted(() => {
   -webkit-appearance: none;
   appearance: none;
 }
+.audit-input::placeholder { color: var(--color-muted, #6e7381); }
+.audit-input:focus { border-color: var(--color-dark); }
 
-.audit-input::placeholder {
-  color: var(--color-muted, #6e7381);
-}
-
-.audit-input:focus {
-  border-color: var(--color-dark);
-}
-
-/* -- CTA Button -- */
 .cta-button {
   display: block;
   width: 100%;
@@ -618,7 +580,7 @@ onMounted(() => {
   border-radius: 0;
   cursor: pointer;
   transition: background 0.3s;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .cta-button:hover {
   background: var(--color-accent);
@@ -634,6 +596,150 @@ onMounted(() => {
   margin: 0;
 }
 
+/* -- Teaser Success -- */
+.success-cell {
+  text-align: center;
+  padding: 32px 12px;
+}
+
+/* ═══ POPUP ═══ */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(36, 39, 46, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.popup-card {
+  position: relative;
+  background: var(--color-white, #fcfcfc);
+  border: 0.5px solid #24272e;
+  padding: 48px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.popup-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+.popup-close:hover { color: var(--color-dark); }
+
+.popup-label {
+  display: block;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 8px;
+}
+
+.popup-title {
+  font-family: var(--font);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-dark);
+  line-height: 1.2;
+  margin: 0 0 16px 0;
+}
+
+.popup-summary {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-muted);
+  margin: 0 0 24px 0;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 300;
+  background: var(--color-cream);
+  border: 0.5px solid #24272e;
+  border-radius: 0;
+  color: var(--color-dark);
+  outline: none;
+  transition: border-color 0.25s;
+}
+.popup-input::placeholder { color: var(--color-muted); opacity: 0.5; }
+.popup-input:focus { border-color: var(--color-accent); }
+
+.popup-submit {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 16px;
+  background: #FF8270;
+  color: var(--color-dark);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.4s;
+  margin-top: 4px;
+}
+.popup-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--color-dark);
+  transform: translate(-101%, 101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+.popup-submit:hover::before { transform: translate(0, 0); }
+.popup-submit:hover { color: var(--color-cream); }
+
+/* Popup transition */
+.popup-enter-active,
+.popup-leave-active {
+  transition: opacity 0.25s ease;
+}
+.popup-enter-active .popup-card,
+.popup-leave-active .popup-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+.popup-enter-from,
+.popup-leave-to {
+  opacity: 0;
+}
+.popup-enter-from .popup-card {
+  transform: translateY(20px);
+  opacity: 0;
+}
+.popup-leave-to .popup-card {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
 @media (max-width: 768px) {
   .audit-cta-section {
     padding: 80px 20px;
@@ -646,6 +752,9 @@ onMounted(() => {
   }
   .audit-cell {
     padding: 10px;
+  }
+  .popup-card {
+    padding: 32px 24px;
   }
 }
 
@@ -752,70 +861,11 @@ onMounted(() => {
 }
 .flow-next:hover { background: var(--color-accent); color: var(--color-dark); transform: translateY(-2px); }
 
-/* ── Chips ── */
-.chip-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.chip {
-  background: var(--color-cream);
-  border: 0.5px solid #24272e;
-  color: var(--color-dark);
-  padding: 12px 20px;
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 0;
-  transition: border-color 0.25s, background 0.2s, color 0.2s;
-}
-.chip:hover { border-color: var(--color-accent); }
-.chip-selected {
-  background: var(--color-dark);
-  color: var(--color-cream);
-  border-color: var(--color-dark);
-}
-.chip-shake {
-  animation: chipShake 0.3s ease-in-out;
-}
-@keyframes chipShake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
-}
-.step-hint {
-  font-family: var(--font);
-  font-size: 14px;
-  color: var(--color-muted);
-  margin-top: -8px;
-}
-
-/* ── Submit button variant ── */
 .flow-next--submit {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-/* ── Personalize ── */
-.personalize-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-top: 8px;
-}
-.skip-link {
-  background: none;
-  border: none;
-  font-family: var(--font);
-  font-size: 14px;
-  color: var(--color-muted);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.skip-link:hover { color: var(--color-dark); }
+
 /* ── Success ── */
 .success-step {
   text-align: center;
@@ -861,7 +911,5 @@ onMounted(() => {
 @media (max-width: 768px) {
   .flow-card { padding: 32px 24px; }
   .step-label { font-size: 20px; }
-  .chip { flex: 1 1 calc(50% - 5px); text-align: center; }
-  .chip-grid--challenges .chip { flex: 1 1 100%; }
 }
 </style>
