@@ -359,7 +359,7 @@ onMounted(() => {
 
       <!-- Success state (teaser popup submit) -->
       <div v-if="submitted" class="audit-cell success-cell">
-        <img src="/logo-glyph.svg" alt="" class="success-glyph" />
+        <img src="/images/logo-glyph.svg" alt="" class="success-glyph" />
         <h3 class="success-title tw-hide">We're on it.</h3>
         <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
         <p class="success-trust">No commitment. No card. No calls unless you ask.</p>
@@ -483,7 +483,7 @@ onMounted(() => {
 
       <!-- Success State -->
       <div v-if="showingSuccess" class="step success-step">
-        <img src="/logo-glyph.svg" alt="" class="success-glyph" />
+        <img src="/images/logo-glyph.svg" alt="" class="success-glyph" />
         <h3 class="success-title tw-hide">We're on it.</h3>
         <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
         <p class="success-trust">No commitment. No card. No calls unless you ask.</p>

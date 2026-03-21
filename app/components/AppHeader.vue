@@ -130,7 +130,7 @@ onUnmounted(() => {
     <div class="header-inner">
       <!-- Logo -->
       <NuxtLink to="/" class="header-logo tw-hide" aria-label="AAXLO home">
-        <img src="/axxlo-logo.svg" alt="AAXLO" class="logo-img" />
+        <img src="/images/axxlo-logo.svg" alt="AAXLO" class="logo-img" />
       </NuxtLink>
 
       <!-- Desktop Nav -->

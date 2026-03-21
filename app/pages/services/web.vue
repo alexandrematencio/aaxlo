@@ -108,7 +108,7 @@ onMounted(() => {
       <div class="hero-header">
         <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
         <NuxtLink to="/">
-          <img src="/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
+          <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 

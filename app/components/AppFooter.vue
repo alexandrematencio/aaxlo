@@ -79,7 +79,7 @@ onMounted(() => {
       <!-- Left: Logo + tagline + contact -->
       <div class="footer-brand">
         <img
-          src="/axxlo-logo.svg"
+          src="/images/axxlo-logo.svg"
           alt="AAXLO"
           class="footer-logo tw-hide"
         />

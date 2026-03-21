@@ -71,7 +71,7 @@ onMounted(() => {
     <!-- Header bar -->
     <header class="stub-header">
       <NuxtLink to="/" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
-      <img src="/axxlo-logo.svg" alt="AAXL" class="stub-logo tw-hide" />
+      <img src="/images/axxlo-logo.svg" alt="AAXL" class="stub-logo tw-hide" />
     </header>
 
     <!-- Main content area -->
