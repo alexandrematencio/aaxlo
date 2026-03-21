@@ -134,7 +134,7 @@ onMounted(() => {
 .emotional-para {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(238, 238, 238, 0.6);
   line-height: 1.7;
   margin: 0;

@@ -144,7 +144,7 @@ onMounted(() => {
   display: block;
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -221,7 +221,7 @@ onMounted(() => {
 .svc-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -252,7 +252,7 @@ onMounted(() => {
 .svc-desc {
   font-family: var(--font);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.5;
   position: relative;
@@ -287,7 +287,7 @@ onMounted(() => {
 .cta-text {
   font-family: var(--font);
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
 }
 

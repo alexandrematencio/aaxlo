@@ -166,7 +166,7 @@ onMounted(() => {
   z-index: 1;
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: 0.05em;
   color: var(--color-muted);
   opacity: 0;

@@ -141,7 +141,7 @@ onMounted(() => {
 .hero-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -178,7 +178,7 @@ onMounted(() => {
 .story-text {
   font-family: var(--font);
   font-size: 17px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.7;
 }
@@ -193,7 +193,7 @@ onMounted(() => {
   display: block;
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -223,7 +223,7 @@ onMounted(() => {
 .value-desc {
   font-family: var(--font);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
 }
@@ -250,7 +250,7 @@ onMounted(() => {
 .cta-text {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
 }
 

@@ -131,7 +131,7 @@ onMounted(() => {
 .stub-back {
   font-family: var(--font);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -175,7 +175,7 @@ onMounted(() => {
 .stub-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -212,7 +212,7 @@ onMounted(() => {
 .stub-text {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
 }
@@ -257,7 +257,7 @@ onMounted(() => {
   z-index: 1;
   font-family: var(--font);
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 0.4s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);

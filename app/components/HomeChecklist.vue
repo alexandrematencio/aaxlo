@@ -206,7 +206,7 @@ onMounted(() => {
   text-align: left;
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   line-height: 1.5;
   transition: background 0.25s, border-color 0.25s, border-left-width 0.25s;
@@ -241,7 +241,7 @@ onMounted(() => {
 .checklist-reveal {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   line-height: 1.6;
   margin: 0;

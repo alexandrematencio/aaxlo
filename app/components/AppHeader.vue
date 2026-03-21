@@ -499,7 +499,7 @@ onUnmounted(() => {
 
 .mobile-sub-desc {
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted, #6e7381);
 }
 

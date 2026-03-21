@@ -210,7 +210,7 @@ onMounted(() => {
 .back-link {
   font-family: var(--font);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -239,7 +239,7 @@ onMounted(() => {
 .hero-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -275,7 +275,7 @@ onMounted(() => {
 .hero-desc {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
 }
@@ -290,7 +290,7 @@ onMounted(() => {
   display: block;
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -370,7 +370,7 @@ onMounted(() => {
 .faq-answer p {
   font-family: var(--font);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
   max-width: 640px;
@@ -398,7 +398,7 @@ onMounted(() => {
 .cta-text {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   max-width: 480px;
 }

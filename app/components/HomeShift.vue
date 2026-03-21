@@ -132,7 +132,7 @@ onMounted(() => {
 .shift-block-a {
   font-family: var(--font);
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(238, 238, 238, 0.7);
   line-height: 1.6;
   margin: 48px 0 0 0;
@@ -141,7 +141,7 @@ onMounted(() => {
 .shift-block-b {
   font-family: var(--font);
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(238, 238, 238, 0.7);
   line-height: 1.6;
   margin: 64px 0 0 0;

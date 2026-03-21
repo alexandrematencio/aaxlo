@@ -130,7 +130,7 @@ onMounted(() => {
 .step-label {
   font-family: var(--font);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 0.88;
   text-transform: uppercase;
   color: var(--color-dark);

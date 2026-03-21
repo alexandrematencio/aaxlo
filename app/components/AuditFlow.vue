@@ -543,7 +543,7 @@ onMounted(() => {
 .cta-subtitle {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(36, 39, 46, 0.7);
   line-height: 1.5;
   max-width: 580px;
@@ -628,7 +628,7 @@ onMounted(() => {
 .cta-small {
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(36, 39, 46, 0.5);
   line-height: 1.6;
   margin-top: 32px;
@@ -726,7 +726,7 @@ onMounted(() => {
 .flow-input {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   background: var(--color-cream);
   border: 0.5px solid #24272e;

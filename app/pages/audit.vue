@@ -156,7 +156,7 @@ onMounted(() => {
 .hero-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -175,7 +175,7 @@ onMounted(() => {
 .hero-subtitle {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
   max-width: 600px;
@@ -201,7 +201,7 @@ onMounted(() => {
   display: block;
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -219,7 +219,7 @@ onMounted(() => {
 .cover-item {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   line-height: 1.4;
   padding-left: 24px;
@@ -243,7 +243,7 @@ onMounted(() => {
 .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
 .faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent); flex-shrink: 0; width: 24px; text-align: center; }
 .faq-answer { padding-top: 16px; }
-.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 400; color: var(--color-muted); line-height: 1.6; max-width: 640px; }
+.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; max-width: 640px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {

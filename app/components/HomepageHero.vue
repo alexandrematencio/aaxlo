@@ -252,7 +252,7 @@ watch(() => props.animate, (val) => {
 .hero-sub {
   font-family: var(--font);
   font-size: clamp(18px, 2vw, 24px);
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   line-height: 1.35;
   max-width: 600px;
@@ -388,7 +388,7 @@ watch(() => props.animate, (val) => {
 .nav-label {
   font-family: var(--font);
   font-size: clamp(14px, 1.4vw, 20px);
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--color-dark);
@@ -410,7 +410,7 @@ watch(() => props.animate, (val) => {
   left: 10px;
   font-family: var(--font);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   transition: color 0.4s;
   z-index: 1;

@@ -85,7 +85,7 @@ onMounted(() => {
 .hero-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@ onMounted(() => {
 .hero-subtitle {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
 }
@@ -123,7 +123,7 @@ onMounted(() => {
   flex: 1;
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   background: var(--color-white);
   border: none;
@@ -154,7 +154,7 @@ onMounted(() => {
 .subscribe-success {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   padding: 16px 0;
 }

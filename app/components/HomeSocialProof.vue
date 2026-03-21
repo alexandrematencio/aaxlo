@@ -138,7 +138,7 @@ onMounted(() => {
 .social-body {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
   margin: 32px 0 0 0;

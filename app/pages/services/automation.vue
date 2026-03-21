@@ -171,19 +171,19 @@ onMounted(() => {
 
 .hero { position: relative; border-bottom: 0.5px solid #24272e; }
 .hero-header { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; }
-.back-link { font-family: var(--font); font-size: 12px; font-weight: 400; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
+.back-link { font-family: var(--font); font-size: 12px; font-weight: 300; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
 .back-link:hover { color: var(--color-dark); }
 .hero-logo { height: 28px; width: auto; }
 .hero-grid { display: grid; grid-template-columns: 240px 1fr; }
 .hero-meta { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 48px 32px; border-right: 0.5px solid #24272e; }
-.hero-label { font-family: var(--font); font-size: 11px; font-weight: 400; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; }
+.hero-label { font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; }
 .hero-index { font-family: var(--font); font-size: 140px; font-weight: 700; color: rgba(36, 39, 46, 0.04); line-height: 1; opacity: 0; }
 .hero-body { display: flex; flex-direction: column; justify-content: center; gap: 32px; padding: 64px 80px; max-width: 720px; }
 .hero-title { font-family: var(--font); font-size: 48px; font-weight: 600; color: var(--color-dark); line-height: 1.05; letter-spacing: -0.02em; }
-.hero-desc { font-family: var(--font); font-size: 18px; font-weight: 400; color: var(--color-muted); line-height: 1.6; }
+.hero-desc { font-family: var(--font); font-size: 18px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 
 .features-section { padding: 96px 80px; }
-.section-label { display: block; font-family: var(--font); font-size: 11px; font-weight: 400; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 48px; }
+.section-label { display: block; font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 48px; }
 .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 64px; }
 .feat-card { display: flex; flex-direction: column; gap: 12px; }
 .feat-title { font-family: var(--font); font-size: 22px; font-weight: 600; color: var(--color-dark); line-height: 1.2; }
@@ -195,11 +195,11 @@ onMounted(() => {
 .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
 .faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent); flex-shrink: 0; width: 24px; text-align: center; }
 .faq-answer { padding-top: 16px; }
-.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 400; color: var(--color-muted); line-height: 1.6; max-width: 640px; }
+.faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; max-width: 640px; }
 
 .cta-section { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 96px 48px; text-align: center; border-top: 0.5px solid #24272e; }
 .cta-title { font-family: var(--font); font-size: 36px; font-weight: 600; color: var(--color-dark); line-height: 1.1; }
-.cta-text { font-family: var(--font); font-size: 18px; font-weight: 400; color: var(--color-muted); max-width: 480px; }
+.cta-text { font-family: var(--font); font-size: 18px; font-weight: 300; color: var(--color-muted); max-width: 480px; }
 .cta-btn { font-family: var(--font); font-size: 16px; font-weight: 600; color: var(--color-cream); background: var(--color-dark); padding: 16px 40px; text-decoration: none; transition: background 0.4s, transform 0.3s; }
 .cta-btn:hover { background: var(--color-accent); transform: translateY(-2px); }
 

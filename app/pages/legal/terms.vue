@@ -89,22 +89,22 @@ onMounted(() => {
 .tw-hide { clip-path: inset(-0.1em 100% -0.25em 0); }
 
 .stub-header { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; background: white; border-bottom: 0.5px solid #24272e; }
-.stub-back { font-family: var(--font); font-size: 12px; font-weight: 400; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
+.stub-back { font-family: var(--font); font-size: 12px; font-weight: 300; color: var(--color-muted); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
 .stub-back:hover { color: var(--color-dark); }
 .stub-logo { height: 28px; width: auto; }
 
 .stub-main { position: relative; border-bottom: 0.5px solid #24272e; }
 .stub-content-grid { display: grid; grid-template-columns: 240px 1fr; }
 .stub-meta { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 48px 32px; border-right: 0.5px solid #24272e; }
-.stub-label { font-family: var(--font); font-size: 11px; font-weight: 400; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; }
+.stub-label { font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; }
 .stub-body { display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 48px 80px; }
 .stub-title { font-family: var(--font); font-size: 42px; font-weight: 600; color: var(--color-dark); line-height: 1.1; letter-spacing: -0.02em; }
-.stub-text { font-family: var(--font); font-size: 14px; font-weight: 400; color: var(--color-muted); }
+.stub-text { font-family: var(--font); font-size: 14px; font-weight: 300; color: var(--color-muted); }
 
 .legal-content { padding: 64px 80px 96px; padding-left: calc(240px + 80px); max-width: 900px; }
 .legal-block { margin-bottom: 40px; }
 .legal-block h2 { font-family: var(--font); font-size: 18px; font-weight: 600; color: var(--color-dark); margin-bottom: 12px; line-height: 1.3; }
-.legal-block p { font-family: var(--font); font-size: 15px; font-weight: 400; color: var(--color-muted); line-height: 1.7; }
+.legal-block p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.7; }
 .legal-block a { color: var(--color-accent); text-decoration: none; }
 .legal-block a:hover { text-decoration: underline; }
 

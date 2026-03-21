@@ -131,7 +131,7 @@ onMounted(() => {
 .hero-label {
   font-family: var(--font);
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-accent);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -191,7 +191,7 @@ onMounted(() => {
 .form-textarea {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   background: var(--color-cream);
   border: 0.5px solid #24272e;
@@ -249,7 +249,7 @@ onMounted(() => {
 .success-text {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.6;
   margin-bottom: 32px;
@@ -289,7 +289,7 @@ onMounted(() => {
 .info-text {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1.4;
 }
@@ -297,7 +297,7 @@ onMounted(() => {
 .info-link {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-dark);
   text-decoration: none;
   transition: color 0.3s;

@@ -200,7 +200,7 @@ onMounted(() => {
 .footer-tagline {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(238, 238, 238, 0.66);
   line-height: 1.4;
 }
@@ -214,7 +214,7 @@ onMounted(() => {
 .footer-email {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: #ffffff;
   line-height: 1;
   position: relative;
@@ -240,7 +240,7 @@ onMounted(() => {
 .footer-location {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1;
 }
@@ -283,7 +283,7 @@ onMounted(() => {
 .footer-links a {
   font-family: var(--font);
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 300;
   color: rgba(238, 238, 238, 0.66);
   line-height: 1;
   transition: color 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -308,7 +308,7 @@ onMounted(() => {
 .footer-copyright {
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
   line-height: 1;
 }
@@ -319,7 +319,7 @@ onMounted(() => {
   gap: 6px;
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--color-muted);
 }
 
