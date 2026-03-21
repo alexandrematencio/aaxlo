@@ -189,7 +189,7 @@ onMounted(() => {
 
 /* ── FORM SECTION ── */
 .form-section {
-  padding: 0 80px 96px;
+  padding: 96px 80px;
 }
 
 .form-layout {
@@ -260,7 +260,7 @@ onMounted(() => {
 @media (max-width: 768px) {
   .hero { padding: 48px 24px 32px; }
   .hero-title { font-size: 32px; }
-  .form-section { padding: 0 24px 64px; }
+  .form-section { padding: 64px 24px; }
   .covers-section { padding: 64px 24px; }
   .faq-section { padding: 64px 24px; }
   .faq-item { padding: 12px 10px; }
