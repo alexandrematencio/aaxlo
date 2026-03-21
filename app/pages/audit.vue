@@ -77,6 +77,7 @@ onMounted(() => {
         if (entry.isIntersecting) {
           const ftl = gsap.timeline({ defaults: { ease: 'power2.out' } })
           ftl.to(faqSection.querySelector('.section-label'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, ease: 'steps(10)' })
+          ftl.to(faqSection.querySelector('.faq-title'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.15, ease: 'steps(20)' }, '-=0.1')
           ftl.to(faqSection.querySelectorAll('.faq-item'), { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.25, stagger: 0.06 }, '-=0.1')
           obs.disconnect()
         }
@@ -118,6 +119,7 @@ onMounted(() => {
       <div class="faq-container">
         <div class="faq-label-cell">
           <span class="section-label tw-hide">FREQUENTLY ASKED</span>
+          <h2 class="faq-title tw-hide">Questions &amp; Answers</h2>
         </div>
         <div class="faq-list">
           <div
@@ -244,6 +246,8 @@ onMounted(() => {
 .faq-section { padding: 96px 80px; border-top: 0.5px solid #24272e; display: flex; justify-content: center; }
 .faq-container { max-width: 700px; width: 100%; display: flex; flex-direction: column; }
 .faq-label-cell { border: 0.5px solid #24272e; padding: 12px; }
+.faq-label-cell .section-label { margin-bottom: 8px; }
+.faq-title { font-family: var(--font); font-size: clamp(28px, 4vw, 44px); font-weight: 600; color: var(--color-dark); line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
 .faq-list { display: flex; flex-direction: column; }
 .faq-item { border: 0.5px solid #24272e; border-top: none; cursor: pointer; padding: 14px 12px; transition: background 0.2s; }
 .faq-item:hover { background: var(--color-cream, #fff1ef); }
