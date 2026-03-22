@@ -18,7 +18,6 @@ function showFinalState() {
   el.querySelectorAll('.emotional-cell-slide').forEach(c => {
     gsap.set(c, { opacity: 1, x: 0 })
   })
-  el.style.height = ''
 }
 
 let scrollHandler = null
@@ -62,12 +61,16 @@ onMounted(() => {
   const revealed = new Set()
 
   // Hide all slide cells off-screen to the right
+  // Use viewport-relative offset so it works on all screen sizes
+  const slideOffset = Math.min(120, window.innerWidth * 0.3)
   slideCells.forEach(cell => {
-    gsap.set(cell, { opacity: 0, x: 120 })
+    gsap.set(cell, { opacity: 0, x: slideOffset })
   })
 
-  // Each block gets its own full scroll distance — 3 blocks = 3 finger swipes
-  const scrollPerBlock = window.innerHeight * 0.7
+  // Each block needs a full viewport of scroll distance — forces deliberate scrolling
+  // Slightly less on mobile (smaller fingers, shorter swipes)
+  const isMobile = window.innerWidth < 768
+  const scrollPerBlock = window.innerHeight * (isMobile ? 0.9 : 1.2)
   const extraHeight = scrollPerBlock * cellCount
   const naturalHeight = el.offsetHeight
   el.style.height = `${naturalHeight + extraHeight}px`
@@ -101,13 +104,10 @@ onMounted(() => {
       })
     }
 
-    // Once all revealed, clean up after a short delay
+    // Once all revealed, just stop listening — keep the extra height
+    // so the sticky container naturally unsticks as the user scrolls past
     if (revealed.size >= cellCount) {
-      setTimeout(() => {
-        // Collapse the extra scroll height smoothly
-        el.style.height = ''
-        window.removeEventListener('scroll', scrollHandler)
-      }, 800)
+      window.removeEventListener('scroll', scrollHandler)
     }
   }
 
@@ -171,9 +171,10 @@ onBeforeUnmount(() => {
 .emotional-sticky {
   position: sticky;
   top: 10vh;
-  padding: 120px clamp(32px, 6vw, 96px);
+  padding: clamp(48px, 10vh, 120px) clamp(16px, 6vw, 96px);
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .tw-hide {
@@ -241,16 +242,22 @@ onBeforeUnmount(() => {
 
 @media (max-width: 768px) {
   .emotional-sticky {
-    padding: 80px 20px;
+    top: 5vh;
+    padding: 48px 16px;
   }
   .emotional-headline {
-    font-size: clamp(26px, 6vw, 36px);
+    font-size: clamp(22px, 5.5vw, 32px);
   }
   .emotional-para {
-    font-size: 17px;
+    font-size: 15px;
+    line-height: 1.5;
   }
   .emotional-cell {
     padding: 10px;
+  }
+  .emotional-label {
+    font-size: 10px;
+    margin-bottom: 6px;
   }
 }
 </style>
