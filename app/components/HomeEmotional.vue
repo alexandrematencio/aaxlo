@@ -104,10 +104,26 @@ onMounted(() => {
       })
     }
 
-    // Once all revealed, just stop listening — keep the extra height
-    // so the sticky container naturally unsticks as the user scrolls past
+    // Once all revealed, collapse extra height and free the scroll
     if (revealed.size >= cellCount) {
       window.removeEventListener('scroll', scrollHandler)
+
+      // Wait for the last slide animation to finish
+      setTimeout(() => {
+        // Remove the extra scroll height and adjust scroll position
+        // so the page doesn't jump
+        const currentScroll = window.scrollY
+        const sectionTop = el.offsetTop
+        const currentSectionHeight = el.offsetHeight
+        el.style.height = ''
+        const newSectionHeight = el.offsetHeight
+        const heightDiff = currentSectionHeight - newSectionHeight
+
+        // If the user is scrolled past the section, adjust scroll to compensate
+        if (currentScroll > sectionTop + newSectionHeight) {
+          window.scrollTo({ top: currentScroll - heightDiff, behavior: 'instant' })
+        }
+      }, 800)
     }
   }
 
