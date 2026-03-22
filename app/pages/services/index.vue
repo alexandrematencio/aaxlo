@@ -338,7 +338,8 @@ onMounted(() => {
   .svc-grid {
     grid-template-columns: 1fr;
   }
-  .svc-card {
+  .svc-card,
+  .svc-card:nth-child(3n) {
     border-right: none;
   }
   .hero {

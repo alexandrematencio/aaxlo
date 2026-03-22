@@ -58,7 +58,7 @@ onMounted(() => {
     <div class="legal-content">
       <div class="legal-block tw-hide">
         <h2>1. &Eacute;diteur du site</h2>
-        <p>AAXLO Pte. Ltd.<br>Singapour<br>Email : <a href="mailto:hi@axxlo.com">hi@axxlo.com</a></p>
+        <p>AAXLO Pte. Ltd.<br>Singapour<br>Email : <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a></p>
       </div>
       <div class="legal-block tw-hide">
         <h2>2. Directeur de la publication</h2>
@@ -74,7 +74,7 @@ onMounted(() => {
       </div>
       <div class="legal-block tw-hide">
         <h2>5. Donn&eacute;es personnelles</h2>
-        <p>Pour toute question relative &agrave; la protection de vos donn&eacute;es personnelles, veuillez consulter notre <NuxtLink to="/legal/privacy">politique de confidentialit&eacute;</NuxtLink> ou nous contacter &agrave; <a href="mailto:hi@axxlo.com">hi@axxlo.com</a>.</p>
+        <p>Pour toute question relative &agrave; la protection de vos donn&eacute;es personnelles, veuillez consulter notre <NuxtLink to="/legal/privacy">politique de confidentialit&eacute;</NuxtLink> ou nous contacter &agrave; <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
       </div>
     </div>
   </div>

@@ -70,11 +70,11 @@ onMounted(() => {
       </div>
       <div class="legal-block tw-hide">
         <h2>4. Your Rights</h2>
-        <p>You have the right to access, correct, or delete your personal data at any time. To exercise these rights, contact us at hi@axxlo.com.</p>
+        <p>You have the right to access, correct, or delete your personal data at any time. To exercise these rights, contact us at hi@aaxlo.com.</p>
       </div>
       <div class="legal-block tw-hide">
         <h2>5. Contact</h2>
-        <p>For any privacy-related inquiries, please contact us at <a href="mailto:hi@axxlo.com">hi@axxlo.com</a>.</p>
+        <p>For any privacy-related inquiries, please contact us at <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
       </div>
     </div>
   </div>

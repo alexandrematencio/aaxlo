@@ -193,7 +193,7 @@ onMounted(() => {
   background: #FF8270;
   color: var(--color-dark);
   text-decoration: none;
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border: none;
   border-radius: 0;
   cursor: pointer;
   overflow: hidden;

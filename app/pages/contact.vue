@@ -94,7 +94,7 @@ onMounted(() => {
         <div class="contact-info tw-hide">
           <div class="info-block">
             <h3 class="info-title">Email</h3>
-            <a href="mailto:hi@axxlo.com" class="info-link">hi@axxlo.com</a>
+            <a href="mailto:hi@aaxlo.com" class="info-link">hi@aaxlo.com</a>
           </div>
           <div class="info-block">
             <h3 class="info-title">Location</h3>

@@ -330,14 +330,14 @@ onMounted(() => {
               v-model="formData.businessName"
               type="text"
               class="audit-input"
-              placeholder="Your business name"
+              placeholder="Your business name (required)"
               style="opacity: 0; transform: translateY(8px)"
             />
             <input
               v-model="formData.websiteUrl"
               type="url"
               class="audit-input"
-              placeholder="Your website URL (if existing)"
+              placeholder="Your website URL (optional, if existing)"
               style="opacity: 0; transform: translateY(8px)"
             />
           </div>
@@ -432,7 +432,7 @@ onMounted(() => {
           v-model="formData.businessName"
           type="text"
           class="flow-input"
-          placeholder="Your business name *"
+          placeholder="Your business name (required)"
           :aria-describedby="errors.businessName ? 'err-business' : undefined"
         />
         <span v-if="errors.businessName" id="err-business" class="flow-error" role="alert">{{ errors.businessName }}</span>
@@ -441,7 +441,7 @@ onMounted(() => {
           v-model="formData.websiteUrl"
           type="url"
           class="flow-input"
-          placeholder="Your website URL (if existing)"
+          placeholder="Your website URL (optional, if existing)"
           :aria-describedby="errors.websiteUrl ? 'err-url' : undefined"
         />
         <span v-if="errors.websiteUrl" id="err-url" class="flow-error" role="alert">{{ errors.websiteUrl }}</span>

@@ -80,6 +80,9 @@ function showFinalState() {
   const headline = el.querySelector('.checklist-headline')
   if (headline) gsap.set(headline, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   el.querySelectorAll('.checklist-card').forEach(c => {
+    gsap.set(c, { opacity: 1, y: 0, scale: 1 })
+  })
+  el.querySelectorAll('.checklist-check').forEach(c => {
     gsap.set(c, { opacity: 1, y: 0 })
   })
 }
@@ -104,13 +107,66 @@ onMounted(() => {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.12, ease: 'steps(30)',
           }, '-=0.1')
 
-          /* Cards stagger fade in */
+          /* Cards fade in */
           const cards = el.querySelectorAll('.checklist-card')
           tl.to(cards, {
             opacity: 1, y: 0, duration: 0.18, stagger: 0.03,
           }, '+=0.04')
 
           observer.disconnect()
+
+          /* Checkbox boxes — scroll-driven bomber drop, one per scroll step */
+          const checks = Array.from(el.querySelectorAll('.checklist-check'))
+          const revealed = new Set()
+          checks.forEach(check => gsap.set(check, { opacity: 0, y: -40 }))
+
+          function dropCheck(check) {
+            gsap.to(check, {
+              opacity: 1, y: 0,
+              duration: 0.25,
+              ease: 'power3.in',
+              onComplete: () => {
+                gsap.to(check, {
+                  y: 2, duration: 0.05, ease: 'power1.in',
+                  onComplete: () => {
+                    gsap.to(check, { y: 0, duration: 0.12, ease: 'elastic.out(1, 0.45)' })
+                  },
+                })
+              },
+            })
+          }
+
+          function onScroll() {
+            if (revealed.size >= checks.length) {
+              window.removeEventListener('scroll', onScroll)
+              return
+            }
+
+            const sectionRect = el.getBoundingClientRect()
+            const vh = window.innerHeight
+
+            // Map scroll progress through the section to checkbox index
+            // Start revealing when section is 70% visible, finish when 30% from top
+            const scrollStart = vh * 0.7
+            const scrollEnd = vh * 0.1
+            const progress = (scrollStart - sectionRect.top) / (scrollStart - scrollEnd)
+            const clamped = Math.max(0, Math.min(1, progress))
+
+            // How many should be revealed at this scroll position
+            const targetCount = Math.floor(clamped * checks.length)
+
+            // Reveal any new ones
+            for (let i = 0; i < targetCount; i++) {
+              if (!revealed.has(i)) {
+                revealed.add(i)
+                dropCheck(checks[i])
+              }
+            }
+          }
+
+          window.addEventListener('scroll', onScroll, { passive: true })
+          // Check initial position in case already scrolled
+          onScroll()
         }
       })
     },
@@ -270,6 +326,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   margin-top: 2px;
+  border: 0.5px solid #24272e;
+  will-change: transform, opacity;
 }
 
 .checklist-text {

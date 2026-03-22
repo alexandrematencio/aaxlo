@@ -88,7 +88,7 @@ onMounted(() => {
             Your local business, amplified by AI.
           </p>
           <div class="footer-contact">
-            <a href="mailto:hi@axxlo.com" class="footer-email tw-hide">hi@axxlo.com</a>
+            <a href="mailto:hi@aaxlo.com" class="footer-email tw-hide">hi@aaxlo.com</a>
             <span class="footer-location tw-hide">Based in Singapore</span>
           </div>
         </div>
@@ -134,7 +134,7 @@ onMounted(() => {
         <div class="footer-col tw-hide">
           <h4 class="footer-col-title">Contact</h4>
           <ul class="footer-links">
-            <li><a href="mailto:hi@axxlo.com">Email: hi@axxlo.com</a></li>
+            <li><a href="mailto:hi@aaxlo.com">Email: hi@aaxlo.com</a></li>
             <li><a href="https://cal.com/aaxlo" target="_blank" rel="noopener">Book a call</a></li>
           </ul>
         </div>

@@ -78,7 +78,7 @@ onMounted(() => {
       </div>
       <div class="legal-block tw-hide">
         <h2>6. Contact</h2>
-        <p>For questions about these terms, contact us at <a href="mailto:hi@axxlo.com">hi@axxlo.com</a>.</p>
+        <p>For questions about these terms, contact us at <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
       </div>
     </div>
   </div>

@@ -378,6 +378,9 @@ onMounted(() => {
   padding: 14px 12px;
   transition: background 0.2s;
 }
+.faq-item:first-child {
+  border-top: 0.5px solid #24272e;
+}
 
 .faq-item:hover {
   background: var(--color-cream, #fff1ef);

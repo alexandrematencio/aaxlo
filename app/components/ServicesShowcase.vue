@@ -198,10 +198,6 @@ onMounted(() => {
 .grid-row {
   display: flex;
   flex: 1;
-  border-bottom: 0.5px solid #24272e;
-}
-.grid-row:last-child {
-  border-bottom: none;
 }
 
 /* ── Grid cells ── */
@@ -218,9 +214,13 @@ onMounted(() => {
   color: var(--color-dark);
   cursor: pointer;
   border-right: 0.5px solid #24272e;
+  border-bottom: 0.5px solid #24272e;
 }
 .grid-cell:last-child {
   border-right: none;
+}
+.grid-row:last-child .grid-cell {
+  border-bottom: none;
 }
 
 /* Accent cell (audit CTA) */
@@ -348,7 +348,7 @@ onMounted(() => {
     padding: 40px 32px;
     min-height: 220px;
   }
-  .grid-cell:last-child {
+  .grid-row:last-child .grid-cell:last-child {
     border-bottom: none;
   }
   .cell-title {

@@ -518,7 +518,7 @@ onUnmounted(() => {
 }
 
 .mobile-nav-item:first-child {
-  border-top: 0.5px solid #24272e;
+  border-top: none;
 }
 
 .mobile-nav-item.mobile-sub {

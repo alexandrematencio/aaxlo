@@ -9,6 +9,8 @@ const props = defineProps({
 const section = ref(null)
 const headlineRef = ref(null)
 const trailRef = ref(null)
+const heroSubRef = ref(null)
+const glyphMaskRef = ref(null)
 const { navigateWithStripes } = useStripeTransition()
 
 // ── Scramble text setup ──
@@ -74,6 +76,7 @@ function showFinalState() {
   if (trailRef.value) gsap.set(trailRef.value, { opacity: 0 })
 
   gsap.set(el.querySelector('.hero-sub'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  if (glyphMaskRef.value) gsap.set(glyphMaskRef.value, { opacity: 0 })
   gsap.set(el.querySelector('.hero-cta'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   el.querySelectorAll('.nav-cell').forEach(c => {
     gsap.set(c, { clipPath: 'inset(0 0 0 0)' })
@@ -92,12 +95,7 @@ function runAnimation() {
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
-  /* 1. Subtitle typewriter */
-  tl.to(el.querySelector('.hero-sub'), {
-    clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.25, ease: 'steps(15)',
-  }, '+=0.1')
-
-  /* 2. CTA reveal */
+  /* 1. CTA reveal */
   tl.to(el.querySelector('.hero-cta'), {
     clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2,
   }, '-=0.05')
@@ -145,11 +143,15 @@ function runAnimation() {
     })
   }
 
-  // Main character scramble + staggered slide-up
+  // Main character scramble + staggered slide-up (1.3x speed)
+  const staggerGap = 0.04 / 1.3    // ~0.031s between chars
+  const baseDuration = 0.4 / 1.3   // ~0.308s scramble per char
+  const slideDuration = 0.25 / 1.3 // ~0.192s slide-up
+
   charEls.forEach((charEl, i) => {
     const finalChar = charEl.dataset.final
-    const offset = i * 0.04
-    const scrambleDuration = 0.4 + Math.random() * 0.15
+    const offset = i * staggerGap
+    const scrambleDuration = baseDuration + Math.random() * (0.15 / 1.3)
 
     // Start scrambling (direct DOM — bypasses Vue reactivity)
     tl.call(() => {
@@ -161,11 +163,11 @@ function runAnimation() {
     // Fade in + slide up (transform + opacity only)
     tl.fromTo(charEl,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.25, ease: 'power3.out' },
+      { opacity: 1, y: 0, duration: slideDuration, ease: 'power3.out' },
       `scramble+=${offset}`
     )
 
-    // Lock to final character — clearInterval FIRST, then set text
+    // Lock to final character
     tl.call(() => {
       clearInterval(charEl._scrambleInterval)
       delete charEl._scrambleInterval
@@ -174,9 +176,60 @@ function runAnimation() {
   })
 
   // Fade out trail after all chars have locked
-  const lastCharLock = charEls.length * 0.04 + 0.55
+  const lastCharLock = charEls.length * staggerGap + (0.55 / 1.3)
   if (trailRef.value) {
-    tl.to(trailRef.value, { opacity: 0, duration: 0.2 }, `scramble+=${lastCharLock}`)
+    tl.to(trailRef.value, { opacity: 0, duration: 0.15 }, `scramble+=${lastCharLock}`)
+  }
+
+  // ── 7. Subtitle glyph-mask reveal (right after headline scramble) ──
+  tl.addLabel('subReveal', `scramble+=${lastCharLock + 0.1}`)
+
+  const subEl = heroSubRef.value
+  const glyphEl = glyphMaskRef.value
+  if (subEl && glyphEl) {
+    // Measure subtitle height and position the glyph to match
+    const subRect = subEl.getBoundingClientRect()
+    const subHeight = subRect.height
+    const glyphSize = subHeight // glyph sized to text height
+
+    // Position glyph but keep hidden until animation starts
+    gsap.set(glyphEl, {
+      width: glyphSize,
+      height: glyphSize,
+      top: 0,
+      left: -glyphSize - 4,
+      opacity: 0,
+      x: 0,
+    })
+
+    // Remove tw-hide clip on subtitle
+    gsap.set(subEl, { clipPath: 'inset(0 100% 0 0)' })
+
+    // Glyph sweeps left to right across the subtitle, revealing text behind it
+    const sweepDistance = subRect.width + glyphSize + 8
+
+    // Glyph appears only when this step starts
+    tl.set(glyphEl, { opacity: 1 }, 'subReveal')
+
+    tl.to(glyphEl, {
+      x: sweepDistance,
+      duration: 0.6,
+      ease: 'power2.inOut',
+    }, 'subReveal')
+
+    // Subtitle clip reveals in sync with glyph position
+    tl.to(subEl, {
+      clipPath: 'inset(-0.1em 0% -0.25em 0)',
+      duration: 0.6,
+      ease: 'power2.inOut',
+    }, 'subReveal')
+
+    // Glyph fades out at the end
+    tl.to(glyphEl, {
+      opacity: 0,
+      duration: 0.15,
+      ease: 'power2.in',
+    }, 'subReveal+=0.5')
   }
 }
 
@@ -236,9 +289,32 @@ watch(() => props.animate, (val) => {
                 >{{ c.char }}</span></span>
             </span>
           </h1>
-          <p class="hero-sub hero-sub-delayed tw-hide">
-            You just haven't had time to fix it.
-          </p>
+          <div class="hero-sub-wrap">
+            <p ref="heroSubRef" class="hero-sub hero-sub-delayed tw-hide">
+              You just haven't had time to fix it.
+            </p>
+            <!-- Glyph mask — sweeps across to reveal subtitle -->
+            <svg
+              ref="glyphMaskRef"
+              class="glyph-mask"
+              viewBox="0 0 37 37"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path d="M0.179 24.7734C1.073 27.2357 2.506 29.5471 4.48 31.5229C6.454 33.4971 8.765 34.9312 11.229 35.8236L0.179 24.7734Z" fill="#FF8270"/>
+              <path d="M-0.926 18.6797C-0.916 19.6106 -0.835 20.5398 -0.684 21.4607L14.54 36.6856C15.461 36.8366 16.391 36.9171 17.321 36.9272L-0.926 18.6797Z" fill="#FF8270"/>
+              <path d="M-0.428 14.1895C-0.597 14.9023 -0.723 15.6236 -0.807 16.3498L19.651 36.808C20.378 36.7241 21.099 36.5983 21.812 36.4289L-0.428 14.1895Z" fill="#FF8270"/>
+              <path d="M0.87 10.502C0.59 11.089 0.342 11.6895 0.127 12.2967L23.703 35.873C24.312 35.6583 24.911 35.41 25.498 35.1299L0.87 10.502Z" fill="#FF8270"/>
+              <path d="M2.752 7.39648C2.383 7.88794 2.041 8.39448 1.729 8.9111L27.09 34.2721C27.608 33.9584 28.113 33.6162 28.605 33.2489L2.752 7.39648Z" fill="#FF8270"/>
+              <path d="M5.131 4.78516C4.911 4.98476 4.693 5.19107 4.48 5.40408C4.267 5.6171 4.061 5.83348 3.861 6.05488L29.945 32.1388C30.165 31.9392 30.383 31.7328 30.596 31.5198C30.809 31.3068 31.015 31.0904 31.215 30.869L5.131 4.78516Z" fill="#FF8270"/>
+              <path d="M7.987 2.65625C7.469 2.96991 6.962 3.3104 6.471 3.67941L32.322 29.5301C32.691 29.0387 33.031 28.5321 33.345 28.0138L7.987 2.65625Z" fill="#FF8270"/>
+              <path d="M11.374 1.05469C10.765 1.26938 10.166 1.51763 9.577 1.79774L34.204 26.424C34.484 25.837 34.732 25.2365 34.947 24.6276L11.374 1.05469Z" fill="#FF8270"/>
+              <path d="M15.426 0.119141C14.7 0.203006 13.978 0.327127 13.266 0.496536L35.503 22.7343C35.673 22.0215 35.799 21.2986 35.881 20.574L15.426 0.119141Z" fill="#FF8270"/>
+              <path d="M34.896 12.1536C34.004 9.69135 32.572 7.38002 30.596 5.40414C28.621 3.42995 26.31 1.99585 23.846 1.10352L34.895 12.152L34.896 12.1536Z" fill="#FF8270"/>
+              <path d="M20.537 0.24321C19.616 0.0922522 18.685 0.0100639 17.754 0L36 18.2458C35.99 17.3149 35.908 16.384 35.757 15.4631L20.537 0.24321Z" fill="#FF8270"/>
+            </svg>
+          </div>
           <a
             href="/audit"
             class="hero-cta tw-hide"
@@ -428,6 +504,12 @@ watch(() => props.animate, (val) => {
   text-align: left;
 }
 
+.hero-sub-wrap {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
 .hero-sub {
   font-family: var(--font);
   font-size: clamp(18px, 2vw, 24px);
@@ -436,6 +518,16 @@ watch(() => props.animate, (val) => {
   line-height: 1.35;
   max-width: 600px;
   margin: 0;
+}
+
+.glyph-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 2;
 }
 
 /* ── CTA Button ── */
@@ -601,17 +693,20 @@ watch(() => props.animate, (val) => {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
   }
+  /* Reset desktop border rules */
   .nav-cell:nth-child(3n) {
     border-right: 0.5px solid #24272e;
   }
+  /* Remove right border on last column (every 2nd child) */
   .nav-cell:nth-child(2n) {
     border-right: none;
   }
-  .nav-cell:nth-child(-n+3) {
+  /* Bottom border on all cells except last row (children 5 & 6) */
+  .nav-cell {
     border-bottom: 0.5px solid #24272e;
   }
-  .nav-cell:nth-child(n+3):nth-child(-n+4) {
-    border-bottom: 0.5px solid #24272e;
+  .nav-cell:nth-child(n+5) {
+    border-bottom: none;
   }
 }
 

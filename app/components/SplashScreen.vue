@@ -51,8 +51,8 @@ onMounted(async () => {
   const multiTopPx = svgRect.top + 18.5 * pxPerUnit - groupRect.top
   const multiFontSize = 37 * pxPerUnit * 1.1
 
-  // Lab Ops: positioned right of X (SVG x≈120, past the X letter's right edge)
-  const labLeftPx = svgRect.left + 120 * pxPerUnit - groupRect.left
+  // Lab & Ops: positioned right of X (SVG x≈115, closer to X letter)
+  const labLeftPx = svgRect.left + 115 * pxPerUnit - groupRect.left
   const labTopPx = svgRect.top + 18.5 * pxPerUnit - groupRect.top
   const labFontSize = Math.max(12, 8 * pxPerUnit)
 
@@ -99,48 +99,89 @@ onMounted(async () => {
 
   tl.to(multiEl.value, {
     opacity: 1, scale: 1.1, rotation: 0,
-    duration: 0.35, ease: 'elastic.out(1, 0.5)',
-  }, '+=0.08')
+    duration: 0.22, ease: 'elastic.out(1, 0.5)',
+  }, '+=0.04')
   .to(multiEl.value, {
     rotation: 360 * 3 + 45, scale: 0.7, opacity: 0,
-    duration: 0.4, ease: 'power2.inOut',
-  }, '+=0.08')
-  .to(xLetter.value, { opacity: 1, scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.55)', svgOrigin: '92 18.5' }, '-=0.15')  // ~2.26s
+    duration: 0.25, ease: 'power2.inOut',
+  }, '+=0.04')
+  .to(xLetter.value, { opacity: 1, scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.55)', svgOrigin: '92 18.5' }, '-=0.1')
 
-  // PHASE 4: "Lab Operations" typewriter ~2.26s
-  gsap.set(labOps.value, { opacity: 1, clipPath: 'inset(-0.1em 100% -0.25em 0)' })
-  let cursorBlink = null
+  // PHASE 4: "Local Operations" scramble reveal (fast)
+  const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  const labChars = labOps.value.querySelectorAll('.lab-char')
   const labWidth = labOps.value.getBoundingClientRect().width
+  let cursorBlink = null
 
+  // Hide each char individually, show container
+  gsap.set(labOps.value, { opacity: 1 })
+  labChars.forEach(c => gsap.set(c, { opacity: 0 }))
+
+  // Cursor blink
   tl.call(() => {
     gsap.set(cursorEl.value, { opacity: 1 })
     cursorBlink = gsap.to(cursorEl.value, {
       opacity: 0, duration: 0.4, yoyo: true, repeat: -1, ease: 'steps(1)',
     })
-  }, null, '+=0.05')
-  .to(labOps.value, { clipPath: 'inset(0 0% 0 0)', duration: 0.4, ease: 'steps(15)' })
+  }, null, '+=0.02')
+
+  // Scramble each character — total ~0.25s
+  const totalChars = labChars.length
+  const staggerGap = 0.25 / totalChars
+
+  tl.call(() => {
+    labChars.forEach((charEl, i) => {
+      const finalChar = charEl.dataset.final
+      if (finalChar === ' ') {
+        gsap.set(charEl, { opacity: 1 })
+        return
+      }
+
+      const charDelay = i * staggerGap
+      const scrambleDur = 0.1 + Math.random() * 0.08
+
+      setTimeout(() => {
+        gsap.set(charEl, { opacity: 1 })
+        charEl._interval = setInterval(() => {
+          charEl.textContent = SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+        }, 30)
+      }, charDelay * 1000)
+
+      setTimeout(() => {
+        if (charEl._interval) {
+          clearInterval(charEl._interval)
+          delete charEl._interval
+        }
+        charEl.textContent = finalChar === '&' ? '&' : finalChar
+      }, (charDelay + scrambleDur) * 1000)
+    })
+  })
+
+  // Cursor moves to end during scramble
   .to(cursorEl.value, {
     left: labLeftPx + labWidth + 4,
-    duration: 0.4, ease: 'steps(15)',
-  }, '<')                                                              // ~2.71s
+    duration: 0.25, ease: 'power2.out',
+  }, '<')
 
-  // PHASE 5: "ab" and "perations" disappear, L and O scale up + relocate
+  // Reserve time on timeline
+  tl.to({}, { duration: 0.25 })
+
+  // PHASE 5: fade out non-keep chars, L and O scale up
   const labFadeEls = labOps.value.querySelectorAll('.lab-fade')
-  const labSpaceEl = labOps.value.querySelector('.lab-space')
+  const labSpaceEl = labOps.value.querySelectorAll('.lab-space')
   const labKeepL = labOps.value.querySelectorAll('.lab-keep')[0]
   const labKeepO = labOps.value.querySelectorAll('.lab-keep')[1]
 
-  // Prepare: hide SVG L and O (they appear after the HTML ones arrive)
   gsap.set(lLetter.value, { opacity: 0 })
   gsap.set(oLetter.value, { opacity: 0 })
 
   // Kill cursor
-  tl.call(() => { if (cursorBlink) cursorBlink.kill() }, null, '+=0.15')
-  .to(cursorEl.value, { opacity: 0, duration: 0.08 }, '<')
+  tl.call(() => { if (cursorBlink) cursorBlink.kill() }, null, '+=0.05')
+  .to(cursorEl.value, { opacity: 0, duration: 0.06 }, '<')
 
-  // Fade out "ab", " ", "perations"
-  .to(labFadeEls, { opacity: 0, duration: 0.2, ease: 'power2.in' })
-  .to(labSpaceEl, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '<')
+  // Fade out non-keep chars
+  .to(labFadeEls, { opacity: 0, duration: 0.12, ease: 'power2.in' })
+  .to(labSpaceEl, { opacity: 0, duration: 0.12, ease: 'power2.in' }, '<')
 
   // Promote L and O to independent absolutely-positioned elements,
   // then animate font-size + position with a smooth continuous flow.
@@ -173,7 +214,7 @@ onMounted(async () => {
       left: lStartLeft,
       top: lStartTop,
       fontSize: currentFontSize,
-      fontWeight: 600,
+      fontWeight: 400,
       color: '#24272E',
       fontFamily: 'var(--font)',
     })
@@ -182,7 +223,7 @@ onMounted(async () => {
       left: oStartLeft,
       top: oStartTop,
       fontSize: currentFontSize,
-      fontWeight: 600,
+      fontWeight: 400,
       color: '#24272E',
       fontFamily: 'var(--font)',
     })
@@ -197,8 +238,8 @@ onMounted(async () => {
 
     // Single smooth scale+reposition using transform only (GPU-accelerated)
     // Animating fontSize/left/top causes layout thrashing and stutters.
-    const scaleDur = 0.7
-    const scaleEase = 'elastic.out(1, 0.65)'
+    const scaleDur = 0.5
+    const scaleEase = 'elastic.out(1, 0.6)'
     const scaleFactor = targetFontSize / currentFontSize
 
     // Calculate translation needed (from current position to target position)
@@ -240,16 +281,16 @@ onMounted(async () => {
     // Bouncy overshoot on SVG letters — start slightly overscaled, settle to 1
     gsap.fromTo(lLetter.value,
       { scale: 1.15, svgOrigin: '126 18.5' },
-      { scale: 1, duration: 0.6, delay: crossFadeAt, ease: 'elastic.out(1, 0.4)', svgOrigin: '126 18.5' }
+      { scale: 1, duration: 0.45, delay: crossFadeAt, ease: 'elastic.out(1, 0.4)', svgOrigin: '126 18.5' }
     )
     gsap.fromTo(oLetter.value,
       { scale: 1.15, svgOrigin: '158.5 18.5' },
-      { scale: 1, duration: 0.6, delay: crossFadeAt + 0.04, ease: 'elastic.out(1, 0.4)', svgOrigin: '158.5 18.5' }
+      { scale: 1, duration: 0.45, delay: crossFadeAt + 0.03, ease: 'elastic.out(1, 0.4)', svgOrigin: '158.5 18.5' }
     )
   })
 
   // Reserve time on the timeline matching the scale animation duration
-  tl.to({}, { duration: 0.65 })
+  tl.to({}, { duration: 0.45 })
 
   // PHASE 6: O → disk → stripes → tilt → glyph
   const stripeRects = morphGroup.value.querySelectorAll('.cutout-stripe')
@@ -258,20 +299,20 @@ onMounted(async () => {
   gsap.set(stripeRects, { scaleY: 0 })
   gsap.set(glyphGroup.value, { opacity: 0 })
 
-  tl.to(solidDisk.value, { opacity: 1, scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.6)', svgOrigin: '158.5 18.5' }, '+=0.1')
-  .to(oLetter.value, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '-=0.2')
+  tl.to(solidDisk.value, { opacity: 1, scale: 1, duration: 0.2, ease: 'elastic.out(1, 0.6)', svgOrigin: '158.5 18.5' }, '+=0.04')
+  .to(oLetter.value, { opacity: 0, duration: 0.12, ease: 'power2.in' }, '-=0.12')
   .to(stripeRects, {
-    scaleY: 1, duration: 0.08, stagger: 0.025, ease: 'back.out(3)',
-  }, '+=0.08')
+    scaleY: 1, duration: 0.06, stagger: 0.02, ease: 'back.out(3)',
+  }, '+=0.04')
   .to(morphGroup.value, {
     rotation: -45, svgOrigin: '158.5 18.5',
-    duration: 0.45, ease: 'elastic.out(1, 0.7)',
-  }, '+=0.08')
-  .to(morphGroup.value, { opacity: 0, duration: 0.2, ease: 'power2.inOut' }, '+=0.05')
-  .to(glyphGroup.value, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.5)', svgOrigin: '158.5 18.5' }, '<')  // ~4.1s
+    duration: 0.3, ease: 'elastic.out(1, 0.7)',
+  }, '+=0.04')
+  .to(morphGroup.value, { opacity: 0, duration: 0.15, ease: 'power2.inOut' }, '+=0.03')
+  .to(glyphGroup.value, { opacity: 1, scale: 1, duration: 0.2, ease: 'back.out(1.5)', svgOrigin: '158.5 18.5' }, '<')
 
   // PHASE 8: Logo scales down and flies to the header logo position
-  tl.call(() => emit('reveal'), null, '+=0.15')
+  tl.call(() => emit('reveal'), null, '+=0.08')
   .call(() => {
     // Find the actual header logo element to get its exact position
     const headerLogo = document.querySelector('.header-logo .logo-img')
@@ -395,7 +436,7 @@ onMounted(async () => {
 
       <!-- HTML overlays (×, Lab Ops, cursor) — positioned relative to SVG at runtime -->
       <span ref="multiEl" class="sp-overlay sp-multi" style="opacity:0">&times;</span>
-      <span ref="labOps" class="sp-overlay sp-lab" style="opacity:0"><span class="lab-keep">L</span><span class="lab-fade">ab</span><span class="lab-space">&nbsp;</span><span class="lab-keep">O</span><span class="lab-fade">perations</span></span>
+      <span ref="labOps" class="sp-overlay sp-lab" style="opacity:0"><span class="lab-char lab-keep" data-final="L">L</span><span class="lab-char lab-fade" data-final="o">o</span><span class="lab-char lab-fade" data-final="c">c</span><span class="lab-char lab-fade" data-final="a">a</span><span class="lab-char lab-fade" data-final="l">l</span><span class="lab-char lab-space" data-final=" ">&nbsp;</span><span class="lab-char lab-keep" data-final="O">O</span><span class="lab-char lab-fade" data-final="p">p</span><span class="lab-char lab-fade" data-final="e">e</span><span class="lab-char lab-fade" data-final="r">r</span><span class="lab-char lab-fade" data-final="a">a</span><span class="lab-char lab-fade" data-final="t">t</span><span class="lab-char lab-fade" data-final="i">i</span><span class="lab-char lab-fade" data-final="o">o</span><span class="lab-char lab-fade" data-final="n">n</span><span class="lab-char lab-fade" data-final="s">s</span></span>
       <span ref="cursorEl" class="sp-overlay sp-cursor" style="opacity:0">|</span>
     </div>
   </div>
@@ -443,24 +484,14 @@ onMounted(async () => {
 }
 
 .sp-lab {
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.08em;
   transform: translate(0, -50%);
   display: inline-flex;
   overflow: visible;
 }
 
-.sp-lab .lab-keep {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-.sp-lab .lab-fade {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-.sp-lab .lab-space {
+.sp-lab .lab-char {
   display: inline-block;
   will-change: transform, opacity;
 }
