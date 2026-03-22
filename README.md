@@ -1,75 +1,59 @@
-# Nuxt Minimal Starter
+# AAXLO
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Digital agency website helping small businesses fix their online presence — visibility, web, content, automation, and custom builds. Serving local clients in France and beyond borders.
 
-## Setup
+## Tech Stack
 
-Make sure to install dependencies:
+- **[Nuxt 4](https://nuxt.com/)** — Vue 3 framework with SSR
+- **[GSAP](https://gsap.com/)** — Scroll-driven animations and micro-interactions
+- **[Nuxt Content](https://content.nuxt.com/)** — Blog and content management
+- **[Tailwind CSS](https://tailwindcss.com/)** — Utility-first styling
+- **Deployed on [Vercel](https://vercel.com/)**
+
+## Getting Started
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Open [http://localhost:3000](http://localhost:3000).
 
-Build the application for production:
+## Project Structure
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+```
+app/
+├── pages/
+│   ├── index.vue          # Landing page
+│   ├── about.vue          # About AAXLO
+│   ├── contact.vue        # Contact form
+│   ├── audit.vue          # Free digital audit
+│   ├── blog/              # Blog listing
+│   ├── services/          # Service pages
+│   │   ├── visibility.vue
+│   │   ├── web.vue
+│   │   ├── content.vue
+│   │   ├── automation.vue
+│   │   └── consulting.vue
+│   └── legal/             # Legal pages
+├── components/            # Reusable Vue components
+├── composables/           # Vue composables
+└── plugins/               # Nuxt plugins
 ```
 
-Locally preview production build:
+## Scripts
 
-```bash
-# npm
-npm run preview
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build locally |
+| `npm run generate` | Static site generation |
 
-# pnpm
-pnpm preview
+## Environment Variables
 
-# yarn
-yarn preview
+Copy `.env.example` to `.env` and fill in required values (if applicable).
 
-# bun
-bun run preview
-```
+## License
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Private — All rights reserved.
