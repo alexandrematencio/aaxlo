@@ -736,8 +736,8 @@ watch(() => props.animate, (val) => {
   .nav-cell:nth-child(3n),
   .nav-cell:nth-child(-n+3),
   .nav-cell:nth-child(n+5) {
-    border: 0.5px solid #24272e;
-    border-top: none;
+    border: none;
+    border-bottom: 0.5px solid #24272e;
     padding: 32px 20px;
     min-height: 80px;
   }
