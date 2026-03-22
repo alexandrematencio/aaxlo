@@ -9,6 +9,7 @@ defineProps({
 })
 
 const page = ref(null)
+useShineHover(page, '.stub-footer-cell')
 
 onMounted(() => {
   const el = page.value
@@ -98,7 +99,7 @@ onMounted(() => {
       <NuxtLink to="/services" class="stub-footer-cell tw-hide">
         <span class="cell-label">SERVICES</span>
       </NuxtLink>
-      <NuxtLink to="/audit" class="stub-footer-cell tw-hide">
+      <NuxtLink to="/audit" class="stub-footer-cell stub-cta tw-hide">
         <span class="cell-label">FREE AUDIT</span>
       </NuxtLink>
       <NuxtLink to="/contact" class="stub-footer-cell tw-hide">
@@ -238,19 +239,7 @@ onMounted(() => {
   cursor: pointer;
 }
 
-/* Hover: diagonal wipe (same as homepage nav) */
-.stub-footer-cell::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--color-dark);
-  transform: translate(-101%, 101%);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
-}
-.stub-footer-cell:hover::before {
-  transform: translate(0, 0);
-}
+/* Shine hover — handled by useShineHover composable */
 
 .cell-label {
   position: relative;
@@ -263,7 +252,6 @@ onMounted(() => {
   transition: color 0.4s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .stub-footer-cell:hover .cell-label {
-  color: var(--color-cream);
   transform: translateY(-2px);
 }
 

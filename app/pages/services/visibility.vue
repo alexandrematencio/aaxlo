@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 useHead({ title: 'Visibility — AAXLO' })
 
 const page = ref(null)
+useShineHover(page, '.cta-btn')
 
 const features = [
   {
@@ -443,6 +444,8 @@ onMounted(() => {
 }
 
 .cta-btn {
+  position: relative;
+  overflow: hidden;
   font-family: var(--font);
   font-size: 16px;
   font-weight: 600;
@@ -454,10 +457,7 @@ onMounted(() => {
   letter-spacing: 0.05em;
   transition: background 0.4s, transform 0.3s;
 }
-.cta-btn:hover {
-  background: var(--color-accent);
-  transform: translateY(-2px);
-}
+/* Shine hover — handled by useShineHover composable */
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {

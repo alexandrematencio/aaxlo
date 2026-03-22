@@ -94,7 +94,7 @@ onMounted(async () => {
   }, '<+=0.05')                                                        // ~1.45s
 
   // PHASE 3 ~1.45s — × spins in with bouncy scale
-  gsap.set(xLetter.value, { opacity: 0 })
+  gsap.set(xLetter.value, { opacity: 0, scale: 0.5, svgOrigin: '92 18.5' })
   gsap.set(multiEl.value, { scale: 0, rotation: -180 })
 
   tl.to(multiEl.value, {
@@ -105,7 +105,7 @@ onMounted(async () => {
     rotation: 360 * 3 + 45, scale: 0.7, opacity: 0,
     duration: 0.4, ease: 'power2.inOut',
   }, '+=0.08')
-  .to(xLetter.value, { opacity: 1, duration: 0.15, ease: 'power2.out' }, '-=0.15')  // ~2.26s
+  .to(xLetter.value, { opacity: 1, scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.55)', svgOrigin: '92 18.5' }, '-=0.15')  // ~2.26s
 
   // PHASE 4: "Lab Operations" typewriter ~2.26s
   gsap.set(labOps.value, { opacity: 1, clipPath: 'inset(-0.1em 100% -0.25em 0)' })
@@ -226,11 +226,26 @@ onMounted(async () => {
       transformOrigin: '0 0',
     })
 
-    // Cross-fade near end of scale: HTML letters → SVG letters
-    gsap.to(labKeepL, { opacity: 0, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.in' })
-    gsap.to(labKeepO, { opacity: 0, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.in' })
-    gsap.to(lLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.out' })
-    gsap.to(oLetter.value, { opacity: 1, duration: 0.15, delay: scaleDur - 0.25, ease: 'power1.out' })
+    // Cross-fade early: HTML letters → SVG letters
+    // At 0.1s with elastic.out, letters have already overshot their target —
+    // SVG at final position is close enough for a seamless handoff.
+    // This eliminates the blur from bitmap-scaling HTML text.
+    const crossFadeAt = 0.1
+    const crossFadeDur = 0.08
+    gsap.to(labKeepL, { opacity: 0, duration: crossFadeDur, delay: crossFadeAt, ease: 'power1.in' })
+    gsap.to(labKeepO, { opacity: 0, duration: crossFadeDur, delay: crossFadeAt, ease: 'power1.in' })
+    gsap.to(lLetter.value, { opacity: 1, duration: crossFadeDur, delay: crossFadeAt, ease: 'power1.out' })
+    gsap.to(oLetter.value, { opacity: 1, duration: crossFadeDur, delay: crossFadeAt, ease: 'power1.out' })
+
+    // Bouncy overshoot on SVG letters — start slightly overscaled, settle to 1
+    gsap.fromTo(lLetter.value,
+      { scale: 1.15, svgOrigin: '126 18.5' },
+      { scale: 1, duration: 0.6, delay: crossFadeAt, ease: 'elastic.out(1, 0.4)', svgOrigin: '126 18.5' }
+    )
+    gsap.fromTo(oLetter.value,
+      { scale: 1.15, svgOrigin: '158.5 18.5' },
+      { scale: 1, duration: 0.6, delay: crossFadeAt + 0.04, ease: 'elastic.out(1, 0.4)', svgOrigin: '158.5 18.5' }
+    )
   })
 
   // Reserve time on the timeline matching the scale animation duration

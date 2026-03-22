@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 useHead({ title: 'About — AAXLO' })
 
 const page = ref(null)
+useShineHover(page, '.cta-btn')
 
 const values = [
   {
@@ -261,6 +262,8 @@ onMounted(() => {
 }
 
 .cta-btn {
+  position: relative;
+  overflow: hidden;
   font-family: var(--font);
   font-size: 16px;
   font-weight: 600;
@@ -268,7 +271,6 @@ onMounted(() => {
   letter-spacing: 0.05em;
   padding: 16px 36px;
   text-decoration: none;
-  transition: background 0.4s, color 0.4s, transform 0.3s;
 }
 
 .cta-btn--primary {
@@ -276,8 +278,7 @@ onMounted(() => {
   background: var(--color-dark);
 }
 .cta-btn--primary:hover {
-  background: var(--color-accent);
-  transform: translateY(-2px);
+  /* Shine hover — handled by useShineHover composable */
 }
 
 .cta-btn--secondary {
@@ -286,8 +287,7 @@ onMounted(() => {
   border: 0.5px solid #24272e;
 }
 .cta-btn--secondary:hover {
-  background: var(--color-dark);
-  color: var(--color-cream);
+  /* Shine hover — handled by useShineHover composable */
   transform: translateY(-2px);
 }
 

@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 useHead({ title: 'Automation — AAXLO' })
 
 const page = ref(null)
+useShineHover(page, '.cta-btn')
 
 const features = [
   {
@@ -211,8 +212,8 @@ onMounted(() => {
 .cta-section { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 96px 48px; text-align: center; border-top: 0.5px solid #24272e; }
 .cta-title { font-family: var(--font); font-size: 36px; font-weight: 600; color: var(--color-dark); line-height: 1.1; }
 .cta-text { font-family: var(--font); font-size: 18px; font-weight: 300; color: var(--color-muted); max-width: 480px; }
-.cta-btn { font-family: var(--font); font-size: 16px; font-weight: 600; color: var(--color-cream); background: var(--color-dark); padding: 16px 40px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.4s, transform 0.3s; }
-.cta-btn:hover { background: var(--color-accent); transform: translateY(-2px); }
+.cta-btn { position: relative; overflow: hidden; font-family: var(--font); font-size: 16px; font-weight: 600; color: var(--color-cream); background: var(--color-dark); padding: 16px 40px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.4s, transform 0.3s; }
+/* Shine hover — handled by useShineHover composable */
 
 @media (max-width: 768px) {
   .hero-grid { grid-template-columns: 1fr; }

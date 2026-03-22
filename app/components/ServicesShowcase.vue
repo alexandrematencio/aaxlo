@@ -129,7 +129,7 @@ onMounted(() => {
           :key="cell.slug"
           :href="cell.to"
           class="grid-cell"
-          :class="{ 'grid-cell--accent': cell.accent }"
+          :class="{ 'grid-cell--accent grid-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
           @click.prevent="navigateWithStripes(cell.to)"
         >
@@ -154,7 +154,7 @@ onMounted(() => {
           :key="cell.slug"
           :href="cell.to"
           class="grid-cell"
-          :class="{ 'grid-cell--accent': cell.accent }"
+          :class="{ 'grid-cell--accent grid-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
           @click.prevent="navigateWithStripes(cell.to)"
         >
@@ -228,7 +228,6 @@ onMounted(() => {
   background: var(--color-accent);
 }
 
-/* Diagonal wipe hover */
 .grid-cell::after {
   content: '';
   position: absolute;

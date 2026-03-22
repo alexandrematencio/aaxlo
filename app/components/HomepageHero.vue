@@ -7,7 +7,41 @@ const props = defineProps({
 })
 
 const section = ref(null)
+const headlineRef = ref(null)
+const trailRef = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+
+// ── Scramble text setup ──
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+const HEADLINE_TEXT = 'You might already know what\'s wrong with your online presence.'
+const TRAIL_COUNT = 10
+
+// Group characters by word so the browser wraps at word boundaries
+const headlineWords = computed(() => {
+  const words = HEADLINE_TEXT.split(' ')
+  let charIndex = 0
+  return words.map((word, wi) => ({
+    id: wi,
+    chars: word.split('').map(char => ({
+      char,
+      id: charIndex++,
+    })),
+    // Increment charIndex for the space between words
+    _: (() => { if (wi < words.length - 1) charIndex++ })(),
+  }))
+})
+
+function randomChar() {
+  return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+}
+
+// Pre-compute trail positions (stable across renders)
+const trailPositions = Array.from({ length: TRAIL_COUNT }, (_, i) => ({
+  id: i,
+  left: `${Math.random() * 100}%`,
+  top: `${-20 + Math.random() * 140}%`,
+  fontSize: `${0.3 + Math.random() * 0.4}em`,
+}))
 
 const navCells = [
   { label: 'GET YOUR FREE AUDIT', accent: true, to: '/audit', stripe: true },
@@ -30,8 +64,15 @@ function showFinalState() {
   const el = section.value
   if (!el) return
 
-  // borders are CSS now, no draw-h to set
-  gsap.set(el.querySelector('.hero-headline'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  // Show headline chars at final state
+  if (headlineRef.value) {
+    headlineRef.value.querySelectorAll('.scramble-char').forEach(c => {
+      gsap.set(c, { opacity: 1, y: 0 })
+      c.textContent = c.dataset.final
+    })
+  }
+  if (trailRef.value) gsap.set(trailRef.value, { opacity: 0 })
+
   gsap.set(el.querySelector('.hero-sub'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   gsap.set(el.querySelector('.hero-cta'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   el.querySelectorAll('.nav-cell').forEach(c => {
@@ -51,39 +92,102 @@ function runAnimation() {
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
-  /* 1. Headline typewriter */
-  tl.to(el.querySelector('.hero-headline'), {
-    clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.35, ease: 'steps(22)',
-  }, '-=0.1')
-
-  /* 3. Subtitle typewriter (brief delay for dramatic pause) */
+  /* 1. Subtitle typewriter */
   tl.to(el.querySelector('.hero-sub'), {
     clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.25, ease: 'steps(15)',
-  }, '+=0.4')
+  }, '+=0.1')
 
-  /* 4. CTA reveal */
+  /* 2. CTA reveal */
   tl.to(el.querySelector('.hero-cta'), {
     clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2,
   }, '-=0.05')
 
-  /* 5. Nav cells reveal, staggered */
+  /* 3. Nav cells reveal, staggered */
   const cells = el.querySelectorAll('.nav-cell')
   tl.to(cells, {
     clipPath: 'inset(0 0 0 0)', duration: 0.2, stagger: 0.03,
   }, '-=0.05')
 
-  /* 6. Nav labels typewriter */
+  /* 4. Nav labels typewriter */
   const labels = el.querySelectorAll('.nav-label')
   tl.to(labels, {
     clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.15, stagger: 0.02, ease: 'steps(10)',
   }, '-=0.1')
 
-  /* 7. Nav indices fade in */
+  /* 5. Nav indices fade in */
   const indices = el.querySelectorAll('.nav-index')
   tl.to(indices, {
     opacity: 1, duration: 0.15, stagger: 0.02,
   }, '-=0.1')
+
+  /* 6. LAST STEP — Headline scramble reveal */
+  const charEls = headlineRef.value?.querySelectorAll('.scramble-char') || []
+  const trailEls = trailRef.value?.querySelectorAll('.trail-char') || []
+
+  // Mark the scramble start point on the timeline
+  tl.addLabel('scramble', '+=0.2')
+
+  // Trail characters — cycle and fade around the heading
+  if (trailRef.value && trailEls.length) {
+    gsap.set(trailRef.value, { opacity: 1 })
+    trailEls.forEach((trail, i) => {
+      gsap.set(trail, { opacity: 0 })
+      tl.to(trail, { opacity: 0.15, duration: 0.1, ease: 'power2.out' }, `scramble+=${i * 0.06}`)
+      tl.to({}, {
+        duration: 0.5 + Math.random() * 0.4,
+        ease: 'none',
+        onUpdate() { trail.textContent = randomChar() },
+      }, `scramble+=${i * 0.06}`)
+      tl.to(trail, {
+        opacity: 0, y: -10 + Math.random() * 20,
+        duration: 0.3, ease: 'power2.in',
+      }, `scramble+=${i * 0.06 + 0.3 + Math.random() * 0.3}`)
+    })
+  }
+
+  // Main character scramble + staggered slide-up
+  charEls.forEach((charEl, i) => {
+    const finalChar = charEl.dataset.final
+    const offset = i * 0.04
+    const scrambleDuration = 0.4 + Math.random() * 0.15
+
+    // Start scrambling (direct DOM — bypasses Vue reactivity)
+    tl.call(() => {
+      charEl._scrambleInterval = setInterval(() => {
+        charEl.textContent = randomChar()
+      }, 35)
+    }, null, `scramble+=${offset}`)
+
+    // Fade in + slide up (transform + opacity only)
+    tl.fromTo(charEl,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.25, ease: 'power3.out' },
+      `scramble+=${offset}`
+    )
+
+    // Lock to final character — clearInterval FIRST, then set text
+    tl.call(() => {
+      clearInterval(charEl._scrambleInterval)
+      delete charEl._scrambleInterval
+      charEl.textContent = finalChar
+    }, null, `scramble+=${offset + scrambleDuration}`)
+  })
+
+  // Fade out trail after all chars have locked
+  const lastCharLock = charEls.length * 0.04 + 0.55
+  if (trailRef.value) {
+    tl.to(trailRef.value, { opacity: 0, duration: 0.2 }, `scramble+=${lastCharLock}`)
+  }
 }
+
+onBeforeUnmount(() => {
+  // Clean up any lingering scramble intervals
+  if (headlineRef.value) {
+    headlineRef.value.querySelectorAll('.scramble-char').forEach(c => {
+      if (c._scrambleInterval) clearInterval(c._scrambleInterval)
+    })
+  }
+})
 
 onMounted(() => {
   if (props.skip) {
@@ -107,8 +211,30 @@ watch(() => props.animate, (val) => {
       <!-- Copy area -->
       <div class="hero-copy-area">
         <div class="hero-copy">
-          <h1 class="hero-headline tw-hide">
-            You might already know what's wrong with your online presence.
+          <h1 class="hero-headline">
+            <!-- Trail / decorative scramble characters -->
+            <span ref="trailRef" class="trail-layer" aria-hidden="true">
+              <span
+                v-for="t in trailPositions"
+                :key="t.id"
+                class="trail-char"
+                :style="{ left: t.left, top: t.top, fontSize: t.fontSize }"
+              >{{ randomChar() }}</span>
+            </span>
+            <!-- Main characters (split by word for correct line-breaking) -->
+            <span ref="headlineRef" class="chars-layer">
+              <span
+                v-for="(word, wi) in headlineWords"
+                :key="word.id"
+                class="scramble-word"
+              ><span
+                  v-for="c in word.chars"
+                  :key="c.id"
+                  class="scramble-char"
+                  :data-final="c.char"
+                  style="opacity: 0"
+                >{{ c.char }}</span></span>
+            </span>
           </h1>
           <p class="hero-sub hero-sub-delayed tw-hide">
             You just haven't had time to fix it.
@@ -130,7 +256,7 @@ watch(() => props.animate, (val) => {
         <!-- Row 1 -->
         <a
           href="/audit"
-          class="nav-cell nav-cell--accent"
+          class="nav-cell nav-cell--accent nav-cta"
           style="clip-path: inset(0 100% 0 0)"
           @click.prevent="navigateWithStripes('/audit')"
         >
@@ -211,6 +337,57 @@ watch(() => props.animate, (val) => {
   clip-path: inset(-0.1em 100% -0.25em 0);
 }
 
+/* ── Scramble text characters ── */
+.chars-layer {
+  position: relative;
+  display: inline;
+  z-index: 2;
+}
+
+.scramble-word {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.25em;
+}
+
+.scramble-word:last-child {
+  margin-right: 0;
+}
+
+.scramble-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.trail-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+.trail-char {
+  position: absolute;
+  display: inline-block;
+  font-family: var(--font);
+  font-weight: 300;
+  color: var(--color-dark);
+  opacity: 0;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scramble-char {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .trail-layer {
+    display: none;
+  }
+}
+
 /* ── TOP HALF ── */
 .hero-upper {
   display: flex;
@@ -240,6 +417,7 @@ watch(() => props.animate, (val) => {
 }
 
 .hero-headline {
+  position: relative;
   font-family: var(--font);
   font-size: clamp(40px, 5.5vw, 64px);
   font-weight: 600;
@@ -247,6 +425,7 @@ watch(() => props.animate, (val) => {
   line-height: 1.05;
   letter-spacing: -0.02em;
   margin: 0;
+  text-align: left;
 }
 
 .hero-sub {
@@ -341,7 +520,6 @@ watch(() => props.animate, (val) => {
   border-bottom: 0.5px solid #24272e;
 }
 
-/* Diagonal wipe hover */
 .nav-cell::before {
   content: '';
   position: absolute;

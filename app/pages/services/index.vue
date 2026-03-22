@@ -5,6 +5,8 @@ useHead({ title: 'Services — AAXLO' })
 
 const page = ref(null)
 
+// Diagonal wipe hover handled via CSS
+
 const services = [
   {
     label: 'VISIBILITY',
@@ -187,22 +189,22 @@ onMounted(() => {
   background: var(--color-peach);
 }
 
-/* Diagonal wipe on hover */
 .svc-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: var(--color-dark);
   transform: translate(-101%, 101%);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
 }
 .svc-card:hover::before {
   transform: translate(0, 0);
 }
-.svc-card:hover .svc-title,
+.svc-card:hover .svc-title {
+  color: #FF8270;
+}
 .svc-card:hover .svc-desc,
-.svc-card:hover .svc-arrow,
 .svc-card:hover .svc-label {
   color: var(--color-cream);
 }
