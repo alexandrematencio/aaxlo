@@ -342,14 +342,19 @@ onMounted(() => {
   .grid-row {
     flex-direction: column;
   }
-  .grid-cell {
-    border-right: none;
-    border-bottom: 0.5px solid #24272e;
+  .grid-cell,
+  .grid-cell:last-child,
+  .grid-row:last-child .grid-cell {
+    border: 0.5px solid #24272e;
+    border-top: none;
     padding: 40px 32px;
     min-height: 220px;
   }
+  .grid-row:first-child .grid-cell:first-child {
+    border-top: 0.5px solid #24272e;
+  }
   .grid-row:last-child .grid-cell:last-child {
-    border-bottom: none;
+    border-bottom: 0.5px solid #24272e;
   }
   .cell-title {
     font-size: clamp(24px, 5vw, 32px);

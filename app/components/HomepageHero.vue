@@ -731,14 +731,15 @@ watch(() => props.animate, (val) => {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
-  .nav-cell {
-    border-right: none !important;
-    border-bottom: 0.5px solid #24272e;
+  .nav-cell,
+  .nav-cell:nth-child(2n),
+  .nav-cell:nth-child(3n),
+  .nav-cell:nth-child(-n+3),
+  .nav-cell:nth-child(n+5) {
+    border: 0.5px solid #24272e;
+    border-top: none;
     padding: 32px 20px;
     min-height: 80px;
-  }
-  .nav-cell:last-child {
-    border-bottom: none;
   }
   .nav-label {
     font-size: 18px;

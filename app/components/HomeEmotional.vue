@@ -204,26 +204,22 @@ onBeforeUnmount(() => {
   flex-direction: column;
 }
 
+/* Title cell — standalone, has all 4 borders */
 .emotional-cell {
   border: 0.5px solid #24272e;
-  border-top: none;
   padding: 16px;
 }
-.emotional-cell:first-child {
-  border-top: 0.5px solid #24272e;
-}
 
-/* Slide wrapper — hides the entire block (border + text) until revealed */
+/* Slide wrapper — carries the border so it slides in with the content.
+   border-top: none to collapse with the cell above (title or prev slide). */
 .emotional-cell-slide {
   will-change: transform, opacity;
-  overflow: hidden;
+  border: 0.5px solid #24272e;
+  border-top: none;
 }
-/* First slide cell needs its own top border since it follows the title cell */
+/* Inner cell inside slide — no border of its own, the wrapper handles it */
 .emotional-cell-slide .emotional-cell {
-  border-top: none;
-}
-.emotional-cell-slide:first-of-type .emotional-cell {
-  border-top: none;
+  border: none;
 }
 
 .emotional-label {
