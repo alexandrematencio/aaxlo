@@ -8,69 +8,6 @@ const props = defineProps({
 const section = ref(null)
 const stickyContainer = ref(null)
 
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-function randomChar() {
-  return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
-}
-
-/**
- * Word-safe scramble: splits text into word-level spans (no mid-word breaks),
- * then scrambles individual characters within each word.
- */
-function scrambleElement(el, duration = 1.2) {
-  const text = el.textContent.trim()
-  const words = text.split(/(\s+)/) // split keeping whitespace
-  el.textContent = ''
-
-  const allCharSpans = []
-
-  words.forEach(segment => {
-    if (/^\s+$/.test(segment)) {
-      // Whitespace — preserve as-is
-      el.appendChild(document.createTextNode(segment))
-      return
-    }
-
-    // Wrap each word in a non-breaking container
-    const wordWrap = document.createElement('span')
-    wordWrap.style.display = 'inline-block'
-    wordWrap.style.whiteSpace = 'nowrap'
-
-    segment.split('').forEach(char => {
-      const charSpan = document.createElement('span')
-      charSpan.style.display = 'inline-block'
-      charSpan.dataset.final = char
-      charSpan.textContent = randomChar()
-      wordWrap.appendChild(charSpan)
-      allCharSpans.push(charSpan)
-    })
-
-    el.appendChild(wordWrap)
-  })
-
-  // Stagger scramble across all characters
-  const stagger = Math.min(0.012, duration / allCharSpans.length)
-  allCharSpans.forEach((span, i) => {
-    const finalChar = span.dataset.final
-    const charDelay = i * stagger
-    const scrambleDur = Math.min(0.2, duration * 0.3)
-
-    setTimeout(() => {
-      span._interval = setInterval(() => {
-        span.textContent = randomChar()
-      }, 30)
-    }, charDelay * 1000)
-
-    setTimeout(() => {
-      if (span._interval) {
-        clearInterval(span._interval)
-        delete span._interval
-      }
-      span.textContent = finalChar
-    }, (charDelay + scrambleDur) * 1000)
-  })
-}
-
 function showFinalState() {
   const el = section.value
   if (!el) return
@@ -78,10 +15,9 @@ function showFinalState() {
   el.querySelectorAll('.tw-hide').forEach(t => {
     gsap.set(t, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   })
-  el.querySelectorAll('.emotional-para').forEach(p => {
-    gsap.set(p, { opacity: 1, x: 0, clipPath: 'none' })
+  el.querySelectorAll('.emotional-cell-slide').forEach(c => {
+    gsap.set(c, { opacity: 1, x: 0 })
   })
-  // Remove extended height
   el.style.height = ''
 }
 
@@ -119,78 +55,69 @@ onMounted(() => {
   )
   introObserver.observe(el)
 
-  // ── Phase 2: Sticky container + scroll-driven paragraph reveals ──
-  const paragraphs = Array.from(el.querySelectorAll('.emotional-para'))
-  const paraCount = paragraphs.length
+  // ── Phase 2: Sticky container + scroll-driven block reveals ──
+  // Each .emotional-cell-slide slides in from the right on its own scroll motion
+  const slideCells = Array.from(el.querySelectorAll('.emotional-cell-slide'))
+  const cellCount = slideCells.length
   const revealed = new Set()
 
-  // Hide paragraphs, clear clip-path
-  paragraphs.forEach((p, i) => {
-    const fromX = i % 2 === 0 ? 80 : -80
-    gsap.set(p, { opacity: 0, x: fromX, clipPath: 'none' })
+  // Hide all slide cells off-screen to the right
+  slideCells.forEach(cell => {
+    gsap.set(cell, { opacity: 0, x: 120 })
   })
 
-  // Extend section height to create scroll space for sticky pinning
-  // Each paragraph gets ~60vh of scroll distance
-  const scrollPerPara = window.innerHeight * 0.6
-  const extraHeight = scrollPerPara * paraCount
+  // Each block gets its own full scroll distance — 3 blocks = 3 finger swipes
+  const scrollPerBlock = window.innerHeight * 0.7
+  const extraHeight = scrollPerBlock * cellCount
   const naturalHeight = el.offsetHeight
   el.style.height = `${naturalHeight + extraHeight}px`
 
-  // Scroll handler: map scroll progress through the section to paragraph reveals
+  // Scroll handler: one block per scroll motion
   scrollHandler = () => {
-    if (revealed.size >= paraCount) return
+    if (revealed.size >= cellCount) return
 
     const rect = el.getBoundingClientRect()
-    const stickyTop = window.innerHeight * 0.1 // sticky starts at top: 10vh
+    const stickyTop = window.innerHeight * 0.1
 
-    // How far the section has scrolled past the sticky point
     const scrolled = stickyTop - rect.top
     if (scrolled < 0) return
 
-    // Progress through the extra scroll space (0 to 1)
     const progress = Math.min(scrolled / extraHeight, 1)
 
-    // Which paragraph should be visible at this progress
-    const targetIndex = Math.min(Math.floor(progress * paraCount), paraCount - 1)
+    // Each block triggers at its own threshold: 0/3, 1/3, 2/3
+    const targetIndex = Math.min(Math.floor(progress * cellCount), cellCount - 1)
 
     for (let i = 0; i <= targetIndex; i++) {
       if (revealed.has(i)) continue
       revealed.add(i)
 
-      const para = paragraphs[i]
-      const fromX = i % 2 === 0 ? 80 : -80
+      const cell = slideCells[i]
 
-      gsap.fromTo(para,
-        { opacity: 0, x: fromX },
-        {
-          opacity: 1, x: 0,
-          duration: 0.6,
-          ease: 'power3.out',
-          onStart: () => scrambleElement(para, 1.2),
-        }
-      )
+      gsap.to(cell, {
+        opacity: 1,
+        x: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+      })
     }
 
-    // Once all revealed, clean up
-    if (revealed.size >= paraCount) {
-      window.removeEventListener('scroll', scrollHandler)
+    // Once all revealed, clean up after a short delay
+    if (revealed.size >= cellCount) {
+      setTimeout(() => {
+        // Collapse the extra scroll height smoothly
+        el.style.height = ''
+        window.removeEventListener('scroll', scrollHandler)
+      }, 800)
     }
   }
 
   window.addEventListener('scroll', scrollHandler, { passive: true })
-  // Check initial position
   scrollHandler()
 })
 
 onBeforeUnmount(() => {
   if (scrollHandler) {
     window.removeEventListener('scroll', scrollHandler)
-  }
-  if (section.value) {
-    section.value.querySelectorAll('span[data-final]').forEach(s => {
-      if (s._interval) clearInterval(s._interval)
-    })
   }
 })
 </script>
@@ -206,22 +133,28 @@ onBeforeUnmount(() => {
           </h2>
         </div>
 
-        <div class="emotional-cell">
-          <p class="emotional-para tw-hide">
-            You didn't start your business to learn about meta descriptions or manage a content calendar. You started it because you're good at something and you decided to bet on yourself.
-          </p>
+        <div class="emotional-cell-slide">
+          <div class="emotional-cell">
+            <p class="emotional-para">
+              You didn't start your business to learn about meta descriptions or manage a content calendar. You started it because you're good at something and you decided to bet on yourself.
+            </p>
+          </div>
         </div>
 
-        <div class="emotional-cell">
-          <p class="emotional-para tw-hide">
-            That bet — the late nights, the slow months, the figuring-it-out-as-you-go — that was the hard part. And that's yours.
-          </p>
+        <div class="emotional-cell-slide">
+          <div class="emotional-cell">
+            <p class="emotional-para">
+              That bet — the late nights, the slow months, the figuring-it-out-as-you-go — that was the hard part. And that's yours.
+            </p>
+          </div>
         </div>
 
-        <div class="emotional-cell">
-          <p class="emotional-para tw-hide">
-            Getting people to find you online, keeping your social media alive, automating the stuff that eats your time — that's on us. And we care about getting it right. Not in an abstract "we value our clients" way. In a "we check if it's actually working three weeks later" way.
-          </p>
+        <div class="emotional-cell-slide">
+          <div class="emotional-cell">
+            <p class="emotional-para">
+              Getting people to find you online, keeping your social media alive, automating the stuff that eats your time — that's on us. And we care about getting it right. Not in an abstract "we value our clients" way. In a "we check if it's actually working three weeks later" way.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -263,6 +196,19 @@ onBeforeUnmount(() => {
   border-top: 0.5px solid #24272e;
 }
 
+/* Slide wrapper — hides the entire block (border + text) until revealed */
+.emotional-cell-slide {
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+/* First slide cell needs its own top border since it follows the title cell */
+.emotional-cell-slide .emotional-cell {
+  border-top: none;
+}
+.emotional-cell-slide:first-of-type .emotional-cell {
+  border-top: none;
+}
+
 .emotional-label {
   display: block;
   font-family: var(--font);
@@ -291,7 +237,6 @@ onBeforeUnmount(() => {
   color: var(--color-dark);
   line-height: 1.6;
   margin: 0;
-  will-change: transform, opacity;
 }
 
 @media (max-width: 768px) {
