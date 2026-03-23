@@ -1,26 +1,32 @@
 <script setup>
 import { gsap } from 'gsap'
 
+const { t, locale, locales } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+const localePath = useLocalePath()
+
 const header = ref(null)
 const dropdownOpen = ref(false)
 const mobileOpen = ref(false)
-const lang = ref('EN')
 
 // Check if splash screen is playing — if so, delay header animation
 const splashPlayed = useState('splashPlayed', () => false)
 
 let dropdownTimeout = null
 
-const services = [
-  { label: 'Visibility', desc: 'GBP, local SEO & directories', to: '/services/visibility' },
-  { label: 'Web', desc: 'Websites, menus & booking', to: '/services/web' },
-  { label: 'Content', desc: 'Social media & brand identity', to: '/services/content' },
-  { label: 'Automation', desc: 'Chatbots, reviews & messaging', to: '/services/automation' },
-  { label: 'Consulting', desc: 'Custom AI workflows & training', to: '/services/consulting' },
-]
+const services = computed(() => [
+  { label: t('services_dropdown.visibility.label'), desc: t('services_dropdown.visibility.desc'), to: localePath('/services/visibility') },
+  { label: t('services_dropdown.web.label'), desc: t('services_dropdown.web.desc'), to: localePath('/services/web') },
+  { label: t('services_dropdown.content.label'), desc: t('services_dropdown.content.desc'), to: localePath('/services/content') },
+  { label: t('services_dropdown.automation.label'), desc: t('services_dropdown.automation.desc'), to: localePath('/services/automation') },
+  { label: t('services_dropdown.consulting.label'), desc: t('services_dropdown.consulting.desc'), to: localePath('/services/consulting') },
+])
+
+const otherLocales = computed(() => locales.value.filter(l => l.code !== locale.value))
 
 function toggleLang() {
-  lang.value = lang.value === 'EN' ? 'FR' : 'EN'
+  const target = locale.value === 'en' ? 'fr' : 'en'
+  navigateTo(switchLocalePath(target))
 }
 
 function openDropdown() {
@@ -96,7 +102,7 @@ function runHeaderReveal() {
 
 onMounted(() => {
   const route = useRoute()
-  const isHomepage = route.path === '/'
+  const isHomepage = route.name?.toString().startsWith('index')
 
   if (!isHomepage || splashPlayed.value) {
     // Non-homepage or splash already done — reveal immediately
@@ -129,7 +135,7 @@ onUnmounted(() => {
   <header ref="header" class="header">
     <div class="header-inner">
       <!-- Logo -->
-      <NuxtLink to="/" class="header-logo tw-hide" aria-label="AAXLO home">
+      <NuxtLink :to="localePath('/')" class="header-logo tw-hide" aria-label="AAXLO home">
         <img src="/images/axxlo-logo.svg" alt="AAXLO" class="logo-img" />
       </NuxtLink>
 
@@ -140,8 +146,8 @@ onUnmounted(() => {
           @mouseenter="openDropdown"
           @mouseleave="closeDropdown"
         >
-          <NuxtLink to="/services" class="nav-link tw-hide">
-            Services
+          <NuxtLink :to="localePath('/services')" class="nav-link tw-hide">
+            {{ $t('nav.services') }}
             <svg class="chevron" :class="{ open: dropdownOpen }" width="10" height="6" viewBox="0 0 10 6" fill="none">
               <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -166,24 +172,24 @@ onUnmounted(() => {
           </Transition>
         </div>
 
-        <NuxtLink to="/about" class="nav-link tw-hide">About</NuxtLink>
-        <NuxtLink to="/blog" class="nav-link tw-hide">Blog</NuxtLink>
+        <NuxtLink :to="localePath('/about')" class="nav-link tw-hide">{{ $t('nav.about') }}</NuxtLink>
+        <NuxtLink :to="localePath('/blog')" class="nav-link tw-hide">{{ $t('nav.blog') }}</NuxtLink>
       </nav>
 
       <!-- Mobile CTA (between logo and burger) -->
-      <NuxtLink to="/audit" class="mobile-header-cta">
-        <span class="mobile-header-cta-label">Free Audit</span>
+      <NuxtLink :to="localePath('/audit')" class="mobile-header-cta">
+        <span class="mobile-header-cta-label">{{ $t('nav.freeAudit') }}</span>
         <span class="mobile-header-cta-wipe" aria-hidden="true"></span>
       </NuxtLink>
 
       <!-- Right side -->
       <div class="header-right">
-        <button class="lang-toggle tw-hide" @click="toggleLang" :aria-label="`Switch language to ${lang === 'EN' ? 'French' : 'English'}`">
-          {{ lang }}
+        <button class="lang-toggle tw-hide" @click="toggleLang" :aria-label="$t('lang.switchTo', { lang: locale === 'en' ? 'Français' : 'English' })">
+          {{ locale.toUpperCase() }}
         </button>
 
-        <NuxtLink to="/audit" class="header-cta tw-hide">
-          <span class="cta-label">Get your free audit</span>
+        <NuxtLink :to="localePath('/audit')" class="header-cta tw-hide">
+          <span class="cta-label">{{ $t('nav.freeAudit') }}</span>
           <span class="cta-wipe" aria-hidden="true"></span>
         </NuxtLink>
 
@@ -202,17 +208,17 @@ onUnmounted(() => {
     <Teleport to="body">
       <div v-if="mobileOpen" class="mobile-overlay" @click.self="closeMobile">
         <nav class="mobile-nav">
-          <NuxtLink to="/services" class="mobile-nav-item" @click="closeMobile">Services</NuxtLink>
+          <NuxtLink :to="localePath('/services')" class="mobile-nav-item" @click="closeMobile">{{ $t('nav.services') }}</NuxtLink>
           <NuxtLink v-for="s in services" :key="s.label" :to="s.to" class="mobile-nav-item mobile-sub" @click="closeMobile">
             {{ s.label }}
             <span class="mobile-sub-desc">{{ s.desc }}</span>
           </NuxtLink>
-          <NuxtLink to="/about" class="mobile-nav-item" @click="closeMobile">About</NuxtLink>
-          <NuxtLink to="/blog" class="mobile-nav-item" @click="closeMobile">Blog</NuxtLink>
+          <NuxtLink :to="localePath('/about')" class="mobile-nav-item" @click="closeMobile">{{ $t('nav.about') }}</NuxtLink>
+          <NuxtLink :to="localePath('/blog')" class="mobile-nav-item" @click="closeMobile">{{ $t('nav.blog') }}</NuxtLink>
 
           <div class="mobile-bottom">
-            <NuxtLink to="/contact" class="mobile-cta" @click="closeMobile">Get your free audit</NuxtLink>
-            <button class="mobile-lang" @click="toggleLang">{{ lang === 'EN' ? 'FR' : 'EN' }}</button>
+            <NuxtLink :to="localePath('/contact')" class="mobile-cta" @click="closeMobile">{{ $t('nav.freeAudit') }}</NuxtLink>
+            <button class="mobile-lang" @click="toggleLang">{{ locale === 'en' ? 'FR' : 'EN' }}</button>
           </div>
         </nav>
       </div>

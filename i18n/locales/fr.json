@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "services": "Services",
+    "about": "À propos",
+    "blog": "Blog",
+    "freeAudit": "Audit gratuit",
+    "backToServices": "← TOUS LES SERVICES"
+  },
+  "services_dropdown": {
+    "visibility": { "label": "Visibilité", "desc": "GBP, SEO local & annuaires" },
+    "web": { "label": "Web", "desc": "Sites, menus & réservation" },
+    "content": { "label": "Contenu", "desc": "Réseaux sociaux & identité de marque" },
+    "automation": { "label": "Automatisation", "desc": "Chatbots, avis & messagerie" },
+    "consulting": { "label": "Consulting", "desc": "Workflows IA & formation sur-mesure" }
+  },
+  "common": {
+    "learnMore": "EN SAVOIR PLUS →",
+    "getAudit": "AUDIT GRATUIT →",
+    "whatsIncluded": "CE QUI EST INCLUS",
+    "frequentlyAsked": "QUESTIONS FRÉQUENTES",
+    "questionsAnswers": "Questions & Réponses"
+  },
+  "audit_form": {
+    "businessName": "Nom de l'entreprise",
+    "businessNamePlaceholder": "Nom de votre entreprise",
+    "websiteUrl": "URL du site web",
+    "websiteUrlPlaceholder": "https://votreentreprise.com",
+    "email": "E-mail",
+    "emailPlaceholder": "Adresse e-mail *",
+    "phone": "Téléphone",
+    "name": "Votre nom",
+    "namePlaceholder": "Votre nom",
+    "nameOptionalPlaceholder": "Votre nom (facultatif)",
+    "next": "Suivant →",
+    "back": "← Retour",
+    "submit": "Lancer mon audit gratuit →",
+    "step": "Étape",
+    "of": "sur",
+    "teaserLabel": "AUDIT GRATUIT",
+    "teaserHeadline": "Découvrez ce qui vous fait perdre des clients en ce moment.",
+    "teaserSubtitle": "Nous analysons toute votre présence numérique — site web, visibilité sur les moteurs de recherche, avis, réseaux sociaux, comparaison avec vos concurrents — et nous vous fournissons un rapport clair avec des scores et un plan d'action. 24 heures. Gratuit.",
+    "teaserBusinessPlaceholder": "Nom de votre entreprise (obligatoire)",
+    "teaserUrlPlaceholder": "URL de votre site web (facultatif, si existant)",
+    "teaserPlaceholder": "Nom de votre entreprise",
+    "teaserSubmit": "Obtenez votre audit gratuit →",
+    "teaserDisclaimer": "Sans engagement. Sans carte bancaire. Pas d'appel sauf si vous le demandez. Vous recevez un rapport complet avec des recommandations spécifiques sous 24 heures — que vous travailliez avec nous ensuite ou non.",
+    "step1Label": "Parlez-nous de votre entreprise",
+    "step2Label": "Où devons-nous envoyer votre audit ?",
+    "step3Label": "Pour qui préparons-nous cet audit ?",
+    "popupTitle": "PRESQUE TERMINÉ",
+    "popupDesc": "Où devons-nous envoyer votre audit ?",
+    "invalidEmail": "Veuillez entrer un e-mail valide",
+    "invalidBusinessName": "Veuillez entrer le nom de votre entreprise",
+    "invalidUrl": "Veuillez entrer une URL valide (ex. https://example.com)",
+    "successTitle": "C'est parti !",
+    "successText": "Votre audit personnalisé arrivera dans {email} sous 24 heures.",
+    "successTrust": "Sans engagement. Sans carte bancaire. Pas d'appel sauf si vous le demandez.",
+    "backHome": "← Retour à l'accueil"
+  },
+  "contact_form": {
+    "name": "Nom *",
+    "namePlaceholder": "Votre nom",
+    "email": "E-mail *",
+    "emailPlaceholder": "votre{'@'}email.com",
+    "message": "Message *",
+    "messagePlaceholder": "Parlez-nous de votre projet ou question...",
+    "submit": "Envoyer le message →",
+    "successTitle": "Message envoyé !",
+    "successText": "Nous vous répondrons sous 24 heures à",
+    "backHome": "← Retour à l'accueil"
+  },
+  "footer": {
+    "tagline": "Votre entreprise locale, amplifiée par l'IA.",
+    "location": "Basé à Singapour",
+    "servicesTitle": "Services",
+    "aboutTitle": "À propos",
+    "whoWeAre": "Qui sommes-nous",
+    "resourcesTitle": "Ressources",
+    "legalTitle": "Juridique",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "mentionsLegales": "Mentions légales",
+    "contactTitle": "Contact",
+    "bookCall": "Réserver un appel",
+    "copyright": "© 2026 AAXLO Pte. Ltd."
+  },
+  "lang": {
+    "switchTo": "Changer la langue en {lang}"
+  }
+}

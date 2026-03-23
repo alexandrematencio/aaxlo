@@ -1,47 +1,25 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Web — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+const svc = computed(() => servicesData.value?.web)
+
+useHead({
+  title: svc.value?.seo?.title,
+  meta: [{ name: 'description', content: svc.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const features = [
-  {
-    title: 'Modern Websites',
-    description: 'Fast, mobile-first websites built with performance and conversion in mind. No bloated templates — every page is crafted to turn visitors into customers.',
-  },
-  {
-    title: 'Digital Menus & QR',
-    description: 'Beautiful, updatable digital menus with QR code access. Perfect for restaurants, cafes, and bars that want to ditch the paper and impress their guests.',
-  },
-  {
-    title: 'Booking & Ordering Systems',
-    description: 'Online booking, table reservations, and ordering systems integrated directly into your site. Reduce no-shows and let customers self-serve 24/7.',
-  },
-  {
-    title: 'E-commerce',
-    description: 'Sell products online with a store that matches your brand. Inventory management, payment processing, and shipping — all set up and ready to go.',
-  },
-]
+const features = computed(() => svc.value?.features || [])
 
-const faqs = [
-  {
-    question: 'How long does it take to build a website?',
-    answer: 'A standard business website takes 2-4 weeks from kickoff to launch. More complex projects with booking systems or e-commerce typically take 4-8 weeks. We move fast because our AI-assisted workflows handle the repetitive work, so our team can focus on strategy and design.',
-    open: ref(false),
-  },
-  {
-    question: 'Will I be able to update the website myself?',
-    answer: 'Absolutely. Every site we build comes with a simple content management system. We also provide a 30-minute walkthrough so you feel confident making changes. And if you ever get stuck, we are one message away.',
-    open: ref(false),
-  },
-  {
-    question: 'Do you handle hosting and maintenance?',
-    answer: 'Yes. We offer managed hosting with SSL, daily backups, uptime monitoring, and monthly security updates. You focus on running your business — we keep your site fast, secure, and online.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => svc.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -107,23 +85,23 @@ onMounted(() => {
   <div ref="page" class="detail-page">
     <section class="hero">
       <div class="hero-header">
-        <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
-        <NuxtLink to="/">
+        <NuxtLink :to="localePath('/services')" class="back-link tw-hide">{{ $t('nav.backToServices') }}</NuxtLink>
+        <NuxtLink :to="localePath('/')">
           <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 
       <!-- Service navigation -->
-      <ServiceNav current="web" />
+      <ServiceNav current="web" :content="servicesData?.nav" />
 
       <div class="hero-grid">
         <div class="hero-meta">
-          <span class="hero-label tw-hide">WEB</span>
-          <span class="hero-index">02</span>
+          <span class="hero-label tw-hide">{{ svc?.label }}</span>
+          <span class="hero-index">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
-          <h1 class="hero-title tw-hide">Your digital storefront, reimagined.</h1>
-          <p class="hero-desc tw-hide">Your website is your hardest-working employee — it never sleeps, never takes a day off, and talks to every single potential customer. We make sure it's doing that job brilliantly.</p>
+          <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
+          <p class="hero-desc tw-hide">{{ svc?.heroDesc }}</p>
         </div>
       </div>
     </section>
@@ -146,17 +124,17 @@ onMounted(() => {
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, idx) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[idx] }"
+            @click="faqOpen[idx] = !faqOpen[idx]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[idx]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -165,9 +143,9 @@ onMounted(() => {
     </section>
 
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Need a new website?</h2>
-      <p class="cta-text tw-hide">Let us audit your current site and show you what's possible.</p>
-      <NuxtLink to="/audit" class="cta-btn tw-hide">Get your free audit &rarr;</NuxtLink>
+      <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>

@@ -1,47 +1,25 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Automation — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+const svc = computed(() => servicesData.value?.automation)
+
+useHead({
+  title: svc.value?.seo?.title,
+  meta: [{ name: 'description', content: svc.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const features = [
-  {
-    title: 'AI Chatbots',
-    description: 'Custom chatbots trained on your business data that answer customer questions, qualify leads, and book appointments — 24/7, in multiple languages, on your website or WhatsApp.',
-  },
-  {
-    title: 'Review Response Bots',
-    description: 'AI-enhanced responses to every Google, Yelp, and TripAdvisor review within minutes. Professional, on-brand replies that show customers you care — without eating your evening.',
-  },
-  {
-    title: 'WhatsApp Automation',
-    description: 'Automated welcome messages, order confirmations, appointment reminders, and follow-up sequences on WhatsApp Business. Meet your customers where they already are.',
-  },
-  {
-    title: 'Email & SMS Campaigns',
-    description: 'Automated drip campaigns, promotional blasts, abandoned cart recovery, and re-engagement sequences. Set it once, let it run, watch conversions climb.',
-  },
-]
+const features = computed(() => svc.value?.features || [])
 
-const faqs = [
-  {
-    question: 'Will the chatbot sound robotic?',
-    answer: 'Not at all. We train the chatbot on your actual business information, FAQs, and brand voice. Customers often cannot tell the difference. And for complex queries, it seamlessly hands off to a human.',
-    open: ref(false),
-  },
-  {
-    question: 'How much time will automation actually save me?',
-    answer: 'Most of our clients save 10-15 hours per week on repetitive tasks like responding to reviews, answering the same questions, and sending follow-up messages. That is time you can reinvest in actually running your business.',
-    open: ref(false),
-  },
-  {
-    question: 'Can I see what the bots are doing?',
-    answer: 'Yes. You get a dashboard with full conversation logs, response metrics, and customer satisfaction scores. You can also set up alerts for specific triggers — like a negative review or a high-value lead.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => svc.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -107,23 +85,23 @@ onMounted(() => {
   <div ref="page" class="detail-page">
     <section class="hero">
       <div class="hero-header">
-        <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
-        <NuxtLink to="/">
+        <NuxtLink :to="localePath('/services')" class="back-link tw-hide">{{ $t('nav.backToServices') }}</NuxtLink>
+        <NuxtLink :to="localePath('/')">
           <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 
       <!-- Service navigation -->
-      <ServiceNav current="automation" />
+      <ServiceNav current="automation" :content="servicesData?.nav" />
 
       <div class="hero-grid">
         <div class="hero-meta">
-          <span class="hero-label tw-hide">AUTOMATION</span>
-          <span class="hero-index">04</span>
+          <span class="hero-label tw-hide">{{ svc?.label }}</span>
+          <span class="hero-index">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
-          <h1 class="hero-title tw-hide">Automate the busywork, focus on what matters.</h1>
-          <p class="hero-desc tw-hide">You did not start your business to spend hours answering the same questions, chasing reviews, or sending follow-up emails. Let AI handle the repetitive work while you do what you do best.</p>
+          <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
+          <p class="hero-desc tw-hide">{{ svc?.heroDesc }}</p>
         </div>
       </div>
     </section>
@@ -146,17 +124,17 @@ onMounted(() => {
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, idx) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[idx] }"
+            @click="faqOpen[idx] = !faqOpen[idx]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[idx]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -165,9 +143,9 @@ onMounted(() => {
     </section>
 
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Ready to reclaim your time?</h2>
-      <p class="cta-text tw-hide">Find out which tasks you can automate today with a free audit.</p>
-      <NuxtLink to="/audit" class="cta-btn tw-hide">Get your free audit &rarr;</NuxtLink>
+      <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>

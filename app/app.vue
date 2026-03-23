@@ -2,7 +2,7 @@
 import '~/assets/css/main.css'
 
 useHead({
-  title: 'AAXLO — Your local business, amplified by AI',
+  title: 'AAXLO',
 })
 </script>
 

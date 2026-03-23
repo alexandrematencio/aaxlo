@@ -1,47 +1,25 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Consulting — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+const svc = computed(() => servicesData.value?.consulting)
+
+useHead({
+  title: svc.value?.seo?.title,
+  meta: [{ name: 'description', content: svc.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const features = [
-  {
-    title: 'Custom AI Workflows',
-    description: 'We design and build AI-enhanced workflows tailored to your specific operations — from automated inventory management to intelligent customer routing. No off-the-shelf solutions.',
-  },
-  {
-    title: 'App MVPs',
-    description: 'Got an idea for an app or internal tool? We build functional prototypes fast, validate them with real users, and iterate until they work. From concept to working product in weeks, not months.',
-  },
-  {
-    title: 'Competitor Monitoring',
-    description: 'AI-enhanced tracking of your competitors\' pricing, reviews, social media activity, and search rankings. Get weekly intelligence reports so you always know what the market is doing.',
-  },
-  {
-    title: 'AI Training',
-    description: 'Hands-on workshops and training sessions for your team. We teach you how to use AI tools effectively — from ChatGPT to Canva AI to custom-built solutions for your industry.',
-  },
-]
+const features = computed(() => svc.value?.features || [])
 
-const faqs = [
-  {
-    question: 'What kind of businesses do you consult with?',
-    answer: 'We work with local businesses of all sizes — restaurants, clinics, retail shops, service providers, and more. If you serve a local market and want to leverage AI, we can help. Our solutions scale from single-location businesses to small chains.',
-    open: ref(false),
-  },
-  {
-    question: 'How is this different from hiring a developer?',
-    answer: 'A developer builds what you tell them. We figure out what you actually need, design the solution, build it, and make sure it works in the context of your business. We are consultants first, builders second — which means you get solutions that solve real problems, not just code.',
-    open: ref(false),
-  },
-  {
-    question: 'Do you offer ongoing support after the project?',
-    answer: 'Yes. Every consulting engagement includes 30 days of post-delivery support. After that, we offer monthly retainers for ongoing optimization, monitoring, and iteration. Most clients stay with us because the ROI keeps growing.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => svc.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -107,23 +85,23 @@ onMounted(() => {
   <div ref="page" class="detail-page">
     <section class="hero">
       <div class="hero-header">
-        <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
-        <NuxtLink to="/">
+        <NuxtLink :to="localePath('/services')" class="back-link tw-hide">{{ $t('nav.backToServices') }}</NuxtLink>
+        <NuxtLink :to="localePath('/')">
           <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 
       <!-- Service navigation -->
-      <ServiceNav current="consulting" />
+      <ServiceNav current="consulting" :content="servicesData?.nav" />
 
       <div class="hero-grid">
         <div class="hero-meta">
-          <span class="hero-label tw-hide">CONSULTING</span>
-          <span class="hero-index">05</span>
+          <span class="hero-label tw-hide">{{ svc?.label }}</span>
+          <span class="hero-index">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
-          <h1 class="hero-title tw-hide">Custom AI built for your exact business.</h1>
-          <p class="hero-desc tw-hide">Off-the-shelf AI tools are a starting point. But the real competitive advantage comes from solutions designed around your specific workflows, customers, and goals. That is what we build.</p>
+          <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
+          <p class="hero-desc tw-hide">{{ svc?.heroDesc }}</p>
         </div>
       </div>
     </section>
@@ -146,17 +124,17 @@ onMounted(() => {
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, idx) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[idx] }"
+            @click="faqOpen[idx] = !faqOpen[idx]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[idx]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -165,9 +143,9 @@ onMounted(() => {
     </section>
 
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Have a specific challenge in mind?</h2>
-      <p class="cta-text tw-hide">Let's talk. We will map out a custom solution — no commitment required.</p>
-      <NuxtLink to="/contact" class="cta-btn tw-hide">Book a consultation &rarr;</NuxtLink>
+      <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>

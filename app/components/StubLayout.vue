@@ -1,6 +1,8 @@
 <script setup>
 import { gsap } from 'gsap'
 
+const localePath = useLocalePath()
+
 defineProps({
   label: { type: String, required: true },
   title: { type: String, required: true },
@@ -71,7 +73,7 @@ onMounted(() => {
   <div ref="page" class="stub-page">
     <!-- Header bar -->
     <header class="stub-header">
-      <NuxtLink to="/" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
+      <NuxtLink :to="localePath('/')" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
       <img src="/images/axxlo-logo.svg" alt="AAXL" class="stub-logo tw-hide" />
     </header>
 
@@ -93,16 +95,16 @@ onMounted(() => {
 
     <!-- Footer bar (mini grid matching homepage style) -->
     <div class="stub-footer">
-      <NuxtLink to="/" class="stub-footer-cell tw-hide">
+      <NuxtLink :to="localePath('/')" class="stub-footer-cell tw-hide">
         <span class="cell-label">HOME</span>
       </NuxtLink>
-      <NuxtLink to="/services" class="stub-footer-cell tw-hide">
+      <NuxtLink :to="localePath('/services')" class="stub-footer-cell tw-hide">
         <span class="cell-label">SERVICES</span>
       </NuxtLink>
-      <NuxtLink to="/audit" class="stub-footer-cell stub-cta tw-hide">
+      <NuxtLink :to="localePath('/audit')" class="stub-footer-cell stub-cta tw-hide">
         <span class="cell-label">FREE AUDIT</span>
       </NuxtLink>
-      <NuxtLink to="/contact" class="stub-footer-cell tw-hide">
+      <NuxtLink :to="localePath('/contact')" class="stub-footer-cell tw-hide">
         <span class="cell-label">CONTACT</span>
       </NuxtLink>
     </div>

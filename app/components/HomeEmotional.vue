@@ -2,6 +2,7 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   skip: { type: Boolean, default: false },
 })
 
@@ -143,32 +144,16 @@ onBeforeUnmount(() => {
     <div ref="stickyContainer" class="emotional-sticky">
       <div class="emotional-container">
         <div class="emotional-cell">
-          <span class="emotional-label tw-hide">THE REASON</span>
+          <span class="emotional-label tw-hide">{{ content?.label }}</span>
           <h2 class="emotional-headline tw-hide">
-            You built something worth finding.
+            {{ content?.headline }}
           </h2>
         </div>
 
-        <div class="emotional-cell-slide">
+        <div v-for="(para, pi) in (content?.paragraphs || [])" :key="pi" class="emotional-cell-slide">
           <div class="emotional-cell">
             <p class="emotional-para">
-              You didn't start your business to learn about meta descriptions or manage a content calendar. You started it because you're good at something and you decided to bet on yourself.
-            </p>
-          </div>
-        </div>
-
-        <div class="emotional-cell-slide">
-          <div class="emotional-cell">
-            <p class="emotional-para">
-              That bet — the late nights, the slow months, the figuring-it-out-as-you-go — that was the hard part. And that's yours.
-            </p>
-          </div>
-        </div>
-
-        <div class="emotional-cell-slide">
-          <div class="emotional-cell">
-            <p class="emotional-para">
-              Getting people to find you online, keeping your social media alive, automating the stuff that eats your time — that's on us. And we care about getting it right. Not in an abstract "we value our clients" way. In a "we check if it's actually working three weeks later" way.
+              {{ para }}
             </p>
           </div>
         </div>

@@ -1,47 +1,25 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Visibility — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+const svc = computed(() => servicesData.value?.visibility)
+
+useHead({
+  title: svc.value?.seo?.title,
+  meta: [{ name: 'description', content: svc.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const features = [
-  {
-    title: 'GBP Optimization',
-    description: 'We transform your Google Business Profile into a conversion machine — optimized photos, posts, Q&A, categories, and attributes that make you rank higher and get more clicks.',
-  },
-  {
-    title: 'Local SEO',
-    description: 'On-page optimization, local keyword targeting, schema markup, and Google Maps ranking strategies designed specifically for businesses that serve a local area.',
-  },
-  {
-    title: 'Directory Listings',
-    description: 'Consistent NAP data across 60+ directories including Yelp, TripAdvisor, Apple Maps, and industry-specific platforms. No more conflicting information hurting your rankings.',
-  },
-  {
-    title: 'Review Generation',
-    description: 'Automated review request sequences via SMS and email, review response templates powered by AI, and reputation monitoring that alerts you in real time.',
-  },
-]
+const features = computed(() => svc.value?.features || [])
 
-const faqs = [
-  {
-    question: 'How long before I see results from local SEO?',
-    answer: 'Most businesses see measurable improvements in Google Maps rankings within 4-8 weeks. Full SEO results typically take 3-6 months, but we focus on quick wins first — like GBP optimization — that can drive calls and visits within days.',
-    open: ref(false),
-  },
-  {
-    question: 'Do I need a website for local visibility?',
-    answer: 'Not necessarily. A fully optimized Google Business Profile can generate significant leads on its own. However, having a website strengthens your overall presence and gives you more control over your brand narrative. We can help with both.',
-    open: ref(false),
-  },
-  {
-    question: 'What happens to my existing reviews?',
-    answer: 'Nothing — we never touch existing reviews. Our review generation system encourages new happy customers to leave reviews organically. We also set up AI-enhanced response templates so you can reply to every review (positive or negative) professionally and fast.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => svc.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -124,24 +102,24 @@ onMounted(() => {
 
       <!-- Header bar -->
       <div class="hero-header">
-        <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
-        <NuxtLink to="/">
+        <NuxtLink :to="localePath('/services')" class="back-link tw-hide">{{ $t('nav.backToServices') }}</NuxtLink>
+        <NuxtLink :to="localePath('/')">
           <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 
       <!-- Service navigation -->
-      <ServiceNav current="visibility" />
+      <ServiceNav current="visibility" :content="servicesData?.nav" />
 
       <!-- Content grid -->
       <div class="hero-grid">
         <div class="hero-meta">
-          <span class="hero-label tw-hide">VISIBILITY</span>
-          <span class="hero-index">01</span>
+          <span class="hero-label tw-hide">{{ svc?.label }}</span>
+          <span class="hero-index">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
-          <h1 class="hero-title tw-hide">Get found everywhere your customers are looking.</h1>
-          <p class="hero-desc tw-hide">Your customers are searching for businesses like yours right now. We make sure they find you first — on Google, Maps, directories, and review platforms. No more invisible storefronts.</p>
+          <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
+          <p class="hero-desc tw-hide">{{ svc?.heroDesc }}</p>
         </div>
       </div>
     </section>
@@ -166,17 +144,17 @@ onMounted(() => {
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, idx) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[idx] }"
+            @click="faqOpen[idx] = !faqOpen[idx]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[idx]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -186,9 +164,9 @@ onMounted(() => {
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Ready to be found?</h2>
-      <p class="cta-text tw-hide">Get a free visibility audit and see exactly where you're missing out.</p>
-      <NuxtLink to="/audit" class="cta-btn tw-hide">Get your free audit &rarr;</NuxtLink>
+      <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>

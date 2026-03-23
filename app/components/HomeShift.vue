@@ -2,11 +2,13 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   skip: { type: Boolean, default: false },
 })
 
 const section = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
 
 function showFinalState() {
   const el = section.value
@@ -76,32 +78,29 @@ onMounted(() => {
   <section ref="section" class="home-shift">
     <div class="shift-container">
       <div class="shift-cell">
-        <span class="shift-label tw-hide">THE SHIFT</span>
+        <span class="shift-label tw-hide">{{ content?.label }}</span>
         <h2 class="shift-headline tw-hide">
-          Something changed recently.
+          {{ content?.headline }}
         </h2>
       </div>
 
       <div class="shift-cell">
-        <p class="shift-block-a tw-hide">
-          Two years ago, getting a decent website built, your social media running properly, your search rankings sorted, and your customer communications automated would have meant hiring four or five people. The bill would have looked like it.
-        </p>
-        <p class="shift-block-a tw-hide" style="margin-top: 24px">
-          Today, AI does roughly 80% of that production work. Not the thinking. Not the decisions about what makes sense for your business. The repetitive, time-heavy part that used to eat most of the budget.
+        <p v-for="(para, pi) in (content?.paragraphs || [])" :key="pi" class="shift-block-a tw-hide" :style="pi > 0 ? 'margin-top: 24px' : ''">
+          {{ para }}
         </p>
       </div>
 
       <div class="shift-cell">
         <p class="shift-standalone tw-hide">
-          Some businesses have already figured this out.
+          {{ content?.standalone }}
         </p>
         <a
-          href="/audit"
+          :href="localePath('/audit')"
           class="shift-cta"
           style="opacity: 0; transform: translateY(12px)"
-          @click.prevent="navigateWithStripes('/audit')"
+          @click.prevent="navigateWithStripes(localePath('/audit'))"
         >
-          Get your free audit →
+          {{ content?.cta }}
         </a>
       </div>
     </div>

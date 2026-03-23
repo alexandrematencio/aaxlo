@@ -1,49 +1,20 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Services — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+useHead({
+  title: servicesData.value?.seo?.title,
+  meta: [{ name: 'description', content: servicesData.value?.seo?.description }],
+})
 
 const page = ref(null)
 
 // Diagonal wipe hover handled via CSS
 
-const services = [
-  {
-    label: 'VISIBILITY',
-    index: '01',
-    title: 'Get found everywhere',
-    description: 'Google Business Profile, local SEO, directory listings, and review generation to dominate local search.',
-    to: '/services/visibility',
-  },
-  {
-    label: 'WEB',
-    index: '02',
-    title: 'Your digital storefront',
-    description: 'Modern websites, digital menus, booking systems, and e-commerce built for conversion.',
-    to: '/services/web',
-  },
-  {
-    label: 'CONTENT',
-    index: '03',
-    title: 'Content that converts',
-    description: 'Social media management, content repurposing, brand identity, and professional media.',
-    to: '/services/content',
-  },
-  {
-    label: 'AUTOMATION',
-    index: '04',
-    title: 'Automate the busywork',
-    description: 'AI chatbots, review response bots, WhatsApp automation, and email campaigns on autopilot.',
-    to: '/services/automation',
-  },
-  {
-    label: 'CONSULTING',
-    index: '05',
-    title: 'Custom AI for your business',
-    description: 'Custom AI workflows, app MVPs, competitor monitoring, and AI training tailored to you.',
-    to: '/services/consulting',
-  },
-]
+const services = computed(() => servicesData.value?.overview?.services || [])
 
 onMounted(() => {
   const el = page.value
@@ -96,8 +67,8 @@ onMounted(() => {
   <div ref="page" class="services-page">
     <!-- Hero -->
     <section class="hero">
-      <span class="hero-label tw-hide">SERVICES</span>
-      <h1 class="hero-title tw-hide">Full-spectrum AI solutions<br>for local businesses.</h1>
+      <span class="hero-label tw-hide">{{ servicesData?.overview?.label }}</span>
+      <h1 class="hero-title tw-hide">{{ servicesData?.overview?.title }}</h1>
     </section>
 
     <!-- Service cards grid -->
@@ -105,7 +76,7 @@ onMounted(() => {
       <NuxtLink
         v-for="svc in services"
         :key="svc.label"
-        :to="svc.to"
+        :to="localePath(svc.to)"
         class="svc-card tw-hide"
       >
         <div class="svc-top">
@@ -120,9 +91,9 @@ onMounted(() => {
 
     <!-- Bottom CTA -->
     <section class="cta-section">
-      <p class="cta-text tw-hide">Not sure which service you need?</p>
-      <NuxtLink to="/audit" class="cta-link tw-hide">
-        Get your free audit &rarr;
+      <p class="cta-text tw-hide">{{ servicesData?.overview?.ctaText }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-link tw-hide">
+        {{ servicesData?.overview?.ctaLink }}
       </NuxtLink>
     </section>
   </div>

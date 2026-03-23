@@ -2,53 +2,18 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   skip: { type: Boolean, default: false },
 })
 
 const section = ref(null)
 useShineHover(section, '.checklist-cta')
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
+const { t } = useI18n()
 
+const statements = computed(() => props.content?.statements || [])
 const checked = ref([false, false, false, false, false, false])
-
-const statements = [
-  {
-    text: "Your website exists, but you wouldn't point a new customer to it right now.",
-    service: 'Web',
-    fix: "We build fast, modern sites that make a strong first impression — designed to convert visitors into customers.",
-    link: '/services/web',
-  },
-  {
-    text: "You meant to post on social media this month. You didn't.",
-    service: 'Content',
-    fix: "We manage your social media end-to-end — strategy, creation, scheduling — so your brand stays visible without the effort.",
-    link: '/services/content',
-  },
-  {
-    text: "There are reviews about your business sitting unanswered.",
-    service: 'Automation',
-    fix: "We set up automated review monitoring and response workflows so nothing slips through the cracks.",
-    link: '/services/automation',
-  },
-  {
-    text: "You're not totally sure what comes up when someone Googles your business.",
-    service: 'Visibility',
-    fix: "We optimize your Google Business Profile, local SEO, and directory listings so you control what people find.",
-    link: '/services/visibility',
-  },
-  {
-    text: "You've looked into getting help before. The quotes felt like they were meant for a bigger company.",
-    service: 'Consulting',
-    fix: "AI handles the production work now. We deliver the same scope at a fraction of what agencies used to charge.",
-    link: '/services/consulting',
-  },
-  {
-    text: "You know something needs to change. You just don't know what to tackle first.",
-    service: 'Free Audit',
-    fix: "That's exactly what the audit is for — we analyze everything and tell you what to fix first.",
-    link: '/audit',
-  },
-]
 
 function toggleCard(index) {
   checked.value[index] = !checked.value[index]
@@ -181,7 +146,7 @@ onMounted(() => {
     <div class="checklist-container">
       <div class="checklist-cell">
         <h2 class="checklist-headline tw-hide">
-          Does any of this sound familiar?
+          {{ content?.headline }}
         </h2>
       </div>
 
@@ -206,11 +171,11 @@ onMounted(() => {
             <span class="fix-service">{{ statement.service }}</span>
             <p class="fix-text">{{ statement.fix }}</p>
             <a
-              :href="statement.link"
+              :href="localePath(statement.link)"
               class="fix-link"
-              @click.prevent="navigateWithStripes(statement.link)"
+              @click.prevent="navigateWithStripes(localePath(statement.link))"
             >
-              {{ statement.service === 'Free Audit' ? 'GET YOUR FREE AUDIT →' : 'LEARN MORE →' }}
+              {{ statement.service === 'Free Audit' ? $t('common.getAudit') : $t('common.learnMore') }}
             </a>
           </div>
         </div>
@@ -220,15 +185,15 @@ onMounted(() => {
       <div v-if="hasAnyChecked" class="checklist-bottom">
         <div class="checklist-cell">
           <p class="checklist-summary">
-            The audit covers all of this — and tells you exactly what to fix first.
+            {{ content?.summary }}
           </p>
         </div>
         <a
-          href="/audit"
+          :href="localePath('/audit')"
           class="checklist-cta"
-          @click.prevent="navigateWithStripes('/audit')"
+          @click.prevent="navigateWithStripes(localePath('/audit'))"
         >
-          GET YOUR FREE AUDIT →
+          {{ $t('common.getAudit') }}
         </a>
       </div>
     </div>

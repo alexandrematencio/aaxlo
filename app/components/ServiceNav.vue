@@ -3,17 +3,13 @@ import { gsap } from 'gsap'
 
 const props = defineProps({
   current: { type: String, required: true },
+  content: { type: Array, default: null },
 })
 
 const nav = ref(null)
+const localePath = useLocalePath()
 
-const services = [
-  { slug: 'visibility', label: 'Visibility', index: '01', to: '/services/visibility' },
-  { slug: 'web', label: 'Web', index: '02', to: '/services/web' },
-  { slug: 'content', label: 'Content', index: '03', to: '/services/content' },
-  { slug: 'automation', label: 'Automation', index: '04', to: '/services/automation' },
-  { slug: 'consulting', label: 'Consulting', index: '05', to: '/services/consulting' },
-]
+const services = computed(() => props.content || [])
 
 onMounted(() => {
   const el = nav.value
@@ -57,7 +53,7 @@ onMounted(() => {
       <NuxtLink
         v-for="s in services"
         :key="s.slug"
-        :to="s.to"
+        :to="localePath(s.to)"
         class="sn-tab tw-hide"
         :class="{ 'sn-tab--active': s.slug === current }"
       >

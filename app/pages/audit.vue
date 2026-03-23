@@ -1,47 +1,22 @@
 <script setup>
 import { gsap } from 'gsap'
 
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: auditData } = await useLocalizedContent('/audit')
+
 useHead({
-  title: 'Free AI Audit — AAXLO',
-  meta: [
-    { name: 'description', content: 'Get a free AI-enhanced audit of your Google Business Profile, SEO, social media, reviews, and competitor landscape. Results in 24 hours.' },
-  ],
+  title: auditData.value?.seo?.title,
+  meta: [{ name: 'description', content: auditData.value?.seo?.description }],
 })
 
 const page = ref(null)
 
-const auditCovers = [
-  'Google Business Profile completeness and optimization score',
-  'Local SEO health check and keyword opportunities',
-  'Social media presence and engagement analysis',
-  'Online review sentiment and response rate',
-  'Competitor landscape and positioning gaps',
-  'Website performance and mobile usability',
-  'Top 3 quick wins you can implement this week',
-]
+const auditCovers = computed(() => auditData.value?.covers?.items || [])
 
-const faqs = [
-  {
-    question: 'Is this really free? What is the catch?',
-    answer: 'There is no catch. The audit is 100% free with no obligation. We use it to demonstrate our expertise and build trust. If you like the results, we can discuss working together — but there is zero pressure.',
-    open: ref(false),
-  },
-  {
-    question: 'How do you get the results so fast?',
-    answer: 'Our proprietary AI tools analyze publicly available data about your business, competitors, and market in minutes. A human strategist then reviews the findings, adds context, and prepares your personalized report. That is how we deliver in 24 hours.',
-    open: ref(false),
-  },
-  {
-    question: 'What do I need to provide?',
-    answer: 'Just your business name and website URL. That is enough for us to run a comprehensive analysis. Your contact details let us send you the report and answer any questions you have about the findings.',
-    open: ref(false),
-  },
-  {
-    question: 'Will you share my data with anyone?',
-    answer: 'Never. Your business data is used exclusively to generate your audit report. We do not sell, share, or repurpose it. See our privacy policy for full details.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => auditData.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -92,9 +67,9 @@ onMounted(() => {
   <div ref="page" class="audit-page">
     <!-- Hero -->
     <section class="hero">
-      <span class="hero-label tw-hide">FREE AUDIT</span>
-      <h1 class="hero-title tw-hide">See exactly what's holding your business back online.</h1>
-      <p class="hero-subtitle tw-hide">Our AI-enhanced audit analyzes your Google Business Profile, SEO, social media, reviews, and competitor landscape — all in 24 hours.</p>
+      <span class="hero-label tw-hide">{{ auditData?.hero?.label }}</span>
+      <h1 class="hero-title tw-hide">{{ auditData?.hero?.title }}</h1>
+      <p class="hero-subtitle tw-hide">{{ auditData?.hero?.subtitle }}</p>
     </section>
 
     <!-- Form -->
@@ -106,7 +81,7 @@ onMounted(() => {
 
     <!-- What the audit covers -->
     <section class="covers-section">
-      <span class="section-label tw-hide">WHAT YOUR AUDIT COVERS</span>
+      <span class="section-label tw-hide">{{ auditData?.covers?.label }}</span>
       <ul class="covers-list">
         <li v-for="item in auditCovers" :key="item" class="cover-item tw-hide">
           {{ item }}
@@ -118,22 +93,22 @@ onMounted(() => {
     <section class="faq-section">
       <div class="faq-container">
         <div class="faq-label-cell">
-          <span class="section-label tw-hide">FREQUENTLY ASKED</span>
-          <h2 class="faq-title tw-hide">Questions &amp; Answers</h2>
+          <span class="section-label tw-hide">{{ auditData?.faqSection?.label }}</span>
+          <h2 class="faq-title tw-hide">{{ auditData?.faqSection?.title }}</h2>
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, index) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[index] }"
+            @click="faqOpen[index] = !faqOpen[index]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[index] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[index]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>

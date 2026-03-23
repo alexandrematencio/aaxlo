@@ -2,6 +2,7 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   animate: { type: Boolean, default: false },
   skip: { type: Boolean, default: false },
 })
@@ -12,15 +13,28 @@ const trailRef = ref(null)
 const heroSubRef = ref(null)
 const glyphMaskRef = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
 
 // ── Scramble text setup ──
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-const HEADLINE_TEXT = 'You might already know what\'s wrong with your online presence.'
+const BASE_SCRAMBLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 const TRAIL_COUNT = 10
+
+// Build scramble pool from base chars + unique chars in the actual headline
+// This ensures accented/non-Latin characters appear during scramble, preventing
+// layout shifts when the final character is wider than ASCII substitutes.
+const scrambleChars = computed(() => {
+  const text = props.content?.headline || ''
+  const unique = new Set(text.replace(/\s/g, '').split(''))
+  const base = new Set(BASE_SCRAMBLE.split(''))
+  unique.forEach(c => base.add(c))
+  return Array.from(base).join('')
+})
 
 // Group characters by word so the browser wraps at word boundaries
 const headlineWords = computed(() => {
-  const words = HEADLINE_TEXT.split(' ')
+  const text = props.content?.headline || ''
+  if (!text) return []
+  const words = text.split(' ')
   let charIndex = 0
   return words.map((word, wi) => ({
     id: wi,
@@ -34,7 +48,8 @@ const headlineWords = computed(() => {
 })
 
 function randomChar() {
-  return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+  const chars = scrambleChars.value
+  return chars[Math.floor(Math.random() * chars.length)]
 }
 
 // Pre-compute trail positions (stable across renders)
@@ -45,20 +60,12 @@ const trailPositions = Array.from({ length: TRAIL_COUNT }, (_, i) => ({
   fontSize: `${0.3 + Math.random() * 0.4}em`,
 }))
 
-const navCells = [
-  { label: 'GET YOUR FREE AUDIT', accent: true, to: '/audit', stripe: true },
-  { label: 'SERVICES', index: '01', to: '/services', stripe: true },
-  { label: 'ABOUT US', index: '02', to: '/about', stripe: false },
-  { label: 'BLOG', index: '03', to: '/blog', stripe: false },
-  { label: 'AUDIT', index: '04', to: '/audit', stripe: true },
-  { label: 'CONTACT', index: '05', to: '/contact', stripe: false },
-]
-
 function handleNav(cell) {
+  const path = localePath(cell.to)
   if (cell.stripe) {
-    navigateWithStripes(cell.to)
+    navigateWithStripes(path)
   } else {
-    navigateTo(cell.to)
+    navigateTo(path)
   }
 }
 
@@ -142,6 +149,15 @@ function runAnimation() {
       }, `scramble+=${i * 0.06 + 0.3 + Math.random() * 0.3}`)
     })
   }
+
+  // Lock each character cell to its final character's width to prevent
+  // layout reflow during scramble (proportional font = different char widths)
+  charEls.forEach((charEl) => {
+    charEl.textContent = charEl.dataset.final
+    const w = charEl.getBoundingClientRect().width
+    charEl.style.width = `${w}px`
+    charEl.style.textAlign = 'center'
+  })
 
   // Main character scramble + staggered slide-up (1.3x speed)
   const staggerGap = 0.04 / 1.3    // ~0.031s between chars
@@ -258,7 +274,7 @@ watch(() => props.animate, (val) => {
 </script>
 
 <template>
-  <section ref="section" class="homepage-hero">
+  <section v-if="content" ref="section" class="homepage-hero">
     <!-- Top half -->
     <div class="hero-upper">
       <!-- Copy area -->
@@ -291,7 +307,7 @@ watch(() => props.animate, (val) => {
           </h1>
           <div class="hero-sub-wrap">
             <p ref="heroSubRef" class="hero-sub hero-sub-delayed tw-hide">
-              You just haven't had time to fix it.
+              {{ content?.subheadline }}
             </p>
             <!-- Glyph mask — sweeps across to reveal subtitle -->
             <svg
@@ -316,11 +332,11 @@ watch(() => props.animate, (val) => {
             </svg>
           </div>
           <a
-            href="/audit"
+            :href="localePath('/audit')"
             class="hero-cta tw-hide"
-            @click.prevent="navigateWithStripes('/audit')"
+            @click.prevent="navigateWithStripes(localePath('/audit'))"
           >
-            Get your free audit →
+            {{ content?.cta }}
           </a>
         </div>
       </div>
@@ -329,68 +345,29 @@ watch(() => props.animate, (val) => {
     <!-- Bottom half — nav grid -->
     <div class="hero-nav">
       <div class="hero-nav-grid">
-        <!-- Row 1 -->
         <a
-          href="/audit"
-          class="nav-cell nav-cell--accent nav-cta"
-          style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/audit')"
-        >
-          <span class="nav-arrow-icon" aria-hidden="true">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </span>
-          <span class="nav-plus" aria-hidden="true">+</span>
-          <span class="nav-label tw-hide">GET YOUR FREE AUDIT</span>
-          <span class="nav-plus" aria-hidden="true">+</span>
-        </a>
-        <a
-          href="/services/visibility"
+          v-for="(cell, ci) in (content?.navCells || [])"
+          :key="ci"
+          :href="localePath(cell.to)"
           class="nav-cell"
+          :class="{ 'nav-cell--accent nav-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/services/visibility')"
+          @click.prevent="handleNav(cell)"
         >
-          <span class="nav-index" style="opacity: 0">01</span>
-          <span class="nav-label tw-hide">PEOPLE CAN'T FIND ME</span>
-        </a>
-        <a
-          href="/services/web"
-          class="nav-cell"
-          style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/services/web')"
-        >
-          <span class="nav-index" style="opacity: 0">02</span>
-          <span class="nav-label tw-hide">MY SITE DOESN'T REPRESENT ME</span>
-        </a>
-
-        <!-- Row 2 -->
-        <a
-          href="/services/content"
-          class="nav-cell"
-          style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/services/content')"
-        >
-          <span class="nav-index" style="opacity: 0">03</span>
-          <span class="nav-label tw-hide">I'VE GONE QUIET ONLINE</span>
-        </a>
-        <a
-          href="/services/automation"
-          class="nav-cell"
-          style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/services/automation')"
-        >
-          <span class="nav-index" style="opacity: 0">04</span>
-          <span class="nav-label tw-hide">I'M DOING TOO MUCH BY HAND</span>
-        </a>
-        <a
-          href="/services/consulting"
-          class="nav-cell"
-          style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes('/services/consulting')"
-        >
-          <span class="nav-index" style="opacity: 0">05</span>
-          <span class="nav-label tw-hide">I NEED SOMETHING CUSTOM</span>
+          <template v-if="cell.accent">
+            <span class="nav-arrow-icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <span class="nav-plus" aria-hidden="true">+</span>
+            <span class="nav-label tw-hide">{{ cell.label }}</span>
+            <span class="nav-plus" aria-hidden="true">+</span>
+          </template>
+          <template v-else>
+            <span class="nav-index" style="opacity: 0">{{ cell.index }}</span>
+            <span class="nav-label tw-hide">{{ cell.label }}</span>
+          </template>
         </a>
       </div>
     </div>
