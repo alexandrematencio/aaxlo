@@ -16,7 +16,7 @@ const { navigateWithStripes } = useStripeTransition()
 const localePath = useLocalePath()
 
 // ── Scramble text setup ──
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzàâäéèêëïîôùûüçñößæœ'
 const TRAIL_COUNT = 10
 
 // Group characters by word so the browser wraps at word boundaries
