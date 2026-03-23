@@ -5,14 +5,19 @@ export function useLocalizedContent(path: string) {
 
   return useAsyncData(`content-${path}-${locale.value}`, async () => {
     const collection = ('content_' + locale.value) as keyof Collections
-    const content = await queryCollection(collection).path(path).first()
+    let content = await queryCollection(collection).path(path).first()
 
     // Fallback to English if content missing in current locale
     if (!content && locale.value !== 'en') {
-      return await queryCollection('content_en').path(path).first()
+      content = await queryCollection('content_en').path(path).first()
     }
 
-    return content
+    if (!content) return null
+
+    // Nuxt Content v3 stores custom frontmatter fields (not in schema) under `meta`.
+    // Spread meta into top-level so components can access e.g. `data?.hero` directly.
+    const { meta, ...rest } = content as any
+    return { ...rest, ...(meta || {}) }
   }, {
     watch: [locale],
   })

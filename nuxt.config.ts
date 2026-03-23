@@ -16,12 +16,12 @@ export default defineNuxtConfig({
     ],
     lazy: true,
     defaultLocale: 'en',
+    fallbackLocale: 'en',
     strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
-      fallbackLocale: 'en',
     },
     baseUrl: 'https://aaxlo.com',
   },
