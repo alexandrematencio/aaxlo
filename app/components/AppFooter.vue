@@ -1,6 +1,13 @@
 <script setup>
 import { gsap } from 'gsap'
 
+const { t, locale, locales } = useI18n()
+const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
+const { data: footerContent } = await useLocalizedContent('/footer')
+
+const availableLocales = computed(() => locales.value.filter(l => typeof l === 'object'))
+
 const props = defineProps({ skip: { type: Boolean, default: false } })
 const footer = ref(null)
 
@@ -85,11 +92,11 @@ onMounted(() => {
         />
         <div class="footer-info">
           <p class="footer-tagline tw-hide">
-            Your local business, amplified by AI.
+            {{ footerContent?.tagline || $t('footer.tagline') }}
           </p>
           <div class="footer-contact">
-            <a href="mailto:hi@aaxlo.com" class="footer-email tw-hide">hi@aaxlo.com</a>
-            <span class="footer-location tw-hide">Based in Singapore</span>
+            <a :href="`mailto:${footerContent?.email || 'hi@aaxlo.com'}`" class="footer-email tw-hide">{{ footerContent?.email || 'hi@aaxlo.com' }}</a>
+            <span class="footer-location tw-hide">{{ footerContent?.location || $t('footer.location') }}</span>
           </div>
         </div>
       </div>
@@ -98,44 +105,44 @@ onMounted(() => {
       <div class="footer-nav">
         <!-- Services -->
         <div class="footer-col tw-hide">
-          <h4 class="footer-col-title">Services</h4>
+          <h4 class="footer-col-title">{{ $t('footer.servicesTitle') }}</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/services/visibility">Visibility</NuxtLink></li>
-            <li><NuxtLink to="/services/web">Web</NuxtLink></li>
-            <li><NuxtLink to="/services/content">Content</NuxtLink></li>
-            <li><NuxtLink to="/services/automation">Automation</NuxtLink></li>
-            <li><NuxtLink to="/services/consulting">Consulting</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/services/visibility')">{{ $t('services_dropdown.visibility.label') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/services/web')">{{ $t('services_dropdown.web.label') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/services/content')">{{ $t('services_dropdown.content.label') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/services/automation')">{{ $t('services_dropdown.automation.label') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/services/consulting')">{{ $t('services_dropdown.consulting.label') }}</NuxtLink></li>
           </ul>
         </div>
 
         <!-- About / Resources -->
         <div class="footer-col tw-hide">
-          <h4 class="footer-col-title">About</h4>
+          <h4 class="footer-col-title">{{ $t('footer.aboutTitle') }}</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/about">Who we are</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/about')">{{ $t('footer.whoWeAre') }}</NuxtLink></li>
           </ul>
-          <h4 class="footer-col-title footer-col-title--spaced">Resources</h4>
+          <h4 class="footer-col-title footer-col-title--spaced">{{ $t('footer.resourcesTitle') }}</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/blog">Blog</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/blog')">{{ $t('nav.blog') }}</NuxtLink></li>
           </ul>
         </div>
 
         <!-- Legal -->
         <div class="footer-col tw-hide">
-          <h4 class="footer-col-title">Legal</h4>
+          <h4 class="footer-col-title">{{ $t('footer.legalTitle') }}</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/legal/privacy">Privacy policy</NuxtLink></li>
-            <li><NuxtLink to="/legal/terms">Terms of service</NuxtLink></li>
-            <li><NuxtLink to="/legal/mentions">Mentions l&eacute;gales</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/legal/privacy')">{{ $t('footer.privacyPolicy') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/legal/terms')">{{ $t('footer.termsOfService') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/legal/mentions')">{{ $t('footer.mentionsLegales') }}</NuxtLink></li>
           </ul>
         </div>
 
         <!-- Contact -->
         <div class="footer-col tw-hide">
-          <h4 class="footer-col-title">Contact</h4>
+          <h4 class="footer-col-title">{{ $t('footer.contactTitle') }}</h4>
           <ul class="footer-links">
-            <li><a href="mailto:hi@aaxlo.com">Email: hi@aaxlo.com</a></li>
-            <li><a href="https://cal.com/aaxlo" target="_blank" rel="noopener">Book a call</a></li>
+            <li><a :href="`mailto:${footerContent?.email || 'hi@aaxlo.com'}`">Email: {{ footerContent?.email || 'hi@aaxlo.com' }}</a></li>
+            <li><a :href="footerContent?.bookingUrl || 'https://cal.com/aaxlo'" target="_blank" rel="noopener">{{ $t('footer.bookCall') }}</a></li>
           </ul>
         </div>
       </div>
@@ -143,11 +150,16 @@ onMounted(() => {
 
     <!-- Bottom row -->
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2026 AAXLO Pte. Ltd.</span>
+      <span class="footer-copyright">{{ $t('footer.copyright') }}</span>
       <div class="footer-lang">
-        <NuxtLink to="/" class="footer-lang-link footer-lang-link--active">EN</NuxtLink>
-        <span class="footer-lang-sep">/</span>
-        <NuxtLink to="/fr" class="footer-lang-link">FR</NuxtLink>
+        <template v-for="(loc, idx) in availableLocales" :key="loc.code">
+          <span v-if="idx > 0" class="footer-lang-sep">/</span>
+          <NuxtLink
+            :to="switchLocalePath(loc.code)"
+            class="footer-lang-link"
+            :class="{ 'footer-lang-link--active': locale === loc.code }"
+          >{{ loc.code.toUpperCase() }}</NuxtLink>
+        </template>
       </div>
     </div>
   </footer>
