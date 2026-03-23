@@ -61,7 +61,7 @@
     "name": "Nom *",
     "namePlaceholder": "Votre nom",
     "email": "E-mail *",
-    "emailPlaceholder": "votre@email.com",
+    "emailPlaceholder": "votre{'@'}email.com",
     "message": "Message *",
     "messagePlaceholder": "Parlez-nous de votre projet ou question...",
     "submit": "Envoyer le message →",
