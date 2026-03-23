@@ -3,6 +3,9 @@ import { gsap } from 'gsap'
 import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
 
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 const props = defineProps({
   mode: {
     type: String,
@@ -24,13 +27,13 @@ const formData = reactive({
   name: '',
 })
 
-const telInputOptions = {
+const telInputOptions = computed(() => ({
   mode: 'international',
   preferredCountries: ['FR', 'US', 'GB', 'DE', 'ES', 'IT', 'SG'],
   defaultCountry: 'FR',
   dropdownOptions: { showSearchBox: true, showFlags: true },
-  inputOptions: { placeholder: 'Phone number' },
-}
+  inputOptions: { placeholder: t('audit_form.phone') },
+}))
 
 function onPhoneInput(phone, phoneObject) {
   formData.phone = phone
@@ -59,13 +62,13 @@ function onTeaserSubmit() {
   }
   // Otherwise navigate to audit with pre-filled data
   const params = new URLSearchParams({ business: formData.businessName.trim() })
-  navigateWithStripes('/audit?' + params.toString())
+  navigateWithStripes(localePath('/audit') + '?' + params.toString())
 }
 
 function submitPopup() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formData.email)) {
-    errors.email = 'Please enter a valid email'
+    errors.email = t('audit_form.invalidEmail')
     return
   }
   // Submit complete — show success
@@ -130,7 +133,7 @@ watch(() => formData.email, () => { errors.email = '' })
 function validateStep(step) {
   if (step === 1) {
     if (formData.businessName.trim().length < 2) {
-      errors.businessName = 'Please enter your business name'
+      errors.businessName = t('audit_form.invalidBusinessName')
       animateError('err-business')
       return false
     }
@@ -139,7 +142,7 @@ function validateStep(step) {
       try {
         new URL(formData.websiteUrl)
       } catch {
-        errors.websiteUrl = 'Please enter a valid URL (e.g. https://example.com)'
+        errors.websiteUrl = t('audit_form.invalidUrl')
         animateError('err-url')
         return false
       }
@@ -147,7 +150,7 @@ function validateStep(step) {
   } else if (step === 2) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(formData.email)) {
-      errors.email = 'Please enter a valid email'
+      errors.email = t('audit_form.invalidEmail')
       animateError('err-email')
       return false
     }
@@ -311,15 +314,15 @@ onMounted(() => {
   <section v-if="mode === 'teaser'" ref="section" class="audit-cta-section">
     <div class="audit-cta-inner">
       <div class="audit-cell">
-        <span class="audit-label tw-hide">FREE AUDIT</span>
+        <span class="audit-label tw-hide">{{ $t('audit_form.teaserLabel') }}</span>
         <h2 class="cta-headline tw-hide">
-          Find out what's costing you customers right now.
+          {{ $t('audit_form.teaserHeadline') }}
         </h2>
       </div>
 
       <div class="audit-cell">
         <p class="cta-subtitle tw-hide">
-          We scan your full digital presence — website, search visibility, reviews, social media, how you stack up against competitors — and put it in a clear report with scores and a plan. Takes us 24 hours. Costs you nothing.
+          {{ $t('audit_form.teaserSubtitle') }}
         </p>
       </div>
 
@@ -330,14 +333,14 @@ onMounted(() => {
               v-model="formData.businessName"
               type="text"
               class="audit-input"
-              placeholder="Your business name (required)"
+              :placeholder="$t('audit_form.teaserBusinessPlaceholder')"
               style="opacity: 0; transform: translateY(8px)"
             />
             <input
               v-model="formData.websiteUrl"
               type="url"
               class="audit-input"
-              placeholder="Your website URL (optional, if existing)"
+              :placeholder="$t('audit_form.teaserUrlPlaceholder')"
               style="opacity: 0; transform: translateY(8px)"
             />
           </div>
@@ -346,24 +349,23 @@ onMounted(() => {
             class="cta-button"
             style="opacity: 0; transform: translateY(8px)"
           >
-            Get your free audit →
+            {{ $t('audit_form.teaserSubmit') }}
           </button>
         </form>
       </div>
 
       <div v-if="!submitted" class="audit-cell">
         <p class="cta-small" style="opacity: 0">
-          No commitment. No card. No calls unless you ask for them.<br />
-          You get a full report with specific recommendations within 24 hours — whether you work with us after that or not.
+          {{ $t('audit_form.teaserDisclaimer') }}
         </p>
       </div>
 
       <!-- Success state (teaser popup submit) -->
       <div v-if="submitted" class="audit-cell success-cell">
         <img src="/images/logo-glyph.svg" alt="" class="success-glyph" />
-        <h3 class="success-title tw-hide">We're on it.</h3>
-        <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
-        <p class="success-trust">No commitment. No card. No calls unless you ask.</p>
+        <h3 class="success-title tw-hide">{{ $t('audit_form.successTitle') }}</h3>
+        <p class="success-text">{{ $t('audit_form.successText', { email: formData.email }) }}</p>
+        <p class="success-trust">{{ $t('audit_form.successTrust') }}</p>
       </div>
     </div>
 
@@ -373,8 +375,8 @@ onMounted(() => {
         <div v-if="showPopup" class="popup-overlay" @click.self="closePopup">
           <div class="popup-card">
             <button type="button" class="popup-close" @click="closePopup" aria-label="Close">&times;</button>
-            <span class="popup-label">ALMOST THERE</span>
-            <h3 class="popup-title">Where should we send your audit?</h3>
+            <span class="popup-label">{{ $t('audit_form.popupTitle') }}</span>
+            <h3 class="popup-title">{{ $t('audit_form.popupDesc') }}</h3>
             <p class="popup-summary">
               <strong>{{ formData.businessName }}</strong>
               <span v-if="formData.websiteUrl"> · {{ formData.websiteUrl }}</span>
@@ -384,7 +386,7 @@ onMounted(() => {
                 v-model="formData.email"
                 type="email"
                 class="popup-input"
-                placeholder="Email address *"
+                :placeholder="$t('audit_form.emailPlaceholder')"
                 required
               />
               <span v-if="errors.email" class="flow-error">{{ errors.email }}</span>
@@ -398,9 +400,9 @@ onMounted(() => {
                 v-model="formData.name"
                 type="text"
                 class="popup-input"
-                placeholder="Your name"
+                :placeholder="$t('audit_form.namePlaceholder')"
               />
-              <button type="submit" class="popup-submit">Run my free audit →</button>
+              <button type="submit" class="popup-submit">{{ $t('audit_form.submit') }}</button>
             </form>
           </div>
         </div>
@@ -426,13 +428,13 @@ onMounted(() => {
     <div ref="stepContainer" class="step-container" aria-live="polite">
       <!-- Step 1: Business Name + URL -->
       <div v-if="currentStep === 1 && !submitted" class="step">
-        <label for="flow-business" class="step-label">Tell us about your business</label>
+        <label for="flow-business" class="step-label">{{ $t('audit_form.step1Label') }}</label>
         <input
           id="flow-business"
           v-model="formData.businessName"
           type="text"
           class="flow-input"
-          placeholder="Your business name (required)"
+          :placeholder="$t('audit_form.teaserBusinessPlaceholder')"
           :aria-describedby="errors.businessName ? 'err-business' : undefined"
         />
         <span v-if="errors.businessName" id="err-business" class="flow-error" role="alert">{{ errors.businessName }}</span>
@@ -441,22 +443,22 @@ onMounted(() => {
           v-model="formData.websiteUrl"
           type="url"
           class="flow-input"
-          placeholder="Your website URL (optional, if existing)"
+          :placeholder="$t('audit_form.teaserUrlPlaceholder')"
           :aria-describedby="errors.websiteUrl ? 'err-url' : undefined"
         />
         <span v-if="errors.websiteUrl" id="err-url" class="flow-error" role="alert">{{ errors.websiteUrl }}</span>
-        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+        <button type="button" class="flow-next" @click="goNext">{{ $t('audit_form.next') }}</button>
       </div>
 
       <!-- Step 2: Email + Phone -->
       <div v-if="currentStep === 2 && !submitted" class="step">
-        <label for="flow-email" class="step-label">Where should we send your audit?</label>
+        <label for="flow-email" class="step-label">{{ $t('audit_form.step2Label') }}</label>
         <input
           id="flow-email"
           v-model="formData.email"
           type="email"
           class="flow-input"
-          placeholder="Email address *"
+          :placeholder="$t('audit_form.emailPlaceholder')"
           :aria-describedby="errors.email ? 'err-email' : undefined"
         />
         <span v-if="errors.email" id="err-email" class="flow-error" role="alert">{{ errors.email }}</span>
@@ -466,29 +468,29 @@ onMounted(() => {
           class="tel-input-wrap"
           @on-input="onPhoneInput"
         />
-        <button type="button" class="flow-next" @click="goNext">Next &rarr;</button>
+        <button type="button" class="flow-next" @click="goNext">{{ $t('audit_form.next') }}</button>
       </div>
 
       <!-- Step 3: Name + Submit -->
       <div v-if="currentStep === 3 && !submitted" class="step">
-        <label for="flow-name" class="step-label">Who are we preparing this for?</label>
+        <label for="flow-name" class="step-label">{{ $t('audit_form.step3Label') }}</label>
         <input
           id="flow-name"
           v-model="formData.name"
           type="text"
           class="flow-input"
-          placeholder="Your name (optional)"
+          :placeholder="$t('audit_form.nameOptionalPlaceholder')"
         />
-        <button type="button" class="flow-next flow-next--submit" @click="goNext">Run my free audit &rarr;</button>
+        <button type="button" class="flow-next flow-next--submit" @click="goNext">{{ $t('audit_form.submit') }}</button>
       </div>
 
       <!-- Success State -->
       <div v-if="showingSuccess" class="step success-step">
         <img src="/images/logo-glyph.svg" alt="" class="success-glyph" />
-        <h3 class="success-title tw-hide">We're on it.</h3>
-        <p class="success-text">Your personalized audit will land in <strong>{{ formData.email }}</strong> within 24 hours.</p>
-        <p class="success-trust">No commitment. No card. No calls unless you ask.</p>
-        <NuxtLink to="/" class="success-link">&larr; Back to homepage</NuxtLink>
+        <h3 class="success-title tw-hide">{{ $t('audit_form.successTitle') }}</h3>
+        <p class="success-text">{{ $t('audit_form.successText', { email: formData.email }) }}</p>
+        <p class="success-trust">{{ $t('audit_form.successTrust') }}</p>
+        <NuxtLink :to="localePath('/')" class="success-link">{{ $t('audit_form.backHome') }}</NuxtLink>
       </div>
     </div>
   </div>
