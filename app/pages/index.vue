@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { initScrollReveal, initScrollExit } from '~/composables/useScrollReveal'
 
 const { data: homeContent } = await useLocalizedContent('/home')
+const { data: servicesContent } = await useLocalizedContent('/services')
 
 useHead({
   title: homeContent.value?.seo?.title || 'AAXLO',
@@ -136,7 +137,7 @@ onMounted(() => {
 
     <!-- S4: Services Grid — Crack -->
     <div ref="s4Ref" class="forge-section">
-      <ServicesShowcase :skip="skipAnimations" />
+      <ServicesShowcase :content="servicesContent?.showcase" :skip="skipAnimations" />
     </div>
 
     <!-- S5: Speed — Breathe -->

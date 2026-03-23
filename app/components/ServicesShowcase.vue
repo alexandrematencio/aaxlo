@@ -1,66 +1,15 @@
 <script setup>
 import { gsap } from 'gsap'
 
-const props = defineProps({ skip: { type: Boolean, default: false } })
+const props = defineProps({
+  skip: { type: Boolean, default: false },
+  content: { type: Array, default: null },
+})
 const section = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
 
-const cells = [
-  {
-    slug: 'audit',
-    to: '/audit',
-    accent: true,
-    category: 'FREE AUDIT',
-    title: 'Find out what\'s costing you customers.',
-    desc: 'We scan your website, search visibility, reviews, social media, and competitors — then hand you a clear report with scores and a plan. 24 hours. Free.',
-    stripe: true,
-  },
-  {
-    slug: 'visibility',
-    to: '/services/visibility',
-    index: '01',
-    category: 'VISIBILITY',
-    title: 'Get found when it matters.',
-    desc: 'Google Business Profile, local search rankings, directory listings. Set up right the first time, or fixed if they\'ve been sitting half-done. You show up.',
-    stripe: true,
-  },
-  {
-    slug: 'web',
-    to: '/services/web',
-    index: '02',
-    category: 'WEB',
-    title: 'A site that does its job.',
-    desc: 'Fast, clean, built for phones first. The kind of site where someone lands and calls you, books you, or buys — instead of bouncing.',
-    stripe: true,
-  },
-  {
-    slug: 'content',
-    to: '/services/content',
-    index: '03',
-    category: 'CONTENT',
-    title: 'Stay active without the effort.',
-    desc: 'Social media that runs without draining your evenings. Posts that sound like your business, not like a template. A pipeline that keeps going.',
-    stripe: true,
-  },
-  {
-    slug: 'automation',
-    to: '/services/automation',
-    index: '04',
-    category: 'AUTOMATION',
-    title: 'Stop doing it by hand.',
-    desc: 'AI chatbots, review responses, WhatsApp bookings, email campaigns. Things that used to need a team, running on autopilot.',
-    stripe: true,
-  },
-  {
-    slug: 'consulting',
-    to: '/services/consulting',
-    index: '05',
-    category: 'CUSTOM BUILDS',
-    title: 'Something your competitors don\'t have.',
-    desc: 'A workflow built around how your business actually operates. An app. A tool. For when you need something that doesn\'t exist yet.',
-    stripe: true,
-  },
-]
+const cells = computed(() => props.content || [])
 
 function showFinalState() {
   const el = section.value
@@ -127,11 +76,11 @@ onMounted(() => {
         <a
           v-for="cell in cells.slice(0, 3)"
           :key="cell.slug"
-          :href="cell.to"
+          :href="localePath(cell.to)"
           class="grid-cell"
           :class="{ 'grid-cell--accent grid-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes(cell.to)"
+          @click.prevent="navigateWithStripes(localePath(cell.to))"
         >
           <span v-if="cell.index" class="cell-index" style="opacity:0">{{ cell.index }}</span>
           <div class="cell-content">
@@ -152,11 +101,11 @@ onMounted(() => {
         <a
           v-for="cell in cells.slice(3, 6)"
           :key="cell.slug"
-          :href="cell.to"
+          :href="localePath(cell.to)"
           class="grid-cell"
           :class="{ 'grid-cell--accent grid-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
-          @click.prevent="navigateWithStripes(cell.to)"
+          @click.prevent="navigateWithStripes(localePath(cell.to))"
         >
           <span v-if="cell.index" class="cell-index" style="opacity:0">{{ cell.index }}</span>
           <div class="cell-content">
