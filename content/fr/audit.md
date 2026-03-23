@@ -6,12 +6,12 @@ seo:
 hero:
   label: "AUDIT GRATUIT"
   title: "Voyez exactement ce qui freine votre activité en ligne."
-  subtitle: "Notre audit augmenté par l'IA analyse votre fiche Google Business, votre SEO, vos réseaux sociaux, vos avis et le paysage concurrentiel — le tout en 24 heures."
+  subtitle: "Notre audit IA analyse votre fiche Google Business, votre SEO, vos réseaux sociaux, vos avis et le paysage concurrentiel. Résultats en 24 heures."
 
 covers:
   label: "CE QUE COUVRE VOTRE AUDIT"
   items:
-    - "Score de complétude et d'optimisation de votre fiche Google Business"
+    - "Score d'optimisation de votre fiche Google Business"
     - "Bilan de santé SEO local et opportunités de mots-clés"
     - "Analyse de votre présence et de votre engagement sur les réseaux sociaux"
     - "Sentiment des avis en ligne et taux de réponse"
@@ -21,11 +21,11 @@ covers:
 
 faqs:
   - question: "C'est vraiment gratuit ? Où est le piège ?"
-    answer: "Il n'y a pas de piège. L'audit est 100 % gratuit et sans engagement. Nous l'utilisons pour démontrer notre expertise et bâtir la confiance. Si les résultats vous plaisent, nous pourrons discuter d'une collaboration — mais il n'y a aucune pression."
+    answer: "Il n'y a pas de piège. L'audit est gratuit et sans engagement. On l'utilise pour montrer ce qu'on sait faire. Si les résultats vous plaisent, on pourra discuter d'une collaboration, mais aucune pression."
   - question: "Comment obtenez-vous les résultats aussi vite ?"
-    answer: "Nos outils IA propriétaires analysent en quelques minutes les données publiques de votre activité, de vos concurrents et de votre marché. Un stratège humain passe ensuite en revue les résultats, ajoute du contexte et prépare votre rapport personnalisé. C'est comme ça que nous livrons en 24 heures."
+    answer: "Nos outils IA analysent en quelques minutes les données publiques de votre activité, de vos concurrents et de votre marché. Un stratège humain passe ensuite en revue les résultats, ajoute du contexte et prépare votre rapport. Voilà pourquoi on livre en 24 heures."
   - question: "Que dois-je fournir ?"
-    answer: "Juste le nom de votre commerce et l'URL de votre site. C'est suffisant pour lancer une analyse complète. Vos coordonnées nous permettent de vous envoyer le rapport et de répondre à vos questions sur les résultats."
+    answer: "Juste le nom de votre commerce et l'URL de votre site. C'est suffisant pour lancer l'analyse. Vos coordonnées nous permettent de vous envoyer le rapport et de répondre à vos questions."
   - question: "Allez-vous partager mes données avec quelqu'un ?"
-    answer: "Jamais. Les données de votre activité sont utilisées exclusivement pour générer votre rapport d'audit. Nous ne les vendons, ne les partageons et ne les réutilisons pas. Consultez notre politique de confidentialité pour tous les détails."
+    answer: "Jamais. Les données de votre activité servent uniquement à générer votre rapport. On ne les vend pas, on ne les partage pas, on ne les réutilise pas. Notre politique de confidentialité détaille tout ça."
 ---

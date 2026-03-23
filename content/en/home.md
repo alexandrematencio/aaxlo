@@ -39,11 +39,11 @@ checklist:
   statements:
     - text: "Your website exists, but you wouldn't point a new customer to it right now."
       service: "Web"
-      fix: "We build fast, modern sites that make a strong first impression — designed to convert visitors into customers."
+      fix: "We build sites that make a strong first impression and actually convert visitors into customers."
       link: "/services/web"
     - text: "You meant to post on social media this month. You didn't."
       service: "Content"
-      fix: "We manage your social media end-to-end — strategy, creation, scheduling — so your brand stays visible without the effort."
+      fix: "We run your social media for you, from planning to publishing, so your brand stays visible without the effort."
       link: "/services/content"
     - text: "There are reviews about your business sitting unanswered."
       service: "Automation"
@@ -59,7 +59,7 @@ checklist:
       link: "/services/consulting"
     - text: "You know something needs to change. You just don't know what to tackle first."
       service: "Free Audit"
-      fix: "That's exactly what the audit is for — we analyze everything and tell you what to fix first."
+      fix: "That's exactly what the audit is for. We analyze everything and tell you what to fix first."
       link: "/audit"
 
 emotional:
