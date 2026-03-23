@@ -1,29 +1,19 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'About — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: aboutData } = await useLocalizedContent('/about')
+
+useHead({
+  title: aboutData.value?.seo?.title,
+  meta: [{ name: 'description', content: aboutData.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const values = [
-  {
-    title: 'AI-first, human-led',
-    description: 'We use AI to multiply output, never to replace craft. Every deliverable is reviewed, refined, and approved by a human strategist before it reaches you.',
-  },
-  {
-    title: 'Local obsession',
-    description: 'Big agencies chase enterprise contracts. We chase the restaurant owner who deserves the same tools. Local businesses are the backbone of every economy — we give them an unfair advantage.',
-  },
-  {
-    title: 'Radical transparency',
-    description: 'No jargon, no hidden fees, no vanity metrics. You will always know what we are doing, why we are doing it, and what it costs. If something is not working, we will tell you first.',
-  },
-  {
-    title: 'Speed as a feature',
-    description: 'Our AI-assisted workflows mean we deliver in days what traditional agencies deliver in weeks. Speed is not about cutting corners — it is about removing bottlenecks.',
-  },
-]
+const values = computed(() => aboutData.value?.values?.items || [])
 
 onMounted(() => {
   const el = page.value
@@ -84,27 +74,25 @@ onMounted(() => {
   <div ref="page" class="about-page">
     <!-- Hero -->
     <section class="hero">
-      <span class="hero-label tw-hide">ABOUT US</span>
-      <h1 class="hero-title tw-hide">A team wired differently.</h1>
+      <span class="hero-label tw-hide">{{ aboutData?.hero?.label }}</span>
+      <h1 class="hero-title tw-hide">{{ aboutData?.hero?.title }}</h1>
     </section>
 
     <!-- Story -->
     <section class="story-section">
       <div class="story-grid">
         <div class="story-col">
-          <p class="story-text tw-hide">AAXLO is an AI-enhanced agency based in Singapore, built to democratize the tools and strategies that were once reserved for companies with six-figure marketing budgets.</p>
-          <p class="story-text tw-hide">We started with a simple observation: local businesses — restaurants, clinics, salons, shops — are the heartbeat of every neighborhood. But they are being left behind in the AI revolution.</p>
+          <p v-for="(paragraph, i) in aboutData?.story?.left" :key="'left-' + i" class="story-text tw-hide">{{ paragraph }}</p>
         </div>
         <div class="story-col">
-          <p class="story-text tw-hide">The big agencies do not care about them. The freelancers cannot keep up. And the DIY tools are overwhelming. We exist to fill that gap.</p>
-          <p class="story-text tw-hide">Our team combines deep AI expertise with real-world marketing experience. We do not just know what is technically possible — we know what actually moves the needle for businesses like yours.</p>
+          <p v-for="(paragraph, i) in aboutData?.story?.right" :key="'right-' + i" class="story-text tw-hide">{{ paragraph }}</p>
         </div>
       </div>
     </section>
 
     <!-- Values -->
     <section class="values-section">
-      <span class="section-label tw-hide">HOW WE WORK</span>
+      <span class="section-label tw-hide">{{ aboutData?.values?.label }}</span>
       <div class="values-grid">
         <div v-for="val in values" :key="val.title" class="value-card tw-hide">
           <h3 class="value-title">{{ val.title }}</h3>
@@ -115,11 +103,10 @@ onMounted(() => {
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Ready to work with us?</h2>
-      <p class="cta-text tw-hide">Start with a free audit or get in touch directly.</p>
+      <h2 class="cta-title tw-hide">{{ aboutData?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ aboutData?.cta?.text }}</p>
       <div class="cta-links">
-        <NuxtLink to="/audit" class="cta-btn cta-btn--primary tw-hide">Get your free audit &rarr;</NuxtLink>
-        <NuxtLink to="/contact" class="cta-btn cta-btn--secondary tw-hide">Contact us &rarr;</NuxtLink>
+        <NuxtLink v-for="btn in aboutData?.cta?.buttons" :key="btn.to" :to="localePath(btn.to)" class="cta-btn tw-hide" :class="btn.variant === 'primary' ? 'cta-btn--primary' : 'cta-btn--secondary'" v-html="btn.label" />
       </div>
     </section>
   </div>

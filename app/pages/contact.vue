@@ -1,7 +1,14 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Contact — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: contactData } = await useLocalizedContent('/contact')
+
+useHead({
+  title: contactData.value?.seo?.title,
+  meta: [{ name: 'description', content: contactData.value?.seo?.description }],
+})
 
 const page = ref(null)
 
@@ -35,8 +42,8 @@ onMounted(() => {
   <div ref="page" class="contact-page">
     <!-- Hero -->
     <section class="hero">
-      <span class="hero-label tw-hide">CONTACT</span>
-      <h1 class="hero-title tw-hide">Let's talk about your business.</h1>
+      <span class="hero-label tw-hide">{{ contactData?.hero?.label }}</span>
+      <h1 class="hero-title tw-hide">{{ contactData?.hero?.title }}</h1>
     </section>
 
     <!-- Form + Info -->
@@ -47,66 +54,56 @@ onMounted(() => {
           <div v-if="!submitted">
             <form @submit.prevent="handleSubmit" class="contact-form">
               <div class="form-group">
-                <label for="contact-name" class="form-label">Name *</label>
+                <label for="contact-name" class="form-label">{{ $t('contact_form.name') }}</label>
                 <input
                   id="contact-name"
                   v-model="form.name"
                   type="text"
                   class="form-input"
                   required
-                  placeholder="Your name"
+                  :placeholder="$t('contact_form.namePlaceholder')"
                 />
               </div>
               <div class="form-group">
-                <label for="contact-email" class="form-label">Email *</label>
+                <label for="contact-email" class="form-label">{{ $t('contact_form.email') }}</label>
                 <input
                   id="contact-email"
                   v-model="form.email"
                   type="email"
                   class="form-input"
                   required
-                  placeholder="your@email.com"
+                  :placeholder="$t('contact_form.emailPlaceholder')"
                 />
               </div>
               <div class="form-group">
-                <label for="contact-message" class="form-label">Message *</label>
+                <label for="contact-message" class="form-label">{{ $t('contact_form.message') }}</label>
                 <textarea
                   id="contact-message"
                   v-model="form.message"
                   class="form-textarea"
                   required
                   rows="6"
-                  placeholder="Tell us about your project or question..."
+                  :placeholder="$t('contact_form.messagePlaceholder')"
                 ></textarea>
               </div>
-              <button type="submit" class="form-submit">Send message &rarr;</button>
+              <button type="submit" class="form-submit">{{ $t('contact_form.submit') }}</button>
             </form>
           </div>
 
           <div v-else class="form-success">
-            <h3 class="success-title">Message sent!</h3>
-            <p class="success-text">We will get back to you within 24 hours at <strong>{{ form.email }}</strong>.</p>
-            <NuxtLink to="/" class="success-link">&larr; Back to homepage</NuxtLink>
+            <h3 class="success-title">{{ $t('contact_form.successTitle') }}</h3>
+            <p class="success-text">{{ $t('contact_form.successText') }} <strong>{{ form.email }}</strong>.</p>
+            <NuxtLink :to="localePath('/')" class="success-link">{{ $t('contact_form.backHome') }}</NuxtLink>
           </div>
         </div>
 
         <!-- Info sidebar -->
         <div class="contact-info tw-hide">
-          <div class="info-block">
-            <h3 class="info-title">Email</h3>
-            <a href="mailto:hi@aaxlo.com" class="info-link">hi@aaxlo.com</a>
-          </div>
-          <div class="info-block">
-            <h3 class="info-title">Location</h3>
-            <p class="info-text">Singapore</p>
-          </div>
-          <div class="info-block">
-            <h3 class="info-title">Prefer to talk?</h3>
-            <a href="https://cal.com/aaxlo" target="_blank" rel="noopener" class="info-link">Book a free 15-min call &rarr;</a>
-          </div>
-          <div class="info-block">
-            <h3 class="info-title">Want a free audit instead?</h3>
-            <NuxtLink to="/audit" class="info-link">Get your free audit &rarr;</NuxtLink>
+          <div v-for="block in contactData?.info" :key="block.title" class="info-block">
+            <h3 class="info-title">{{ block.title }}</h3>
+            <a v-if="block.type === 'link'" :href="block.href" class="info-link" :target="block.external ? '_blank' : undefined" :rel="block.external ? 'noopener' : undefined">{{ block.text }}</a>
+            <NuxtLink v-else-if="block.type === 'nuxtlink'" :to="localePath(block.to)" class="info-link">{{ block.text }}</NuxtLink>
+            <p v-else class="info-text">{{ block.text }}</p>
           </div>
         </div>
       </div>
