@@ -2,11 +2,13 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   skip: { type: Boolean, default: false },
 })
 
 const section = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
 
 function showFinalState() {
   const el = section.value
@@ -73,32 +75,26 @@ onMounted(() => {
   <section ref="section" class="home-social-proof">
     <div class="social-container">
       <div class="social-cell">
-        <span class="social-label tw-hide">EARLY ACCESS</span>
+        <span class="social-label tw-hide">{{ content?.label }}</span>
         <h2 class="social-headline tw-hide">
-          We're onboarding our first clients in France right now.
+          {{ content?.headline }}
         </h2>
       </div>
 
-      <div class="social-cell">
+      <div v-for="(para, pi) in (content?.paragraphs || [])" :key="pi" class="social-cell">
         <p class="social-body tw-hide">
-          We're staying small on purpose. Every early client works directly with the people who built this company, and gets more attention than they would anywhere else.
-        </p>
-      </div>
-
-      <div class="social-cell">
-        <p class="social-body tw-hide">
-          If that sounds like what you've been looking for, this is a good time.
+          {{ para }}
         </p>
       </div>
 
       <div class="social-cell">
         <a
-          href="/contact"
+          :href="localePath('/contact')"
           class="social-cta"
           style="opacity: 0; transform: translateY(12px)"
-          @click.prevent="navigateWithStripes('/contact')"
+          @click.prevent="navigateWithStripes(localePath('/contact'))"
         >
-          Get in early →
+          {{ content?.cta }}
         </a>
       </div>
     </div>

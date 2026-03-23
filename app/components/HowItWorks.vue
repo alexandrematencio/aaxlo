@@ -1,14 +1,13 @@
 <script setup>
 import { gsap } from 'gsap'
 
-const props = defineProps({ skip: { type: Boolean, default: false } })
+const props = defineProps({
+  content: { type: Object, default: null },
+  skip: { type: Boolean, default: false },
+})
 const section = ref(null)
 
-const steps = [
-  { label: 'DIGITAL AUDIT', title: '24 hours.', number: '01' },
-  { label: 'WEBSITE LIVE', title: 'Under two weeks.', number: '02' },
-  { label: 'SOCIAL MEDIA READY', title: 'One week.', number: '03' },
-]
+const steps = computed(() => props.content?.steps || [])
 
 function showFinalState() {
   const el = section.value

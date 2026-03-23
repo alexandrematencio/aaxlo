@@ -2,6 +2,15 @@
 import { gsap } from 'gsap'
 import { initScrollReveal, initScrollExit } from '~/composables/useScrollReveal'
 
+const { data: homeContent } = await useLocalizedContent('/home')
+
+useHead({
+  title: homeContent.value?.seo?.title || 'AAXLO',
+  meta: [
+    { name: 'description', content: homeContent.value?.seo?.description || '' },
+  ],
+})
+
 const splashPlayed = useState('splashPlayed', () => false)
 const animsPlayed = useState('animsPlayed', () => false)
 
@@ -113,16 +122,16 @@ onMounted(() => {
     <div ref="energyLine" class="energy-line" aria-hidden="true"></div>
 
     <!-- S1: Hero (has its own splash animation) -->
-    <HomepageHero :animate="heroReady" :skip="skipAnimations" />
+    <HomepageHero :content="homeContent?.hero" :animate="heroReady" :skip="skipAnimations" />
 
     <!-- S2: Checklist — Curtain tear -->
     <div ref="s2Ref" class="forge-section">
-      <HomeChecklist :skip="skipAnimations" />
+      <HomeChecklist :content="homeContent?.checklist" :skip="skipAnimations" />
     </div>
 
     <!-- S3: The Shift — Ignite (dark) -->
     <div ref="s3Ref" class="forge-section">
-      <HomeShift :skip="skipAnimations" />
+      <HomeShift :content="homeContent?.shift" :skip="skipAnimations" />
     </div>
 
     <!-- S4: Services Grid — Crack -->
@@ -132,12 +141,12 @@ onMounted(() => {
 
     <!-- S5: Speed — Breathe -->
     <div ref="s5Ref" class="forge-section">
-      <HowItWorks :skip="skipAnimations" />
+      <HowItWorks :content="homeContent?.howItWorks" :skip="skipAnimations" />
     </div>
 
     <!-- S6: Emotional Beat — Slash reverse (dark) -->
     <div ref="s6Ref" class="forge-section">
-      <HomeEmotional :skip="skipAnimations" />
+      <HomeEmotional :content="homeContent?.emotional" :skip="skipAnimations" />
     </div>
 
     <!-- S7: Audit Form — Melt -->
@@ -146,11 +155,11 @@ onMounted(() => {
     </div>
 
     <!-- S8: Social Proof (hidden) -->
-    <HomeSocialProof v-if="showSocialProof" :skip="skipAnimations" />
+    <HomeSocialProof v-if="showSocialProof" :content="homeContent?.socialProof" :skip="skipAnimations" />
 
     <!-- S9: The Close — Iris -->
     <div ref="s9Ref" class="forge-section">
-      <HomeClose :skip="skipAnimations" />
+      <HomeClose :content="homeContent?.close" :skip="skipAnimations" />
     </div>
   </div>
 </template>

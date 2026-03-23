@@ -2,11 +2,13 @@
 import { gsap } from 'gsap'
 
 const props = defineProps({
+  content: { type: Object, default: null },
   skip: { type: Boolean, default: false },
 })
 
 const section = ref(null)
 const { navigateWithStripes } = useStripeTransition()
+const localePath = useLocalePath()
 
 function showFinalState() {
   const el = section.value
@@ -73,38 +75,26 @@ onMounted(() => {
   <section ref="section" class="home-close">
     <div class="close-container">
       <div class="close-cell">
-        <span class="close-label tw-hide">ONE MORE THING</span>
+        <span class="close-label tw-hide">{{ content?.label }}</span>
         <h2 class="close-headline tw-hide">
-          Still here?
+          {{ content?.headline }}
         </h2>
       </div>
 
-      <div class="close-cell">
+      <div v-for="(para, pi) in (content?.paragraphs || [])" :key="pi" class="close-cell">
         <p class="close-para tw-hide">
-          Good. Something on this page resonated.
-        </p>
-      </div>
-
-      <div class="close-cell">
-        <p class="close-para tw-hide">
-          Most people who end up working with us didn't reach out the first time they landed here. They came back a month later, after watching a competitor pull ahead in search results, or after another week of meaning to sort out the website.
-        </p>
-      </div>
-
-      <div class="close-cell">
-        <p class="close-para tw-hide">
-          You already picked out your problems up top. The audit turns them into a plan.
+          {{ para }}
         </p>
       </div>
 
       <div class="close-cell close-cell--cta">
         <a
-          href="/audit"
+          :href="localePath('/audit')"
           class="close-cta"
           style="opacity: 0; transform: translateY(12px)"
-          @click.prevent="navigateWithStripes('/audit')"
+          @click.prevent="navigateWithStripes(localePath('/audit'))"
         >
-          Get your free audit →
+          {{ content?.cta }}
         </a>
       </div>
     </div>
