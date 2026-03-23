@@ -1,7 +1,12 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Mentions L\u00e9gales — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: legalData } = await useLocalizedContent('/legal')
+
+const section = computed(() => legalData.value?.mentions)
+useHead({ title: section.value?.title ? `${section.value.title} — AAXLO` : 'AAXLO' })
 
 const page = ref(null)
 
@@ -37,8 +42,8 @@ onMounted(() => {
 <template>
   <div ref="page" class="stub-page">
     <header class="stub-header">
-      <NuxtLink to="/" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
-      <NuxtLink to="/">
+      <NuxtLink :to="localePath('/')" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
+      <NuxtLink :to="localePath('/')">
         <img src="/images/axxlo-logo.svg" alt="AAXLO" class="stub-logo tw-hide" />
       </NuxtLink>
     </header>
@@ -46,35 +51,19 @@ onMounted(() => {
     <div class="stub-main">
       <div class="stub-content-grid">
         <div class="stub-meta">
-          <span class="stub-label tw-hide">LEGAL</span>
+          <span class="stub-label tw-hide">{{ section?.label }}</span>
         </div>
         <div class="stub-body">
-          <h1 class="stub-title tw-hide">Mentions L&eacute;gales</h1>
-          <p class="stub-text tw-hide">Derni&egrave;re mise &agrave; jour : mars 2026</p>
+          <h1 class="stub-title tw-hide">{{ section?.title }}</h1>
+          <p class="stub-text tw-hide">{{ section?.lastUpdated }}</p>
         </div>
       </div>
     </div>
 
     <div class="legal-content">
-      <div class="legal-block tw-hide">
-        <h2>1. &Eacute;diteur du site</h2>
-        <p>AAXLO Pte. Ltd.<br>Singapour<br>Email : <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a></p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>2. Directeur de la publication</h2>
-        <p>Le directeur de la publication est le repr&eacute;sentant l&eacute;gal de AAXLO Pte. Ltd.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>3. H&eacute;bergement</h2>
-        <p>Ce site est h&eacute;berg&eacute; par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, &Eacute;tats-Unis.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>4. Propri&eacute;t&eacute; intellectuelle</h2>
-        <p>L'ensemble du contenu de ce site (textes, images, graphismes, logo, ic&ocirc;nes) est la propri&eacute;t&eacute; exclusive de AAXLO Pte. Ltd., sauf mention contraire. Toute reproduction est interdite sans autorisation pr&eacute;alable.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>5. Donn&eacute;es personnelles</h2>
-        <p>Pour toute question relative &agrave; la protection de vos donn&eacute;es personnelles, veuillez consulter notre <NuxtLink to="/legal/privacy">politique de confidentialit&eacute;</NuxtLink> ou nous contacter &agrave; <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
+      <div v-for="(block, i) in section?.sections" :key="i" class="legal-block tw-hide">
+        <h2>{{ block.heading }}</h2>
+        <p>{{ block.text }}</p>
       </div>
     </div>
   </div>

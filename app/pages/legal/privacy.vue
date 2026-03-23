@@ -1,7 +1,12 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Privacy Policy — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: legalData } = await useLocalizedContent('/legal')
+
+const section = computed(() => legalData.value?.privacy)
+useHead({ title: section.value?.title ? `${section.value.title} — AAXLO` : 'AAXLO' })
 
 const page = ref(null)
 
@@ -37,8 +42,8 @@ onMounted(() => {
 <template>
   <div ref="page" class="stub-page">
     <header class="stub-header">
-      <NuxtLink to="/" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
-      <NuxtLink to="/">
+      <NuxtLink :to="localePath('/')" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
+      <NuxtLink :to="localePath('/')">
         <img src="/images/axxlo-logo.svg" alt="AAXLO" class="stub-logo tw-hide" />
       </NuxtLink>
     </header>
@@ -46,35 +51,19 @@ onMounted(() => {
     <div class="stub-main">
       <div class="stub-content-grid">
         <div class="stub-meta">
-          <span class="stub-label tw-hide">LEGAL</span>
+          <span class="stub-label tw-hide">{{ section?.label }}</span>
         </div>
         <div class="stub-body">
-          <h1 class="stub-title tw-hide">Privacy Policy</h1>
-          <p class="stub-text tw-hide">Last updated: March 2026</p>
+          <h1 class="stub-title tw-hide">{{ section?.title }}</h1>
+          <p class="stub-text tw-hide">{{ section?.lastUpdated }}</p>
         </div>
       </div>
     </div>
 
     <div class="legal-content">
-      <div class="legal-block tw-hide">
-        <h2>1. Information We Collect</h2>
-        <p>We collect information you provide directly, such as your name, email address, phone number, and business details when you submit forms on our website. We also collect usage data through cookies and analytics tools.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>2. How We Use Your Information</h2>
-        <p>We use your information to provide our services, communicate with you, generate audit reports, and improve our offerings. We never sell your personal data to third parties.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>3. Data Storage & Security</h2>
-        <p>Your data is stored securely using industry-standard encryption. We retain your data only as long as necessary to provide our services or as required by law.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>4. Your Rights</h2>
-        <p>You have the right to access, correct, or delete your personal data at any time. To exercise these rights, contact us at hi@aaxlo.com.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>5. Contact</h2>
-        <p>For any privacy-related inquiries, please contact us at <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
+      <div v-for="(block, i) in section?.sections" :key="i" class="legal-block tw-hide">
+        <h2>{{ block.heading }}</h2>
+        <p>{{ block.text }}</p>
       </div>
     </div>
   </div>

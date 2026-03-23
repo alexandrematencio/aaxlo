@@ -1,7 +1,12 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Terms of Service — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: legalData } = await useLocalizedContent('/legal')
+
+const section = computed(() => legalData.value?.terms)
+useHead({ title: section.value?.title ? `${section.value.title} — AAXLO` : 'AAXLO' })
 
 const page = ref(null)
 
@@ -37,8 +42,8 @@ onMounted(() => {
 <template>
   <div ref="page" class="stub-page">
     <header class="stub-header">
-      <NuxtLink to="/" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
-      <NuxtLink to="/">
+      <NuxtLink :to="localePath('/')" class="stub-back tw-hide">&larr; BACK TO HOME</NuxtLink>
+      <NuxtLink :to="localePath('/')">
         <img src="/images/axxlo-logo.svg" alt="AAXLO" class="stub-logo tw-hide" />
       </NuxtLink>
     </header>
@@ -46,39 +51,19 @@ onMounted(() => {
     <div class="stub-main">
       <div class="stub-content-grid">
         <div class="stub-meta">
-          <span class="stub-label tw-hide">LEGAL</span>
+          <span class="stub-label tw-hide">{{ section?.label }}</span>
         </div>
         <div class="stub-body">
-          <h1 class="stub-title tw-hide">Terms of Service</h1>
-          <p class="stub-text tw-hide">Last updated: March 2026</p>
+          <h1 class="stub-title tw-hide">{{ section?.title }}</h1>
+          <p class="stub-text tw-hide">{{ section?.lastUpdated }}</p>
         </div>
       </div>
     </div>
 
     <div class="legal-content">
-      <div class="legal-block tw-hide">
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using the AAXLO website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>2. Services</h2>
-        <p>AAXLO provides AI-enhanced digital marketing, web development, content creation, automation, and consulting services for local businesses. Service scope and deliverables are defined in individual project agreements.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>3. Intellectual Property</h2>
-        <p>All deliverables created for you become your property upon full payment. AAXLO retains the right to showcase completed work in our portfolio unless otherwise agreed in writing.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>4. Limitation of Liability</h2>
-        <p>AAXLO shall not be liable for any indirect, incidental, or consequential damages arising from the use of our services. Our total liability shall not exceed the amount paid for the specific service in question.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>5. Governing Law</h2>
-        <p>These terms are governed by the laws of Singapore. Any disputes shall be resolved in the courts of Singapore.</p>
-      </div>
-      <div class="legal-block tw-hide">
-        <h2>6. Contact</h2>
-        <p>For questions about these terms, contact us at <a href="mailto:hi@aaxlo.com">hi@aaxlo.com</a>.</p>
+      <div v-for="(block, i) in section?.sections" :key="i" class="legal-block tw-hide">
+        <h2>{{ block.heading }}</h2>
+        <p>{{ block.text }}</p>
       </div>
     </div>
   </div>
