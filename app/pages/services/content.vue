@@ -1,47 +1,25 @@
 <script setup>
 import { gsap } from 'gsap'
 
-useHead({ title: 'Content — AAXLO' })
+const { t } = useI18n()
+const localePath = useLocalePath()
+const { data: servicesData } = await useLocalizedContent('/services')
+
+const svc = computed(() => servicesData.value?.contentService)
+
+useHead({
+  title: svc.value?.seo?.title,
+  meta: [{ name: 'description', content: svc.value?.seo?.description }],
+})
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
 
-const features = [
-  {
-    title: 'Social Media Management',
-    description: 'Strategy, content calendar, copywriting, and publishing across Instagram, Facebook, TikTok, and LinkedIn. We handle everything so you can focus on your craft.',
-  },
-  {
-    title: 'Content Repurposing',
-    description: 'One video becomes 10 pieces of content. We slice, dice, and redistribute your best content across every platform — maximizing reach without multiplying your workload.',
-  },
-  {
-    title: 'Brand Identity',
-    description: 'Logo, color palette, typography, brand voice guidelines, and visual templates that make your business instantly recognizable and professionally consistent.',
-  },
-  {
-    title: 'Photo & Video',
-    description: 'Professional photography, short-form video production, and AI-enhanced editing. Content that looks premium without the premium agency price tag.',
-  },
-]
+const features = computed(() => svc.value?.features || [])
 
-const faqs = [
-  {
-    question: 'How many posts per week do you create?',
-    answer: 'Our standard plans include 3-5 posts per week across your chosen platforms. Each post is strategically timed and crafted with your brand voice. We also create stories, reels, and carousel content as part of the mix.',
-    open: ref(false),
-  },
-  {
-    question: 'Do you need access to our social media accounts?',
-    answer: 'Yes, we use secure platform-native tools to manage your accounts. We never share credentials and you maintain full ownership. We can also work through Meta Business Suite or other collaboration tools if you prefer.',
-    open: ref(false),
-  },
-  {
-    question: 'Can you work with content we already have?',
-    answer: 'Absolutely — that is actually our specialty. We take your existing photos, videos, blog posts, and customer testimonials and repurpose them into fresh, platform-optimized content. Nothing goes to waste.',
-    open: ref(false),
-  },
-]
+const faqsData = computed(() => svc.value?.faqs || [])
+const faqOpen = ref(faqsData.value.map(() => false))
+watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
 
 onMounted(() => {
   const el = page.value
@@ -107,23 +85,23 @@ onMounted(() => {
   <div ref="page" class="detail-page">
     <section class="hero">
       <div class="hero-header">
-        <NuxtLink to="/services" class="back-link tw-hide">&larr; ALL SERVICES</NuxtLink>
-        <NuxtLink to="/">
+        <NuxtLink :to="localePath('/services')" class="back-link tw-hide">{{ $t('nav.backToServices') }}</NuxtLink>
+        <NuxtLink :to="localePath('/')">
           <img src="/images/axxlo-logo.svg" alt="AAXLO" class="hero-logo tw-hide" />
         </NuxtLink>
       </div>
 
       <!-- Service navigation -->
-      <ServiceNav current="content" />
+      <ServiceNav current="content" :content="servicesData?.nav" />
 
       <div class="hero-grid">
         <div class="hero-meta">
-          <span class="hero-label tw-hide">CONTENT</span>
-          <span class="hero-index">03</span>
+          <span class="hero-label tw-hide">{{ svc?.label }}</span>
+          <span class="hero-index">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
-          <h1 class="hero-title tw-hide">Content that converts strangers into customers.</h1>
-          <p class="hero-desc tw-hide">Great content is not about going viral — it is about building trust, staying top of mind, and giving people a reason to choose you. We create content that does all three, consistently.</p>
+          <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
+          <p class="hero-desc tw-hide">{{ svc?.heroDesc }}</p>
         </div>
       </div>
     </section>
@@ -146,17 +124,17 @@ onMounted(() => {
         </div>
         <div class="faq-list">
           <div
-            v-for="faq in faqs"
+            v-for="(faq, idx) in faqsData"
             :key="faq.question"
             class="faq-item tw-hide"
-            :class="{ 'faq-open': faq.open.value }"
-            @click="faq.open.value = !faq.open.value"
+            :class="{ 'faq-open': faqOpen[idx] }"
+            @click="faqOpen[idx] = !faqOpen[idx]"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faq.open.value ? '&minus;' : '+' }}</span>
+              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
             </div>
-            <div v-show="faq.open.value" class="faq-answer">
+            <div v-show="faqOpen[idx]" class="faq-answer">
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -165,9 +143,9 @@ onMounted(() => {
     </section>
 
     <section class="cta-section">
-      <h2 class="cta-title tw-hide">Ready to level up your content?</h2>
-      <p class="cta-text tw-hide">Get a free audit and see what your content strategy is missing.</p>
-      <NuxtLink to="/audit" class="cta-btn tw-hide">Get your free audit &rarr;</NuxtLink>
+      <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
+      <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
+      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>
