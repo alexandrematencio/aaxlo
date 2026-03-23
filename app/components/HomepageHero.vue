@@ -16,8 +16,19 @@ const { navigateWithStripes } = useStripeTransition()
 const localePath = useLocalePath()
 
 // ── Scramble text setup ──
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzàâäéèêëïîôùûüçñößæœ'
+const BASE_SCRAMBLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 const TRAIL_COUNT = 10
+
+// Build scramble pool from base chars + unique chars in the actual headline
+// This ensures accented/non-Latin characters appear during scramble, preventing
+// layout shifts when the final character is wider than ASCII substitutes.
+const scrambleChars = computed(() => {
+  const text = props.content?.headline || ''
+  const unique = new Set(text.replace(/\s/g, '').split(''))
+  const base = new Set(BASE_SCRAMBLE.split(''))
+  unique.forEach(c => base.add(c))
+  return Array.from(base).join('')
+})
 
 // Group characters by word so the browser wraps at word boundaries
 const headlineWords = computed(() => {
@@ -37,7 +48,8 @@ const headlineWords = computed(() => {
 })
 
 function randomChar() {
-  return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+  const chars = scrambleChars.value
+  return chars[Math.floor(Math.random() * chars.length)]
 }
 
 // Pre-compute trail positions (stable across renders)
