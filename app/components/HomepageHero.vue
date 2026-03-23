@@ -150,6 +150,15 @@ function runAnimation() {
     })
   }
 
+  // Lock each character cell to its final character's width to prevent
+  // layout reflow during scramble (proportional font = different char widths)
+  charEls.forEach((charEl) => {
+    charEl.textContent = charEl.dataset.final
+    const w = charEl.getBoundingClientRect().width
+    charEl.style.width = `${w}px`
+    charEl.style.textAlign = 'center'
+  })
+
   // Main character scramble + staggered slide-up (1.3x speed)
   const staggerGap = 0.04 / 1.3    // ~0.031s between chars
   const baseDuration = 0.4 / 1.3   // ~0.308s scramble per char
