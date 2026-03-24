@@ -178,7 +178,7 @@ onUnmounted(() => {
 
       <!-- Mobile CTA (between logo and burger) -->
       <NuxtLink :to="localePath('/audit')" class="mobile-header-cta">
-        <span class="mobile-header-cta-label">FREE AUDIT</span>
+        <span class="mobile-header-cta-label">{{ $t('nav.freeAudit') }}</span>
         <span class="mobile-header-cta-wipe" aria-hidden="true"></span>
       </NuxtLink>
 
@@ -217,7 +217,7 @@ onUnmounted(() => {
           <NuxtLink :to="localePath('/blog')" class="mobile-nav-item" @click="closeMobile">{{ $t('nav.blog') }}</NuxtLink>
 
           <div class="mobile-bottom">
-            <NuxtLink :to="localePath('/contact')" class="mobile-cta" @click="closeMobile">FREE AUDIT</NuxtLink>
+            <NuxtLink :to="localePath('/contact')" class="mobile-cta" @click="closeMobile">{{ $t('nav.freeAudit') }}</NuxtLink>
             <button class="mobile-lang" @click="toggleLang">{{ locale === 'en' ? 'FR' : 'EN' }}</button>
           </div>
         </nav>
