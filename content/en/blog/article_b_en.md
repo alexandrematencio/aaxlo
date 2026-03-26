@@ -3,7 +3,7 @@ title: "From Overwhelmed to Empowered: A Practical Roadmap for Small Businesses 
 description: "Most small business owners aren't struggling because they lack intelligence — they're struggling because AI advice comes wrapped in jargon. Here's the practical roadmap you actually need."
 date: "2026-03-10"
 author: "AAXLO Editorial"
-category: "AI STRATEGY"
+category: "STRATEGY"
 readTime: "10 min"
 ---
 
