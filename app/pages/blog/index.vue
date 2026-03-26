@@ -15,15 +15,22 @@ function handleSubscribe() {
 }
 
 // Query articles from the blog folder via content_en
+// Note: frontmatter fields like `date` are stored in `meta`, not direct columns,
+// so we get all and sort client-side
 const { data: articles } = await useAsyncData(
   `blog-index-${locale.value}`,
   async () => {
     const coll = locale.value === 'fr' ? 'content_fr' : 'content_en'
-    let all = await queryCollection(coll).path('/blog').order('date', 'DESC').all()
-    // Fallback to EN
-    if (!all.length && locale.value === 'fr') {
-      all = await queryCollection('content_en').path('/blog').order('date', 'DESC').all()
-    }
+    // Get ALL items from collection and filter to /blog/ path
+    let all = await queryCollection(coll).all()
+    // Filter to blog articles (path starts with /blog/)
+    all = all.filter((a: any) => a.path?.startsWith('/blog/'))
+    // Sort by date descending (date is in frontmatter → access via path segment)
+    all.sort((a: any, b: any) => {
+      const dateA = new Date(a.date || a.path.split('/').pop() || 0).getTime()
+      const dateB = new Date(b.date || b.path.split('/').pop() || 0).getTime()
+      return dateB - dateA
+    })
     return all
   }
 )

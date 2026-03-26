@@ -14,10 +14,14 @@ const { data: article } = await useAsyncData(
   async () => {
     // Try current locale collection first
     const coll = locale.value === 'fr' ? 'content_fr' : 'content_en'
-    let res = await queryCollection(coll).path(`/blog/${route.params.slug}`).first()
+    // Try exact path first
+    const targetPath = `/blog/${route.params.slug}`
+    const all = await queryCollection(coll).all()
+    let res = all.find((a: any) => a.path === targetPath)
     // Fallback to EN if on FR with no translated article
     if (!res && locale.value === 'fr') {
-      res = await queryCollection('content_en').path(`/blog/${route.params.slug}`).first()
+      const enAll = await queryCollection('content_en').all()
+      res = enAll.find((a: any) => a.path === targetPath)
     }
     return res
   }
