@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
+import type { Collections } from '@nuxt/content'
 
 useHead({ title: 'Blog — AAXLO' })
 
@@ -14,25 +15,25 @@ function handleSubscribe() {
   if (email.value) subscribed.value = true
 }
 
-// Query articles from the blog folder via content_en
-// Note: frontmatter fields like `date` are stored in `meta`, not direct columns,
-// so we get all and sort client-side
 const { data: articles } = await useAsyncData(
   `blog-index-${locale.value}`,
   async () => {
-    const coll = locale.value === 'fr' ? 'content_fr' : 'content_en'
-    // Get ALL items from collection and filter to /blog/ path
-    let all = await queryCollection(coll).all()
-    // Filter to blog articles (path starts with /blog/)
-    all = all.filter((a: any) => a.path?.startsWith('/blog/'))
-    // Sort by date descending (date is in frontmatter → access via path segment)
-    all.sort((a: any, b: any) => {
-      const dateA = new Date(a.date || a.path.split('/').pop() || 0).getTime()
-      const dateB = new Date(b.date || b.path.split('/').pop() || 0).getTime()
-      return dateB - dateA
-    })
-    return all
-  }
+    const coll = ('content_' + locale.value) as keyof Collections
+    let items = await queryCollection(coll)
+      .where('path', 'LIKE', '/blog/%')
+      .order('date', 'DESC')
+      .all()
+
+    // Fallback to English when current locale has no translated articles
+    if (!items.length && locale.value !== 'en') {
+      items = await queryCollection('content_en')
+        .where('path', 'LIKE', '/blog/%')
+        .order('date', 'DESC')
+        .all()
+    }
+    return items
+  },
+  { watch: [locale] }
 )
 
 function formatDate(d: string) {

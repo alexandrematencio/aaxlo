@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
+import type { Collections } from '@nuxt/content'
 
 const localePath = useLocalePath()
 const route = useRoute()
@@ -8,23 +9,20 @@ const pageRef = ref<HTMLElement | null>(null)
 const animsPlayed = useState('article-anims', () => false)
 const progressPct = ref(0)
 
-// Query article: path /blog/{slug} since prefix '/' strips locale folder
 const { data: article } = await useAsyncData(
   `blog-${route.params.slug}-${locale.value}`,
   async () => {
-    // Try current locale collection first
-    const coll = locale.value === 'fr' ? 'content_fr' : 'content_en'
-    // Try exact path first
+    const coll = ('content_' + locale.value) as keyof Collections
     const targetPath = `/blog/${route.params.slug}`
-    const all = await queryCollection(coll).all()
-    let res = all.find((a: any) => a.path === targetPath)
-    // Fallback to EN if on FR with no translated article
-    if (!res && locale.value === 'fr') {
-      const enAll = await queryCollection('content_en').all()
-      res = enAll.find((a: any) => a.path === targetPath)
+    let res = await queryCollection(coll).path(targetPath).first()
+
+    // Fallback to English if article missing in current locale
+    if (!res && locale.value !== 'en') {
+      res = await queryCollection('content_en').path(targetPath).first()
     }
     return res
-  }
+  },
+  { watch: [locale] }
 )
 
 if (!article.value) {
@@ -94,7 +92,7 @@ const tocItems = computed(() => {
 })
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'long day, year' })
+  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 </script>
 
