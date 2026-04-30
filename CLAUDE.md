@@ -10,12 +10,14 @@ AAXLO is a premium marketing site for a local business growth platform ("Human E
 
 ```bash
 npm run dev        # Dev server at http://localhost:3000
-npm run build      # Production build
+npm run build      # Production build → .output/
 npm run generate   # Static site generation
 npm run preview    # Preview production build
 ```
 
-No test runner or linter is configured.
+No test runner or linter is configured. `npm run postinstall` runs `nuxt prepare` automatically.
+
+**Note:** `README.md` is outdated — it mentions Tailwind CSS and Vercel deployment. The project actually uses **custom CSS with design tokens** (see `app/assets/css/main.css`) and is deployed via the included **Dockerfile** (Node 20 Alpine multi-stage, port 3000).
 
 ## Architecture
 
@@ -41,10 +43,13 @@ Content is split into two layers:
 
 Content collections defined in `content.config.ts` — one collection per locale (`content_en`, `content_fr`, etc.).
 
-**Content files** (7 per locale):
+**Content files** (per locale):
 - `home.md` — all homepage sections (hero, checklist, emotional, shift, social-proof, how-it-works, close)
 - `services.md` — services overview + all 5 service detail pages (visibility, web, content, automation, consulting)
 - `about.md`, `audit.md`, `contact.md`, `footer.md`, `legal.md`
+- `blog/*.md` — individual blog articles using MDC syntax (see Blog System below)
+
+**Schema gotcha:** `content.config.ts` only declares the `seo` field in its zod schema. All other frontmatter fields (`hero`, `sections`, etc.) land under `meta` in Nuxt Content v3. The `useLocalizedContent` composable spreads `meta` back to the top level so components can access `data.hero` directly — do not bypass it.
 
 ### Key Patterns
 
@@ -65,6 +70,29 @@ const { data: home } = await useLocalizedContent('/home')
 ```
 
 **Note on `@` in i18n values**: The `@` character is reserved in vue-i18n. Escape as `{'@'}` in JSON values (e.g., email placeholders).
+
+### Blog System (MDC Components)
+Blog posts in `content/{locale}/blog/*.md` use MDC syntax with custom prose components from `app/components/Article/`. Each component file (e.g., `Article/Lead.vue`) is referenced in markdown with the `Article` prefix:
+
+```markdown
+::ArticleLead
+Opening paragraph.
+::
+
+::ArticleHeading{content="Section Title" id="anchor-id"}
+::ArticleParagraph
+Body text.
+::
+::ArticleList
+---
+items:
+  - label: "01"
+    text: "Item body"
+---
+::
+```
+
+Available components: `ArticleLead`, `ArticleHeading`, `ArticleParagraph`, `ArticleList`, `ArticleListItem`, `ArticlePullquote`, `ArticleStat`, `ArticleStatRow`. Use `content/article-template.md` as a starting point for new posts.
 
 ### Directory Layout
 - `app/pages/` — File-based routes (homepage, services/*, legal/*, audit, contact, blog)
@@ -101,6 +129,6 @@ Font: Switzer (FontShare CDN), fallback Inter. Mobile breakpoint: 860px.
 ### Adding a New Language
 
 1. Create `i18n/locales/{code}.json` with translated UI strings (copy from `en.json`)
-2. Create `content/{code}/` folder with all 7 `.md` files (copy from `content/en/`)
+2. Create `content/{code}/` folder with all `.md` files (copy from `content/en/`)
 3. The locale is already registered in `nuxt.config.ts` — no config changes needed for EN/FR/ES/DE/PT/RU/VI
-4. For a new locale not in the list, add it to `nuxt.config.ts` `i18n.locales` and `content.config.ts`
+4. For a new locale not in the list, add it to **both** `nuxt.config.ts` `i18n.locales` **and** `content.config.ts` (a new `content_{code}` collection is required — collections are statically defined per-locale)
