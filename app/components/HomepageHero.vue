@@ -356,8 +356,8 @@ watch(() => props.animate, (val) => {
         >
           <template v-if="cell.accent">
             <span class="nav-arrow-icon" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" stroke-width="1.5"/>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
             <span class="nav-plus" aria-hidden="true">+</span>
@@ -367,6 +367,11 @@ watch(() => props.animate, (val) => {
           <template v-else>
             <span class="nav-index" style="opacity: 0">{{ cell.index }}</span>
             <span class="nav-label tw-hide">{{ cell.label }}</span>
+            <span class="nav-cell-arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </template>
         </a>
       </div>
@@ -616,8 +621,8 @@ watch(() => props.animate, (val) => {
 
 .nav-arrow-icon {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   color: var(--color-dark);
   transition: color 0.4s;
   z-index: 1;
@@ -654,14 +659,31 @@ watch(() => props.animate, (val) => {
 
 .nav-index {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   font-family: var(--font);
   font-size: 12px;
   font-weight: 300;
   color: var(--color-dark);
   transition: color 0.4s;
   z-index: 1;
+}
+.nav-cell-arrow {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.4s;
+  color: var(--color-dark);
+  z-index: 1;
+}
+.nav-cell:hover .nav-cell-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+  color: var(--color-cream);
 }
 
 /* ── Responsive ── */
@@ -723,6 +745,10 @@ watch(() => props.animate, (val) => {
   }
   .nav-plus {
     font-size: 40px;
+  }
+  .nav-cell-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
   }
 }
 </style>

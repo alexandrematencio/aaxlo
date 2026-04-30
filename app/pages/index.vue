@@ -197,5 +197,6 @@ onMounted(() => {
   position: relative;
   will-change: clip-path, transform, opacity;
   transform-origin: center top;
+  margin-top: -1px; /* Bridge micro-gaps between sections */
 }
 </style>

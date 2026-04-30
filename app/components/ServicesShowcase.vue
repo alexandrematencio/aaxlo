@@ -89,8 +89,8 @@ onMounted(() => {
             <p class="cell-desc" style="opacity:0">{{ cell.desc }}</p>
           </div>
           <span class="cell-arrow" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 16L16 4M16 4H6M16 4V14" stroke="currentColor" stroke-width="1.5"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
         </a>
@@ -114,8 +114,8 @@ onMounted(() => {
             <p class="cell-desc" style="opacity:0">{{ cell.desc }}</p>
           </div>
           <span class="cell-arrow" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 16L16 4M16 4H6M16 4V14" stroke="currentColor" stroke-width="1.5"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
         </a>
@@ -279,11 +279,12 @@ onMounted(() => {
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               color 0.4s;
-  color: var(--color-cream);
+  color: var(--color-dark);
 }
 .grid-cell:hover .cell-arrow {
   opacity: 1;
   transform: translate(0, 0);
+  color: var(--color-cream);
 }
 
 /* ── Responsive ── */
@@ -307,6 +308,10 @@ onMounted(() => {
   }
   .cell-title {
     font-size: clamp(24px, 5vw, 32px);
+  }
+  .cell-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
   }
 }
 

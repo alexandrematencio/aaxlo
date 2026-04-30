@@ -7,12 +7,13 @@ const props = defineProps({
 })
 
 const section = ref(null)
-const stickyContainer = ref(null)
+const scrollArrow = ref(null)
+
+let scrollHandler = null
 
 function showFinalState() {
   const el = section.value
   if (!el) return
-
   el.querySelectorAll('.tw-hide').forEach(t => {
     gsap.set(t, { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   })
@@ -21,7 +22,45 @@ function showFinalState() {
   })
 }
 
-let scrollHandler = null
+function positionArrow(container, anchor) {
+  if (!scrollArrow.value) return
+  const containerRect = container.getBoundingClientRect()
+  const anchorRect = anchor.getBoundingClientRect()
+  gsap.set(scrollArrow.value, {
+    top: anchorRect.bottom - containerRect.top + 48,
+    left: '50%',
+  })
+}
+
+/**
+ * Deactivate the scroll-driven section after all blocks are revealed.
+ * Remove sticky + extra height in one rAF so browser paints once.
+ */
+function deactivateSection(el) {
+  requestAnimationFrame(() => {
+    const stickyEl = el.querySelector('.emotional-sticky')
+    if (!stickyEl) return
+
+    // 1. Where is the sticky content on screen RIGHT NOW? (before any DOM changes)
+    const stickyScreenY = stickyEl.getBoundingClientRect().top
+
+    // 2. Remove sticky + extra height (no paint yet — all synchronous)
+    stickyEl.style.position = 'relative'
+    stickyEl.style.overflow = 'visible'
+    stickyEl.style.top = '0'
+    el.style.height = ''
+
+    // 3. Get section's true document position in the new layout
+    //    (use getBoundingClientRect, NOT offsetTop which is relative to offsetParent)
+    const sectionDocTop = el.getBoundingClientRect().top + window.scrollY
+
+    // 4. Scroll so stickyEl stays at the same screen position
+    //    stickyEl is at sectionDocTop (first child, position: relative)
+    //    Screen pos = sectionDocTop - scrollY → we want this = stickyScreenY
+    const targetScroll = sectionDocTop - stickyScreenY
+    window.scrollTo(0, Math.max(0, targetScroll))
+  })
+}
 
 onMounted(() => {
   const el = section.value
@@ -32,7 +71,21 @@ onMounted(() => {
     return
   }
 
-  // ── Phase 1: Label + Headline on section enter ──
+  const slideCells = Array.from(el.querySelectorAll('.emotional-cell-slide'))
+  const cellCount = slideCells.length
+  const container = el.querySelector('.emotional-container')
+  const titleCell = el.querySelector('.emotional-cell')
+  const revealed = new Set()
+
+  // Alternate slide direction: right, left, right
+  const slideDirections = [1, -1, 1]
+  const slideOffset = Math.min(120, window.innerWidth * 0.3)
+
+  slideCells.forEach((cell, i) => {
+    gsap.set(cell, { opacity: 0, x: slideOffset * (slideDirections[i] || 1) })
+  })
+
+  // ── Phase 1: Title reveal on section enter ──
   const introObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -47,6 +100,11 @@ onMounted(() => {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.15, ease: 'steps(26)',
           }, '-=0.1')
 
+          if (scrollArrow.value) {
+            tl.call(() => positionArrow(container, titleCell))
+            tl.to(scrollArrow.value, { opacity: 1, duration: 0.4, ease: 'power2.out' }, '+=0.15')
+          }
+
           introObserver.disconnect()
         }
       })
@@ -55,76 +113,62 @@ onMounted(() => {
   )
   introObserver.observe(el)
 
-  // ── Phase 2: Sticky container + scroll-driven block reveals ──
-  // Each .emotional-cell-slide slides in from the right on its own scroll motion
-  const slideCells = Array.from(el.querySelectorAll('.emotional-cell-slide'))
-  const cellCount = slideCells.length
-  const revealed = new Set()
-
-  // Hide all slide cells off-screen to the right
-  // Use viewport-relative offset so it works on all screen sizes
-  const slideOffset = Math.min(120, window.innerWidth * 0.3)
-  slideCells.forEach(cell => {
-    gsap.set(cell, { opacity: 0, x: slideOffset })
-  })
-
-  // Each block needs a full viewport of scroll distance — forces deliberate scrolling
-  // Slightly less on mobile (smaller fingers, shorter swipes)
+  // ── Phase 2: Scroll-driven block reveals ──
   const isMobile = window.innerWidth < 768
-  const scrollPerBlock = window.innerHeight * (isMobile ? 0.9 : 1.2)
-  const extraHeight = scrollPerBlock * cellCount
-  const naturalHeight = el.offsetHeight
-  el.style.height = `${naturalHeight + extraHeight}px`
+  const scrollPerBlock = window.innerHeight * (isMobile ? 1.0 : 1.1)
+  const totalScrollDist = scrollPerBlock * cellCount
 
-  // Scroll handler: one block per scroll motion
+  // Add scroll distance
+  const naturalHeight = el.offsetHeight
+  el.style.height = `${naturalHeight + totalScrollDist}px`
+
+  // Trigger thresholds: last one near the end for minimal dead space
+  const triggers = [0, 0.38, 0.85]
+
   scrollHandler = () => {
     if (revealed.size >= cellCount) return
 
     const rect = el.getBoundingClientRect()
-    const stickyTop = window.innerHeight * 0.1
-
+    const stickyTop = window.innerHeight * (isMobile ? 0.05 : 0.1)
     const scrolled = stickyTop - rect.top
     if (scrolled < 0) return
 
-    const progress = Math.min(scrolled / extraHeight, 1)
+    const progress = Math.min(scrolled / totalScrollDist, 1)
 
-    // Each block triggers at its own threshold: 0/3, 1/3, 2/3
-    const targetIndex = Math.min(Math.floor(progress * cellCount), cellCount - 1)
-
-    for (let i = 0; i <= targetIndex; i++) {
+    for (let i = 0; i < cellCount; i++) {
       if (revealed.has(i)) continue
-      revealed.add(i)
+      if (progress < triggers[i]) break
 
+      revealed.add(i)
       const cell = slideCells[i]
+      const isLast = revealed.size >= cellCount
+
+      // Hide arrow during slide-in
+      if (scrollArrow.value) {
+        gsap.set(scrollArrow.value, { opacity: 0 })
+      }
 
       gsap.to(cell, {
         opacity: 1,
         x: 0,
         duration: 0.7,
         ease: 'power3.out',
+        onComplete() {
+          if (!isLast && scrollArrow.value) {
+            positionArrow(container, cell)
+            gsap.to(scrollArrow.value, { opacity: 1, duration: 0.3, ease: 'power2.out' })
+          }
+          // Last block done — deactivate the section
+          if (isLast) {
+            deactivateSection(el)
+          }
+        },
       })
     }
 
-    // Once all revealed, collapse extra height and free the scroll
     if (revealed.size >= cellCount) {
       window.removeEventListener('scroll', scrollHandler)
-
-      // Wait for the last slide animation to finish
-      setTimeout(() => {
-        // Remove the extra scroll height and adjust scroll position
-        // so the page doesn't jump
-        const currentScroll = window.scrollY
-        const sectionTop = el.offsetTop
-        const currentSectionHeight = el.offsetHeight
-        el.style.height = ''
-        const newSectionHeight = el.offsetHeight
-        const heightDiff = currentSectionHeight - newSectionHeight
-
-        // If the user is scrolled past the section, adjust scroll to compensate
-        if (currentScroll > sectionTop + newSectionHeight) {
-          window.scrollTo({ top: currentScroll - heightDiff, behavior: 'instant' })
-        }
-      }, 800)
+      scrollHandler = null
     }
   }
 
@@ -141,7 +185,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section ref="section" class="home-emotional">
-    <div ref="stickyContainer" class="emotional-sticky">
+    <div class="emotional-sticky">
       <div class="emotional-container">
         <div class="emotional-cell">
           <span class="emotional-label tw-hide">{{ content?.label }}</span>
@@ -157,6 +201,13 @@ onBeforeUnmount(() => {
             </p>
           </div>
         </div>
+
+        <!-- Scroll hint arrow -->
+        <span ref="scrollArrow" class="scroll-arrow" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2V14M8 14L3 9M8 14L13 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </div>
     </div>
   </section>
@@ -172,7 +223,7 @@ onBeforeUnmount(() => {
 .emotional-sticky {
   position: sticky;
   top: 10vh;
-  padding: clamp(48px, 10vh, 120px) clamp(16px, 6vw, 96px);
+  padding: 120px clamp(32px, 6vw, 96px);
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -183,6 +234,7 @@ onBeforeUnmount(() => {
 }
 
 .emotional-container {
+  position: relative;
   max-width: 700px;
   width: 100%;
   display: flex;
@@ -237,10 +289,26 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 
+/* ── Scroll hint arrow ── */
+.scroll-arrow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  opacity: 0;
+  color: var(--color-dark);
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 6px); }
+}
+
 @media (max-width: 768px) {
   .emotional-sticky {
     top: 5vh;
-    padding: 48px 16px;
+    padding: 80px 20px;
   }
   .emotional-headline {
     font-size: clamp(22px, 5.5vw, 32px);
