@@ -8,13 +8,6 @@ const localePath = useLocalePath()
 const { locale } = useI18n()
 const pageRef = ref<HTMLElement | null>(null)
 
-const email = ref('')
-const subscribed = ref(false)
-
-function handleSubscribe() {
-  if (email.value) subscribed.value = true
-}
-
 const { data: articles } = await useAsyncData(
   `blog-index-${locale.value}`,
   async () => {
