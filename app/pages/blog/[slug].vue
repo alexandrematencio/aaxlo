@@ -92,7 +92,7 @@ const tocItems = computed(() => {
 })
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  return new Date(d).toLocaleDateString(locale.value, { month: 'long', day: 'numeric', year: 'numeric' })
 }
 </script>
 
@@ -100,7 +100,7 @@ function formatDate(d: string) {
   <div ref="pageRef" class="article-page">
 
     <!-- Skip link -->
-    <a href="#article-content" class="skip-link">Skip to content</a>
+    <a href="#article-content" class="skip-link">{{ $t('blog.skipToContent') }}</a>
 
     <!-- Progress bar -->
     <div
@@ -109,7 +109,7 @@ function formatDate(d: string) {
       :aria-valuenow="progressPct"
       aria-valuemin="0"
       aria-valuemax="100"
-      :aria-label="`Reading progress: ${progressPct}%`"
+      :aria-label="$t('blog.readingProgressLabel', { pct: progressPct })"
     >
       <div class="progress-fill" :style="{ width: `${progressPct}%` }"></div>
     </div>
@@ -118,15 +118,15 @@ function formatDate(d: string) {
     <div class="article-layout">
 
       <!-- Sidebar -->
-      <aside class="article-sidebar" aria-label="Article navigation">
+      <aside class="article-sidebar" :aria-label="$t('blog.articleNavigation')">
         <div class="sidebar-inner">
           <div class="sidebar-reading">
-            <span class="sidebar-label">// Reading</span>
+            <span class="sidebar-label">{{ $t('blog.reading') }}</span>
             <span class="sidebar-progress">{{ progressPct }}%</span>
           </div>
 
-          <nav v-if="tocItems.length" class="sidebar-toc" aria-label="Table of contents">
-            <span class="sidebar-label">// In this article</span>
+          <nav v-if="tocItems.length" class="sidebar-toc" :aria-label="$t('blog.tableOfContents')">
+            <span class="sidebar-label">{{ $t('blog.inThisArticle') }}</span>
             <ol class="toc-list">
               <li v-for="item in tocItems" :key="item.id" class="toc-item">
                 <a :href="`#${item.id}`" class="toc-link">{{ item.text }}</a>
@@ -141,24 +141,24 @@ function formatDate(d: string) {
 
         <!-- Hero -->
         <header class="article-hero">
-          <NuxtLink :to="localePath('/blog')" class="back-link" aria-label="Back to all articles">
+          <NuxtLink :to="localePath('/blog')" class="back-link" :aria-label="$t('blog.backToArticlesAria')">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            All articles
+            {{ $t('blog.backToArticles') }}
           </NuxtLink>
 
           <div class="hero-meta">
             <span class="hero-category-tag">{{ article.category }}</span>
             <time class="hero-date" :datetime="article.date">{{ formatDate(article.date) }}</time>
-            <span class="hero-read">{{ article.readTime }} read</span>
+            <span class="hero-read">{{ article.readTime }} {{ $t('blog.readSuffix') }}</span>
           </div>
 
           <h1 class="article-title">{{ article.title }}</h1>
           <p class="article-description">{{ article.description }}</p>
 
           <div class="hero-byline">
-            <span class="byline-by">By</span>
+            <span class="byline-by">{{ $t('blog.by') }}</span>
             <span class="byline-author">{{ article.author }}</span>
           </div>
         </header>
@@ -171,11 +171,11 @@ function formatDate(d: string) {
         <!-- Footer CTA -->
         <footer class="article-footer">
           <div class="footer-cta">
-            <span class="footer-cta-label">// Continue exploring</span>
-            <h2 class="footer-cta-heading">Ready to grow your business?</h2>
-            <p class="footer-cta-sub">See how AAXLO helps local businesses compete and win.</p>
+            <span class="footer-cta-label">{{ $t('blog.continueExploring') }}</span>
+            <h2 class="footer-cta-heading">{{ $t('blog.ctaHeading') }}</h2>
+            <p class="footer-cta-sub">{{ $t('blog.ctaSubtitle') }}</p>
             <NuxtLink :to="localePath('/contact')" class="footer-cta-btn">
-              Schedule a call
+              {{ $t('blog.ctaButton') }}
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>

@@ -2,10 +2,10 @@
 import { gsap } from 'gsap'
 import type { Collections } from '@nuxt/content'
 
-useHead({ title: 'Blog — AAXLO' })
-
 const localePath = useLocalePath()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
+
+useHead({ title: t('blog.pageTitle') })
 const pageRef = ref<HTMLElement | null>(null)
 
 const { data: articles } = await useAsyncData(
@@ -30,7 +30,7 @@ const { data: articles } = await useAsyncData(
 )
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return new Date(d).toLocaleDateString(locale.value, { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 onMounted(() => {
@@ -58,16 +58,16 @@ onMounted(() => {
 
       <div class="hero-inner">
         <div class="hero-left">
-          <span class="blog-label tw-hide">// BLOG</span>
-          <h1 class="blog-headline tw-hide">Ideas that move<br>businesses forward.</h1>
-          <p class="blog-sub tw-hide">Strategy, visibility, content, and automation — written for businesses that want to grow without losing what makes them distinct.</p>
+          <span class="blog-label tw-hide">{{ $t('blog.label') }}</span>
+          <h1 class="blog-headline tw-hide">{{ $t('blog.headlineLine1') }}<br>{{ $t('blog.headlineLine2') }}</h1>
+          <p class="blog-sub tw-hide">{{ $t('blog.subtitle') }}</p>
         </div>
 
         <div class="hero-right">
           <span class="hero-vert-rule" aria-hidden="true"></span>
           <div class="hero-count">
             <span class="count-number">{{ articles?.length ?? 0 }}</span>
-            <span class="count-label">articles</span>
+            <span class="count-label">{{ $t('blog.articlesCount') }}</span>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ onMounted(() => {
         <div class="featured-header">
           <span class="featured-rule" aria-hidden="true"></span>
           <div class="featured-header-inner">
-            <span class="featured-label">// Editor's pick</span>
+            <span class="featured-label">{{ $t('blog.editorsPick') }}</span>
           </div>
         </div>
 
@@ -100,12 +100,12 @@ onMounted(() => {
             <div class="featured-meta">
               <span class="featured-category-tag">{{ articles[0].category }}</span>
               <time class="feat-date" :datetime="articles[0].date">{{ formatDate(articles[0].date) }}</time>
-              <span class="feat-read">{{ articles[0].readTime }} read</span>
+              <span class="feat-read">{{ articles[0].readTime }} {{ $t('blog.readSuffix') }}</span>
             </div>
             <h2 class="featured-title">{{ articles[0].title }}</h2>
             <p class="featured-desc">{{ articles[0].description }}</p>
             <div class="featured-cta">
-              <span class="featured-cta-text">Read article</span>
+              <span class="featured-cta-text">{{ $t('blog.readArticle') }}</span>
               <span class="feat-arrow" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -114,7 +114,7 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="card-wipe" aria-hidden="true"><span class="card-read-label">Read article</span></div>
+          <div class="card-wipe" aria-hidden="true"><span class="card-read-label">{{ $t('blog.readArticle') }}</span></div>
           <span class="card-border-h card-border-top"></span>
           <span class="card-border-h card-border-bottom"></span>
           <span class="card-border-v card-border-left"></span>
@@ -127,7 +127,7 @@ onMounted(() => {
     <section v-if="articles?.length" class="grid-section">
       <div class="grid-header">
         <span class="grid-rule" aria-hidden="true"></span>
-        <span class="grid-label">// All articles</span>
+        <span class="grid-label">{{ $t('blog.allArticles') }}</span>
       </div>
       <div class="articles-grid">
         <NuxtLink
@@ -148,7 +148,7 @@ onMounted(() => {
           <p class="card-desc">{{ article.description }}</p>
 
           <div class="card-footer">
-            <span class="card-read">{{ article.readTime }} read</span>
+            <span class="card-read">{{ article.readTime }} {{ $t('blog.readSuffix') }}</span>
             <span class="card-arrow" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -156,7 +156,7 @@ onMounted(() => {
             </span>
           </div>
 
-          <div class="card-wipe" aria-hidden="true"><span class="card-read-label">Read article</span></div>
+          <div class="card-wipe" aria-hidden="true"><span class="card-read-label">{{ $t('blog.readArticle') }}</span></div>
           <span class="card-border-h card-border-top"></span>
           <span class="card-border-h card-border-bottom"></span>
           <span class="card-border-v card-border-left"></span>
