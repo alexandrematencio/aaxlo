@@ -17,7 +17,7 @@ npm run preview    # Preview production build
 
 No test runner or linter is configured. `npm run postinstall` runs `nuxt prepare` automatically.
 
-**Note:** `README.md` is outdated — it mentions Tailwind CSS and Vercel deployment. The project actually uses **custom CSS with design tokens** (see `app/assets/css/main.css`) and is deployed via the included **Dockerfile** (Node 20 Alpine multi-stage, port 3000).
+**Deployment:** Docker (Node 20 Alpine multi-stage, port 3000) on a Hostinger VPS. See `Dockerfile`.
 
 ## Architecture
 
