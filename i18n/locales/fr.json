@@ -86,5 +86,30 @@
   },
   "lang": {
     "switchTo": "Changer la langue en {lang}"
+  },
+  "blog": {
+    "pageTitle": "Blog — AAXLO",
+    "label": "// BLOG",
+    "headlineLine1": "Des idées qui font avancer",
+    "headlineLine2": "les entreprises.",
+    "subtitle": "Stratégie, visibilité, contenu et automatisation — écrit pour les entreprises qui veulent grandir sans perdre ce qui les rend uniques.",
+    "articlesCount": "articles",
+    "editorsPick": "// Choix de la rédaction",
+    "allArticles": "// Tous les articles",
+    "readArticle": "Lire l'article",
+    "readSuffix": "de lecture",
+    "skipToContent": "Aller au contenu",
+    "readingProgressLabel": "Progression de lecture : {pct}%",
+    "articleNavigation": "Navigation de l'article",
+    "tableOfContents": "Table des matières",
+    "reading": "// Lecture",
+    "inThisArticle": "// Dans cet article",
+    "backToArticles": "Tous les articles",
+    "backToArticlesAria": "Retour à tous les articles",
+    "by": "Par",
+    "continueExploring": "// Continuer l'exploration",
+    "ctaHeading": "Prêt à faire grandir votre entreprise ?",
+    "ctaSubtitle": "Découvrez comment AAXLO aide les entreprises locales à se démarquer et gagner.",
+    "ctaButton": "Planifier un appel"
   }
 }

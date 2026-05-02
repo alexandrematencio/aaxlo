@@ -46,7 +46,7 @@ mentions:
     - heading: "2. Directeur de la publication"
       text: "Le directeur de la publication est le représentant légal de AAXLO Pte. Ltd."
     - heading: "3. Hébergement"
-      text: "Ce site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis."
+      text: "Ce site est hébergé par Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Chypre."
     - heading: "4. Propriété intellectuelle"
       text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icônes) est la propriété exclusive de AAXLO Pte. Ltd., sauf mention contraire. Toute reproduction est interdite sans autorisation préalable."
     - heading: "5. Données personnelles"

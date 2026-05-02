@@ -107,7 +107,7 @@ onMounted(() => {
     </section>
 
     <section class="features-section">
-      <span class="section-label tw-hide">WHAT'S INCLUDED</span>
+      <span class="section-label tw-hide">{{ $t('common.whatsIncluded') }}</span>
       <div class="feat-grid">
         <div v-for="feat in features" :key="feat.title" class="feat-card tw-hide">
           <h3 class="feat-title">{{ feat.title }}</h3>
@@ -119,8 +119,8 @@ onMounted(() => {
     <section class="faq-section">
       <div class="faq-container">
         <div class="faq-label-cell">
-          <span class="section-label tw-hide">FREQUENTLY ASKED</span>
-          <h2 class="faq-title tw-hide">Questions &amp; Answers</h2>
+          <span class="section-label tw-hide">{{ $t('common.frequentlyAsked') }}</span>
+          <h2 class="faq-title tw-hide">{{ $t('common.questionsAnswers') }}</h2>
         </div>
         <div class="faq-list">
           <div

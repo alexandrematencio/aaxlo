@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
+import type { Collections } from '@nuxt/content'
 
 const localePath = useLocalePath()
 const route = useRoute()
@@ -8,23 +9,20 @@ const pageRef = ref<HTMLElement | null>(null)
 const animsPlayed = useState('article-anims', () => false)
 const progressPct = ref(0)
 
-// Query article: path /blog/{slug} since prefix '/' strips locale folder
 const { data: article } = await useAsyncData(
   `blog-${route.params.slug}-${locale.value}`,
   async () => {
-    // Try current locale collection first
-    const coll = locale.value === 'fr' ? 'content_fr' : 'content_en'
-    // Try exact path first
+    const coll = ('content_' + locale.value) as keyof Collections
     const targetPath = `/blog/${route.params.slug}`
-    const all = await queryCollection(coll).all()
-    let res = all.find((a: any) => a.path === targetPath)
-    // Fallback to EN if on FR with no translated article
-    if (!res && locale.value === 'fr') {
-      const enAll = await queryCollection('content_en').all()
-      res = enAll.find((a: any) => a.path === targetPath)
+    let res = await queryCollection(coll).path(targetPath).first()
+
+    // Fallback to English if article missing in current locale
+    if (!res && locale.value !== 'en') {
+      res = await queryCollection('content_en').path(targetPath).first()
     }
     return res
-  }
+  },
+  { watch: [locale] }
 )
 
 if (!article.value) {
@@ -39,20 +37,21 @@ useHead({
   ],
 })
 
-// Scroll progress
+// Scroll progress — page scrolls on window, not on the .article-page div
 function updateProgress() {
-  if (!pageRef.value) return
-  const el = pageRef.value
-  const scrolled = el.scrollTop
-  const total = el.scrollHeight - el.clientHeight
-  progressPct.value = total > 0 ? Math.round((scrolled / total) * 100) : 0
+  const total = document.documentElement.scrollHeight - window.innerHeight
+  progressPct.value = total > 0 ? Math.round((window.scrollY / total) * 100) : 0
 }
 
 onMounted(() => {
   const el = pageRef.value
   if (!el) return
 
-  // Respect reduced motion
+  // Reading progress runs on every visit, independent of the one-shot reveal animations
+  updateProgress()
+  window.addEventListener('scroll', updateProgress, { passive: true })
+  window.addEventListener('resize', updateProgress, { passive: true })
+
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (prefersReduced) {
     animsPlayed.value = true
@@ -77,14 +76,12 @@ onMounted(() => {
   }, { threshold: 0.08 })
 
   sections.forEach((s) => obs.observe(s))
-  el.addEventListener('scroll', updateProgress, { passive: true })
   animsPlayed.value = true
 })
 
 onUnmounted(() => {
-  if (pageRef.value) {
-    pageRef.value.removeEventListener('scroll', updateProgress)
-  }
+  window.removeEventListener('scroll', updateProgress)
+  window.removeEventListener('resize', updateProgress)
 })
 
 // Extract TOC headings from article body
@@ -94,7 +91,7 @@ const tocItems = computed(() => {
 })
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'long day, year' })
+  return new Date(d).toLocaleDateString(locale.value, { month: 'long', day: 'numeric', year: 'numeric' })
 }
 </script>
 
@@ -102,7 +99,7 @@ function formatDate(d: string) {
   <div ref="pageRef" class="article-page">
 
     <!-- Skip link -->
-    <a href="#article-content" class="skip-link">Skip to content</a>
+    <a href="#article-content" class="skip-link">{{ $t('blog.skipToContent') }}</a>
 
     <!-- Progress bar -->
     <div
@@ -111,7 +108,7 @@ function formatDate(d: string) {
       :aria-valuenow="progressPct"
       aria-valuemin="0"
       aria-valuemax="100"
-      :aria-label="`Reading progress: ${progressPct}%`"
+      :aria-label="$t('blog.readingProgressLabel', { pct: progressPct })"
     >
       <div class="progress-fill" :style="{ width: `${progressPct}%` }"></div>
     </div>
@@ -120,15 +117,18 @@ function formatDate(d: string) {
     <div class="article-layout">
 
       <!-- Sidebar -->
-      <aside class="article-sidebar" aria-label="Article navigation">
+      <aside class="article-sidebar" :aria-label="$t('blog.articleNavigation')">
         <div class="sidebar-inner">
           <div class="sidebar-reading">
-            <span class="sidebar-label">// Reading</span>
+            <span class="sidebar-label">{{ $t('blog.reading') }}</span>
             <span class="sidebar-progress">{{ progressPct }}%</span>
+            <div class="sidebar-progress-bar" aria-hidden="true">
+              <div class="sidebar-progress-fill" :style="{ width: `${progressPct}%` }"></div>
+            </div>
           </div>
 
-          <nav v-if="tocItems.length" class="sidebar-toc" aria-label="Table of contents">
-            <span class="sidebar-label">// In this article</span>
+          <nav v-if="tocItems.length" class="sidebar-toc" :aria-label="$t('blog.tableOfContents')">
+            <span class="sidebar-label">{{ $t('blog.inThisArticle') }}</span>
             <ol class="toc-list">
               <li v-for="item in tocItems" :key="item.id" class="toc-item">
                 <a :href="`#${item.id}`" class="toc-link">{{ item.text }}</a>
@@ -143,24 +143,24 @@ function formatDate(d: string) {
 
         <!-- Hero -->
         <header class="article-hero">
-          <NuxtLink :to="localePath('/blog')" class="back-link" aria-label="Back to all articles">
+          <NuxtLink :to="localePath('/blog')" class="back-link" :aria-label="$t('blog.backToArticlesAria')">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            All articles
+            {{ $t('blog.backToArticles') }}
           </NuxtLink>
 
           <div class="hero-meta">
             <span class="hero-category-tag">{{ article.category }}</span>
             <time class="hero-date" :datetime="article.date">{{ formatDate(article.date) }}</time>
-            <span class="hero-read">{{ article.readTime }} read</span>
+            <span class="hero-read">{{ article.readTime }} {{ $t('blog.readSuffix') }}</span>
           </div>
 
           <h1 class="article-title">{{ article.title }}</h1>
           <p class="article-description">{{ article.description }}</p>
 
           <div class="hero-byline">
-            <span class="byline-by">By</span>
+            <span class="byline-by">{{ $t('blog.by') }}</span>
             <span class="byline-author">{{ article.author }}</span>
           </div>
         </header>
@@ -173,11 +173,11 @@ function formatDate(d: string) {
         <!-- Footer CTA -->
         <footer class="article-footer">
           <div class="footer-cta">
-            <span class="footer-cta-label">// Continue exploring</span>
-            <h2 class="footer-cta-heading">Ready to grow your business?</h2>
-            <p class="footer-cta-sub">See how AAXLO helps local businesses compete and win.</p>
+            <span class="footer-cta-label">{{ $t('blog.continueExploring') }}</span>
+            <h2 class="footer-cta-heading">{{ $t('blog.ctaHeading') }}</h2>
+            <p class="footer-cta-sub">{{ $t('blog.ctaSubtitle') }}</p>
             <NuxtLink :to="localePath('/contact')" class="footer-cta-btn">
-              Schedule a call
+              {{ $t('blog.ctaButton') }}
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -256,6 +256,7 @@ function formatDate(d: string) {
   display: flex;
   flex-direction: column;
   gap: clamp(24px, 3vw, 32px);
+  padding-right: clamp(20px, 5vw, 60px);
 }
 .sidebar-label {
   display: block;
@@ -279,6 +280,17 @@ function formatDate(d: string) {
   color: var(--color-dark);
   letter-spacing: -0.03em;
   line-height: 1;
+}
+.sidebar-progress-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(36, 39, 46, 0.1);
+  overflow: hidden;
+}
+.sidebar-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.1s linear;
 }
 .sidebar-toc { display: flex; flex-direction: column; }
 .toc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }

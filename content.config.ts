@@ -1,6 +1,14 @@
 import { defineContentConfig, defineCollection, z } from '@nuxt/content'
 
 const commonSchema = z.object({
+  // Blog article frontmatter (declared at top level so it's queryable
+  // via .where() and accessible directly on the result, not under `meta`)
+  title: z.string().optional(),
+  description: z.string().optional(),
+  date: z.string().optional(),
+  author: z.string().optional(),
+  category: z.string().optional(),
+  readTime: z.string().optional(),
   seo: z.object({
     title: z.string().optional(),
     description: z.string().optional(),

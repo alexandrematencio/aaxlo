@@ -29,9 +29,6 @@ const s6Ref = ref(null)
 const s7Ref = ref(null)
 const s9Ref = ref(null)
 
-// Energy line ref
-const energyLine = ref(null)
-
 function onSplashReveal() {
   heroReady.value = true
 }
@@ -48,56 +45,35 @@ function onSplashComplete() {
 function setupForge(skip = false) {
   nextTick(() => {
     if (!skip) {
-      // First visit: set up cinematic scroll reveals
-      const pulse = pulseEnergyLine
       if (s2Ref.value) {
-        initScrollReveal(s2Ref.value, 'curtain-tear', { duration: 1.3, onRevealed: pulse })
+        initScrollReveal(s2Ref.value, 'curtain-tear', { duration: 1.3 })
         initScrollExit(s2Ref.value)
       }
       if (s3Ref.value) {
-        initScrollReveal(s3Ref.value, 'ignite', { duration: 1.4, ease: 'power2.out', onRevealed: pulse })
+        initScrollReveal(s3Ref.value, 'ignite', { duration: 1.4, ease: 'power2.out' })
         initScrollExit(s3Ref.value)
       }
       if (s4Ref.value) {
-        initScrollReveal(s4Ref.value, 'crack', { duration: 1.2, onRevealed: pulse })
+        initScrollReveal(s4Ref.value, 'crack', { duration: 1.2 })
         initScrollExit(s4Ref.value)
       }
       if (s5Ref.value) {
-        initScrollReveal(s5Ref.value, 'breathe', { duration: 1.3, onRevealed: pulse })
+        initScrollReveal(s5Ref.value, 'breathe', { duration: 1.3 })
         initScrollExit(s5Ref.value)
       }
       if (s6Ref.value) {
-        initScrollReveal(s6Ref.value, 'slash-reverse', { duration: 1.3, onRevealed: pulse })
+        initScrollReveal(s6Ref.value, 'slash-reverse', { duration: 1.3 })
         initScrollExit(s6Ref.value)
       }
       if (s7Ref.value) {
-        initScrollReveal(s7Ref.value, 'melt', { duration: 1.2, ease: 'power2.inOut', onRevealed: pulse })
+        initScrollReveal(s7Ref.value, 'melt', { duration: 1.2, ease: 'power2.inOut' })
         initScrollExit(s7Ref.value)
       }
       if (s9Ref.value) {
-        initScrollReveal(s9Ref.value, 'iris', { duration: 1.4, ease: 'power2.out', onRevealed: pulse })
+        initScrollReveal(s9Ref.value, 'iris', { duration: 1.4, ease: 'power2.out' })
       }
     }
-
-    // Energy line pulses are wired to onRevealed callbacks above
   })
-}
-
-function pulseEnergyLine() {
-  const line = energyLine.value
-  if (!line) return
-  // Brief flash on section reveal — appears then fades
-  line.style.visibility = 'visible'
-  gsap.fromTo(line,
-    { opacity: 0 },
-    { opacity: 0.35, duration: 0.15, ease: 'power2.out',
-      onComplete: () => {
-        gsap.to(line, { opacity: 0, duration: 0.6, ease: 'power2.in',
-          onComplete: () => { line.style.visibility = 'hidden' }
-        })
-      }
-    }
-  )
 }
 
 onMounted(() => {
@@ -118,9 +94,6 @@ onMounted(() => {
       @reveal="onSplashReveal"
       @complete="onSplashComplete"
     />
-
-    <!-- The Forge — energy line -->
-    <div ref="energyLine" class="energy-line" aria-hidden="true"></div>
 
     <!-- S1: Hero (has its own splash animation) -->
     <HomepageHero :content="homeContent?.hero" :animate="heroReady" :skip="skipAnimations" />
@@ -169,27 +142,6 @@ onMounted(() => {
 .homepage {
   min-height: 100vh;
   position: relative;
-}
-
-/* The Forge — energy line (subtle, only pulses during scroll) */
-.energy-line {
-  position: fixed;
-  top: 64px;
-  left: 50%;
-  width: 1px;
-  height: calc(100vh - 64px);
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 130, 112, 0.4) 20%,
-    rgba(255, 130, 112, 0.4) 80%,
-    transparent 100%
-  );
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  will-change: opacity;
 }
 
 /* Forge section wrappers */
