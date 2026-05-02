@@ -115,7 +115,7 @@ onMounted(() => {
 
   // ── Phase 2: Scroll-driven block reveals ──
   const isMobile = window.innerWidth < 768
-  const scrollPerBlock = window.innerHeight * (isMobile ? 1.0 : 1.1)
+  const scrollPerBlock = window.innerHeight * (isMobile ? 0.65 : 0.7)
   const totalScrollDist = scrollPerBlock * cellCount
 
   // Add scroll distance
@@ -123,7 +123,7 @@ onMounted(() => {
   el.style.height = `${naturalHeight + totalScrollDist}px`
 
   // Trigger thresholds: last one near the end for minimal dead space
-  const triggers = [0, 0.38, 0.85]
+  const triggers = [0, 0.30, 0.65]
 
   scrollHandler = () => {
     if (revealed.size >= cellCount) return
@@ -151,7 +151,7 @@ onMounted(() => {
       gsap.to(cell, {
         opacity: 1,
         x: 0,
-        duration: 0.7,
+        duration: 0.9,
         ease: 'power3.out',
         onComplete() {
           if (!isLast && scrollArrow.value) {
