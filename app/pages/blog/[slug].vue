@@ -122,6 +122,9 @@ function formatDate(d: string) {
           <div class="sidebar-reading">
             <span class="sidebar-label">{{ $t('blog.reading') }}</span>
             <span class="sidebar-progress">{{ progressPct }}%</span>
+            <div class="sidebar-progress-bar" aria-hidden="true">
+              <div class="sidebar-progress-fill" :style="{ width: `${progressPct}%` }"></div>
+            </div>
           </div>
 
           <nav v-if="tocItems.length" class="sidebar-toc" :aria-label="$t('blog.tableOfContents')">
@@ -253,6 +256,7 @@ function formatDate(d: string) {
   display: flex;
   flex-direction: column;
   gap: clamp(24px, 3vw, 32px);
+  padding-right: clamp(20px, 5vw, 60px);
 }
 .sidebar-label {
   display: block;
@@ -276,6 +280,17 @@ function formatDate(d: string) {
   color: var(--color-dark);
   letter-spacing: -0.03em;
   line-height: 1;
+}
+.sidebar-progress-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(36, 39, 46, 0.1);
+  overflow: hidden;
+}
+.sidebar-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.1s linear;
 }
 .sidebar-toc { display: flex; flex-direction: column; }
 .toc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
