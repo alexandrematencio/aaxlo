@@ -37,20 +37,21 @@ useHead({
   ],
 })
 
-// Scroll progress
+// Scroll progress — page scrolls on window, not on the .article-page div
 function updateProgress() {
-  if (!pageRef.value) return
-  const el = pageRef.value
-  const scrolled = el.scrollTop
-  const total = el.scrollHeight - el.clientHeight
-  progressPct.value = total > 0 ? Math.round((scrolled / total) * 100) : 0
+  const total = document.documentElement.scrollHeight - window.innerHeight
+  progressPct.value = total > 0 ? Math.round((window.scrollY / total) * 100) : 0
 }
 
 onMounted(() => {
   const el = pageRef.value
   if (!el) return
 
-  // Respect reduced motion
+  // Reading progress runs on every visit, independent of the one-shot reveal animations
+  updateProgress()
+  window.addEventListener('scroll', updateProgress, { passive: true })
+  window.addEventListener('resize', updateProgress, { passive: true })
+
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (prefersReduced) {
     animsPlayed.value = true
@@ -75,14 +76,12 @@ onMounted(() => {
   }, { threshold: 0.08 })
 
   sections.forEach((s) => obs.observe(s))
-  el.addEventListener('scroll', updateProgress, { passive: true })
   animsPlayed.value = true
 })
 
 onUnmounted(() => {
-  if (pageRef.value) {
-    pageRef.value.removeEventListener('scroll', updateProgress)
-  }
+  window.removeEventListener('scroll', updateProgress)
+  window.removeEventListener('resize', updateProgress)
 })
 
 // Extract TOC headings from article body

@@ -90,9 +90,6 @@ onMounted(() => {
           class="featured-card"
         >
           <div class="featured-bg" aria-hidden="true">
-            <div class="featured-bg-lines">
-              <span v-for="n in 8" :key="n" class="bg-line"></span>
-            </div>
             <span class="featured-index">01</span>
           </div>
 
@@ -301,20 +298,6 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   min-height: 220px;
-}
-.featured-bg-lines {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 24px;
-  opacity: 0.12;
-}
-.bg-line {
-  display: block;
-  height: 0.5px;
-  background: var(--color-accent);
 }
 .featured-index {
   position: relative;
