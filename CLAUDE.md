@@ -22,7 +22,7 @@ No test runner or linter is configured. `npm run postinstall` runs `nuxt prepare
 ## Architecture
 
 ### Tech Stack
-- **Framework**: Nuxt 4.4.2 (Vue 3, file-based routing)
+- **Framework**: Nuxt 4.4.4 (Vue 3, file-based routing)
 - **Content CMS**: @nuxt/content v3 — all page content in YAML frontmatter `.md` files, organized by locale
 - **i18n**: @nuxtjs/i18n — multilingual routing (`/en/`, `/fr/`), locale detection, UI string translations
 - **Animations**: GSAP 3.14 with MorphSVG and ScrambleText plugins (registered in `app/plugins/gsap.client.ts`)
@@ -94,6 +94,8 @@ items:
 
 Available components: `ArticleLead`, `ArticleHeading`, `ArticleParagraph`, `ArticleList`, `ArticleListItem`, `ArticlePullquote`, `ArticleStat`, `ArticleStatRow`. Use `content/article-template.md` as a starting point for new posts.
 
+**Article scroll-context gotcha:** the `.article-page` wrapper in `app/pages/blog/[slug].vue` is *not* a scroll container — it has no `overflow:auto` and no fixed height, so the document scrolls on `window`. Anything that needs scroll position on an article page (reading-progress bar, scroll spies, sticky offsets) must read `window.scrollY` / `document.documentElement.scrollHeight` and listen on `window`, not on `pageRef.value`. Listener attachment must also live OUTSIDE the `if (animsPlayed.value) return` one-shot guard, otherwise it stops re-binding on second-and-later article visits in the same session.
+
 ### Directory Layout
 - `app/pages/` — File-based routes (homepage, services/*, legal/*, audit, contact, blog)
 - `app/components/` — Vue SFCs using `<script setup>` syntax
@@ -107,7 +109,8 @@ Available components: `ArticleLead`, `ArticleHeading`, `ArticleParagraph`, `Arti
 ### Animation System (Key Composables)
 The site relies heavily on coordinated GSAP animations:
 
-- **`useScrollReveal.js`** — Cinematic scroll-triggered reveals using `clip-path` + IntersectionObserver. 8 patterns: `curtain-tear`, `ignite`, `crack`, `breathe`, `melt`, `iris`, `slash`, `slash-reverse`. Uses `visibility: hidden` (not `opacity: 0`) to prevent layout gaps.
+- **`useScrollReveal.js`** — Cinematic scroll-triggered reveals using `clip-path` + IntersectionObserver. 8 patterns: `curtain-tear`, `ignite`, `crack`, `breathe`, `melt`, `iris`, `slash`, `slash-reverse`. Uses `visibility: hidden` (not `opacity: 0`) to prevent layout gaps. Per-section `duration` / `ease` overrides are passed from `app/pages/index.vue` (`setupForge()`).
+- **`HomeEmotional.vue` (S6) is a bespoke exception** — it does NOT use `useScrollReveal`. The wrapper still gets `slash-reverse` for its first-paint, but inside, the section runs its own scroll-driven reveal: makes itself `position: sticky`, *artificially extends its own height* by `cellCount × ~0.7vh` to create scroll budget, then reveals each paragraph as the user crosses fractional thresholds (`triggers = [0, 0.30, 0.65]`). When the last block is in, `deactivateSection()` removes the sticky + extra height in one rAF and re-anchors `window.scrollY` so the page doesn't jump. Don't try to "make it consistent" by porting it onto `useScrollReveal` — the sticky+extend trick is what gives the section its pacing.
 - **`useShineHover.js`** — CTA button shine sweep + sparkle burst effects. Auto-detects dark/light button backgrounds.
 - **`useStripeTransition.js`** — Shared reactive state for diagonal stripe page transitions. Guards against simultaneous transitions.
 - **`useLocalizedContent.ts`** — Locale-aware content fetching with English fallback.
