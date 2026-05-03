@@ -39,7 +39,7 @@ checklist:
   statements:
     - text: "Your website exists, but you wouldn't point a new customer to it right now."
       service: "Web"
-      fix: "We build sites that make a strong first impression and actually convert visitors into customers."
+      fix: "We build sites people land on and actually call you from."
       link: "/services/web"
     - text: "You meant to post on social media this month. You didn't."
       service: "Content"
@@ -47,7 +47,7 @@ checklist:
       link: "/services/content"
     - text: "There are reviews about your business sitting unanswered."
       service: "Automation"
-      fix: "We set up automated review monitoring and response workflows so nothing slips through the cracks."
+      fix: "We set up automated review monitoring and response workflows so every review gets a response."
       link: "/services/automation"
     - text: "You're not totally sure what comes up when someone Googles your business."
       service: "Visibility"
@@ -67,8 +67,8 @@ emotional:
   headline: "You built something worth finding."
   paragraphs:
     - "You didn't start your business to learn about meta descriptions or manage a content calendar. You started it because you're good at something and you decided to bet on yourself."
-    - "That bet — the late nights, the slow months, the figuring-it-out-as-you-go — that was the hard part. And that's yours."
-    - "Getting people to find you online, keeping your social media alive, automating the stuff that eats your time — that's on us. And we care about getting it right. Not in an abstract \"we value our clients\" way. In a \"we check if it's actually working three weeks later\" way."
+    - "That bet: the late nights, the slow months, the figuring-it-out-as-you-go, that was the hard part. And that's yours."
+    - "Getting people to find you online, keeping your social media alive, automating the stuff that eats your time,  that's on us. And we care about getting it right. Not in an abstract \"we value our clients\" way. In a \"we check if it's actually working three weeks later\" way."
 
 shift:
   label: "THE SHIFT"

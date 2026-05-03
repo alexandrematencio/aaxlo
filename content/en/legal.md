@@ -32,7 +32,7 @@ terms:
     - heading: "4. Limitation of Liability"
       text: "AAXLO shall not be liable for any indirect, incidental, or consequential damages arising from the use of our services. Our total liability shall not exceed the amount paid for the specific service in question."
     - heading: "5. Governing Law"
-      text: "These terms are governed by the laws of Singapore. Any disputes shall be resolved in the courts of Singapore."
+      text: "These terms are governed by applicable law. Any disputes shall be resolved through good-faith negotiation."
     - heading: "6. Contact"
       text: "For questions about these terms, contact us at hi@aaxlo.com."
 
@@ -42,13 +42,13 @@ mentions:
   lastUpdated: "Derniere mise a jour : mars 2026"
   sections:
     - heading: "1. Editeur du site"
-      text: "AAXLO Pte. Ltd., Singapour, Email : hi@aaxlo.com"
+      text: "AAXLO — Email : hi@aaxlo.com"
     - heading: "2. Directeur de la publication"
-      text: "Le directeur de la publication est le representant legal de AAXLO Pte. Ltd."
+      text: "Le directeur de la publication est le representant legal de AAXLO."
     - heading: "3. Hebergement"
       text: "Ce site est heberge par Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Chypre."
     - heading: "4. Propriete intellectuelle"
-      text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icones) est la propriete exclusive de AAXLO Pte. Ltd., sauf mention contraire. Toute reproduction est interdite sans autorisation prealable."
+      text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icones) est la propriete exclusive de AAXLO, sauf mention contraire. Toute reproduction est interdite sans autorisation prealable."
     - heading: "5. Donnees personnelles"
       text: "Pour toute question relative a la protection de vos donnees personnelles, veuillez consulter notre politique de confidentialite ou nous contacter a hi@aaxlo.com."
 ---

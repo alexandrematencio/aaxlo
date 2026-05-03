@@ -6,7 +6,7 @@ seo:
 hero:
   label: "AUDIT GRATUIT"
   title: "Voyez exactement ce qui freine votre activité en ligne."
-  subtitle: "Notre audit IA analyse votre fiche Google Business, votre SEO, vos réseaux sociaux, vos avis et le paysage concurrentiel. Résultats en 24 heures."
+  subtitle: "On analyse votre fiche Google Business, votre SEO, vos réseaux sociaux, vos avis et le paysage concurrentiel. Vous recevez un rapport complet en 24 heures."
 
 covers:
   label: "CE QUE COUVRE VOTRE AUDIT"
@@ -21,11 +21,11 @@ covers:
 
 faqs:
   - question: "C'est vraiment gratuit ? Où est le piège ?"
-    answer: "Il n'y a pas de piège. L'audit est gratuit et sans engagement. On l'utilise pour montrer ce qu'on sait faire. Si les résultats vous plaisent, on pourra discuter d'une collaboration, mais aucune pression."
+    answer: "Pas de piège. C'est gratuit et ça le reste. On le fait parce que c'est la meilleure façon de vous montrer ce qu'on fait vraiment. Si vous voulez travailler ensemble après, parfait. Sinon, le rapport reste le vôtre."
   - question: "Comment obtenez-vous les résultats aussi vite ?"
-    answer: "Nos outils IA analysent en quelques minutes les données publiques de votre activité, de vos concurrents et de votre marché. Un stratège humain passe ensuite en revue les résultats, ajoute du contexte et prépare votre rapport. Voilà pourquoi on livre en 24 heures."
+    answer: "Nos outils récupèrent en quelques minutes les données publiques de votre activité, de vos concurrents et de votre marché. Un stratège humain passe ensuite en revue les résultats et rédige votre rapport."
   - question: "Que dois-je fournir ?"
-    answer: "Juste le nom de votre commerce et l'URL de votre site. C'est suffisant pour lancer l'analyse. Vos coordonnées nous permettent de vous envoyer le rapport et de répondre à vos questions."
+    answer: "Juste le nom de votre commerce et l'URL de votre site. C'est suffisant pour lancer l'analyse. Il nous faut juste vos coordonnées pour vous envoyer le rapport."
   - question: "Allez-vous partager mes données avec quelqu'un ?"
-    answer: "Jamais. Les données de votre activité servent uniquement à générer votre rapport. On ne les vend pas, on ne les partage pas, on ne les réutilise pas. Notre politique de confidentialité détaille tout ça."
+    answer: "Jamais. Les données de votre activité servent uniquement à générer votre rapport. On ne les vend pas, ne les partage pas, ne les réutilise pas."
 ---

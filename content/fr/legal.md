@@ -32,7 +32,7 @@ terms:
     - heading: "4. Limitation de responsabilité"
       text: "AAXLO ne saurait être tenu responsable de tout dommage indirect, accessoire ou consécutif résultant de l'utilisation de nos services. Notre responsabilité totale ne saurait excéder le montant payé pour le service en question."
     - heading: "5. Droit applicable"
-      text: "Les présentes conditions sont régies par le droit singapourien. Tout litige sera soumis aux tribunaux compétents de Singapour."
+      text: "Les présentes conditions sont régies par le droit applicable. Tout litige sera résolu par voie de négociation amiable."
     - heading: "6. Contact"
       text: "Pour toute question relative aux présentes conditions, contactez-nous à hi@aaxlo.com."
 
@@ -42,13 +42,13 @@ mentions:
   lastUpdated: "Dernière mise à jour : mars 2026"
   sections:
     - heading: "1. Éditeur du site"
-      text: "AAXLO Pte. Ltd., Singapour. E-mail : hi@aaxlo.com"
+      text: "AAXLO — E-mail : hi@aaxlo.com"
     - heading: "2. Directeur de la publication"
-      text: "Le directeur de la publication est le représentant légal de AAXLO Pte. Ltd."
+      text: "Le directeur de la publication est le représentant légal de AAXLO."
     - heading: "3. Hébergement"
       text: "Ce site est hébergé par Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Chypre."
     - heading: "4. Propriété intellectuelle"
-      text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icônes) est la propriété exclusive de AAXLO Pte. Ltd., sauf mention contraire. Toute reproduction est interdite sans autorisation préalable."
+      text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icônes) est la propriété exclusive de AAXLO, sauf mention contraire. Toute reproduction est interdite sans autorisation préalable."
     - heading: "5. Données personnelles"
       text: "Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez nous contacter à hi@aaxlo.com."
 ---

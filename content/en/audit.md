@@ -6,7 +6,7 @@ seo:
 hero:
   label: "FREE AUDIT"
   title: "See exactly what's holding your business back online."
-  subtitle: "Our AI-powered audit analyzes your Google Business Profile, SEO, social media, reviews, and competitor landscape. Results in 24 hours."
+  subtitle: "We analyze your Google Business Profile, SEO, social media, reviews, and competitor landscape. You get a full report in 24 hours."
 
 covers:
   label: "WHAT YOUR AUDIT COVERS"
@@ -21,11 +21,11 @@ covers:
 
 faqs:
   - question: "Is this really free? What is the catch?"
-    answer: "There is no catch. The audit is 100% free with no obligation. We use it to demonstrate our expertise and build trust. If you like the results, we can discuss working together — but there is zero pressure."
+    answer: "No catch. It's free and stays free. We do it because it's the best way to show you what we can actually do. If you want to work together after, great. If not, the report is still yours."
   - question: "How do you get the results so fast?"
-    answer: "Our AI tools analyze publicly available data about your business, competitors, and market in minutes. A human strategist then reviews the findings, adds context, and prepares your report."
+    answer: "Our tools pull publicly available data on your business, competitors, and market in minutes. Then a human strategist reviews the findings and writes your report."
   - question: "What do I need to provide?"
-    answer: "Just your business name and website URL. That is enough for us to run the full analysis. Your contact details let us send you the report and answer any questions."
+    answer: "Just your business name and website URL. That's enough to run the full analysis. We need your contact details to send you the report."
   - question: "Will you share my data with anyone?"
-    answer: "Never. Your business data is used exclusively to generate your audit report. We do not sell, share, or repurpose it. See our privacy policy for full details."
+    answer: "Never. Your data is only used to generate your report. We don't sell it, share it, or repurpose it."
 ---

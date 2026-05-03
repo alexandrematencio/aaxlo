@@ -1,7 +1,7 @@
 ---
 tagline: "Your local business, amplified by AI."
 email: "hi@aaxlo.com"
-location: "Based in Singapore"
+location: "Operating worldwide"
 bookingUrl: "https://cal.com/aaxlo"
-copyright: "© 2026 AAXLO Pte. Ltd."
+copyright: "© 2026 AAXLO"
 ---

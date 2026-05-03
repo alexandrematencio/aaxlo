@@ -5,7 +5,7 @@ seo:
 
 overview:
   label: "SERVICES"
-  title: "Des solutions IA pour les commerces locaux."
+  title: "Outils IA et stratégie pour les commerces locaux."
   ctaText: "Vous ne savez pas quel service il vous faut ?"
   ctaLink: "Obtenez votre audit gratuit →"
   services:
@@ -27,7 +27,7 @@ overview:
     - label: "AUTOMATISATION"
       index: "04"
       title: "Automatisez les tâches répétitives"
-      description: "Chatbots IA, bots de réponse aux avis, automatisation WhatsApp et campagnes e-mail en pilote automatique."
+      description: "Agents IA, bots de réponse aux avis, automatisation WhatsApp et campagnes e-mail en pilote automatique."
       to: "/services/automation"
     - label: "CONSEIL"
       index: "05"
@@ -69,7 +69,7 @@ showcase:
     index: "04"
     category: "AUTOMATISATION"
     title: "Arrêtez de tout faire à la main."
-    desc: "Chatbots IA, réponses aux avis, réservations WhatsApp, campagnes e-mail. Des tâches qui nécessitaient une équipe entière, en pilote automatique."
+    desc: "Agents IA, réponses aux avis, réservations WhatsApp, campagnes e-mail. Des tâches qui nécessitaient une équipe entière, en pilote automatique."
     stripe: true
   - slug: "consulting"
     to: "/services/consulting"
@@ -137,7 +137,7 @@ web:
   label: "WEB"
   index: "02"
   heroTitle: "Votre vitrine digitale, réinventée."
-  heroDesc: "Votre site, c'est votre employé le plus assidu. Il ne dort jamais, ne prend jamais de jour de repos et parle à chaque client potentiel. On fait en sorte qu'il soit à la hauteur."
+  heroDesc: "Votre site, c'est votre employé le plus assidu. Il parle à chaque client potentiel, à toute heure. On fait en sorte qu'il soit à la hauteur."
   features:
     - title: "Sites modernes"
       description: "Des sites rapides, pensés mobile d'abord, conçus pour la performance et la conversion. Pas de templates gonflés. Chaque page est travaillée pour transformer les visiteurs en clients."
@@ -166,7 +166,7 @@ contentService:
   label: "CONTENU"
   index: "03"
   heroTitle: "Du contenu qui transforme les inconnus en clients."
-  heroDesc: "Un bon contenu, c'est pas devenir viral. C'est bâtir la confiance, rester dans les esprits et donner aux gens une raison de vous choisir. On crée ce contenu-là, et on le fait régulièrement."
+  heroDesc: "Un bon contenu donne aux gens une raison de vous choisir avant même qu'ils franchissent la porte. On le crée régulièrement pour que vous n'ayez pas à y penser."
   features:
     - title: "Gestion des réseaux sociaux"
       description: "Calendrier éditorial, rédaction et publication sur Instagram, Facebook, TikTok et LinkedIn. On gère tout, vous restez concentré sur votre métier."
@@ -184,30 +184,30 @@ contentService:
     - question: "Pouvez-vous travailler avec du contenu que nous avons déjà ?"
       answer: "C'est même notre spécialité. On prend vos photos, vidéos, articles de blog et témoignages clients existants et on les transforme en contenu frais, optimisé pour chaque plateforme. Rien ne se perd."
   cta:
-    title: "Envie de passer un cap ?"
+    title: "Prêt à déléguer votre contenu ?"
     text: "Faites un audit gratuit et voyez ce qui manque à votre stratégie de contenu."
     button: "Obtenez votre audit gratuit →"
 
 automation:
   seo:
     title: "Automatisation IA pour les commerces locaux | AAXLO"
-    description: "Chatbots IA, bots de réponse aux avis, automatisation WhatsApp et campagnes e-mail pour les commerces locaux."
+    description: "Agents IA, bots de réponse aux avis, automatisation WhatsApp et campagnes e-mail pour les commerces locaux."
   label: "AUTOMATISATION"
   index: "04"
   heroTitle: "Laissez l'IA gérer les tâches répétitives."
-  heroDesc: "Vous avez créé votre activité pour faire ce que vous aimez, pas pour passer des heures à répondre aux avis, aux mêmes questions et à envoyer des e-mails de suivi. On automatise le travail chronophage pour que vous puissiez vous concentrer sur l'essentiel."
+  heroDesc: "Vous n'avez pas lancé votre activité pour passer vos soirées à répondre aux mêmes questions. On automatise le travail répétitif pour que vous puissiez vous concentrer sur ce que vous faites vraiment bien."
   features:
-    - title: "Chatbots IA"
-      description: "Des chatbots personnalisés, entraînés sur les données de votre entreprise. Ils répondent aux questions, qualifient les prospects et prennent les rendez-vous, 24h/24, en plusieurs langues, sur votre site ou WhatsApp."
+    - title: "Agents IA"
+      description: "Des agents IA personnalisés, entraînés sur les données de votre entreprise. Ils répondent aux questions, qualifient les prospects et prennent les rendez-vous, 24h/24, en plusieurs langues, sur votre site ou WhatsApp."
     - title: "Bots de réponse aux avis"
       description: "Réponses assistées par l'IA à chaque avis Google, Yelp et TripAdvisor en quelques minutes. Des réponses dans votre ton, qui montrent à vos clients que vous êtes attentif, sans y passer votre soirée."
     - title: "Automatisation WhatsApp"
-      description: "Messages de bienvenue automatisés, confirmations de commande, rappels de rendez-vous et séquences de suivi sur WhatsApp Business. Retrouvez vos clients là où ils sont déjà."
+      description: "Messages de bienvenue automatisés, confirmations de commande, rappels de rendez-vous et séquences de suivi sur WhatsApp Business."
     - title: "Campagnes e-mail et SMS"
       description: "Campagnes automatisées de nurturing, envois promotionnels, relance de paniers abandonnés et séquences de réactivation. Vous configurez une fois, ça tourne tout seul."
   faqs:
-    - question: "Le chatbot aura-t-il l'air robotique ?"
-      answer: "Non. On entraîne le chatbot sur les vraies infos de votre activité, votre FAQ et votre ton. Les clients font rarement la différence. Et pour les demandes complexes, il passe la main à un humain sans coupure."
+    - question: "L'agent IA aura-t-il l'air robotique ?"
+      answer: "Non. On l'entraîne sur les vraies infos de votre activité, votre FAQ et votre ton. Les clients font rarement la différence. Et pour les demandes complexes, il passe la main à un humain sans coupure."
     - question: "Combien de temps l'automatisation va-t-elle réellement me faire gagner ?"
       answer: "La plupart de nos clients économisent 10 à 15 heures par semaine sur les tâches répétitives : répondre aux avis, aux mêmes questions, aux messages de suivi. Autant de temps récupéré pour votre activité."
     - question: "Puis-je voir ce que les bots font ?"
@@ -227,7 +227,7 @@ consulting:
   heroDesc: "Les outils standards résolvent des problèmes génériques. Votre activité n'a rien de générique. On crée des solutions IA sur mesure qui s'adaptent à votre façon de travailler, pas l'inverse."
   features:
     - title: "Workflows IA personnalisés"
-      description: "On conçoit et développe des workflows IA adaptés à vos opérations : gestion automatisée des stocks, routage intelligent des clients, et tout ce dont vous avez besoin. Aucune solution toute faite."
+      description: "On conçoit et développe des workflows IA adaptés à vos opérations : gestion automatisée des stocks, routage intelligent des clients. Aucune solution toute faite."
     - title: "Prototypes d'applications"
       description: "Vous avez une idée d'application ou d'outil interne ? On construit un prototype fonctionnel rapidement, on le valide avec de vrais utilisateurs et on itère jusqu'à ce que ça marche. Du concept au produit en semaines, pas en mois."
     - title: "Veille concurrentielle"

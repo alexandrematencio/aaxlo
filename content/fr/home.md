@@ -39,7 +39,7 @@ checklist:
   statements:
     - text: "Votre site existe, mais vous n'oseriez pas l'envoyer à un nouveau client aujourd'hui."
       service: "Web"
-      fix: "On crée des sites rapides et modernes qui font une vraie première impression, conçus pour transformer les visiteurs en clients."
+      fix: "On crée des sites sur lesquels les gens atterrissent et depuis lesquels ils vous appellent."
       link: "/services/web"
     - text: "Vous aviez prévu de publier sur les réseaux sociaux ce mois-ci. Vous ne l'avez pas fait."
       service: "Contenu"
@@ -47,7 +47,7 @@ checklist:
       link: "/services/content"
     - text: "Des avis sur votre commerce attendent une réponse depuis des semaines."
       service: "Automatisation"
-      fix: "On met en place un suivi automatisé des avis et des réponses pour que rien ne vous échappe."
+      fix: "On met en place un suivi automatisé des avis et des réponses pour que chaque avis reçoive une réponse."
       link: "/services/automation"
     - text: "Vous ne savez pas exactement ce qui apparaît quand on cherche votre commerce sur Google."
       service: "Visibilité"

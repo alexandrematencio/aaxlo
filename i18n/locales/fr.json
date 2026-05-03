@@ -10,7 +10,7 @@
     "visibility": { "label": "Visibilité", "desc": "GBP, SEO local & annuaires" },
     "web": { "label": "Web", "desc": "Sites, menus & réservation" },
     "content": { "label": "Contenu", "desc": "Réseaux sociaux & identité de marque" },
-    "automation": { "label": "Automatisation", "desc": "Chatbots, avis & messagerie" },
+    "automation": { "label": "Automatisation", "desc": "Agents IA, avis & messagerie" },
     "consulting": { "label": "Consulting", "desc": "Workflows IA & formation sur-mesure" }
   },
   "common": {
@@ -71,7 +71,7 @@
   },
   "footer": {
     "tagline": "Votre entreprise locale, amplifiée par l'IA.",
-    "location": "Basé à Singapour",
+    "location": "Présence mondiale",
     "servicesTitle": "Services",
     "aboutTitle": "À propos",
     "whoWeAre": "Qui sommes-nous",
@@ -82,7 +82,7 @@
     "mentionsLegales": "Mentions légales",
     "contactTitle": "Contact",
     "bookCall": "Réserver un appel",
-    "copyright": "© 2026 AAXLO Pte. Ltd."
+    "copyright": "© 2026 AAXLO"
   },
   "lang": {
     "switchTo": "Changer la langue en {lang}"

@@ -14,7 +14,7 @@ info:
     text: "hi@aaxlo.com"
   - title: "Location"
     type: "text"
-    text: "Singapore"
+    text: "Worldwide"
   - title: "Prefer to talk?"
     type: "link"
     href: "https://cal.com/aaxlo"

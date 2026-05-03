@@ -10,7 +10,7 @@
     "visibility": { "label": "Visibility", "desc": "GBP, local SEO & directories" },
     "web": { "label": "Web", "desc": "Websites, menus & booking" },
     "content": { "label": "Content", "desc": "Social media & brand identity" },
-    "automation": { "label": "Automation", "desc": "Chatbots, reviews & messaging" },
+    "automation": { "label": "Automation", "desc": "AI agents, reviews & messaging" },
     "consulting": { "label": "Consulting", "desc": "Custom AI workflows & training" }
   },
   "common": {
@@ -71,7 +71,7 @@
   },
   "footer": {
     "tagline": "Your local business, amplified by AI.",
-    "location": "Based in Singapore",
+    "location": "Operating worldwide",
     "servicesTitle": "Services",
     "aboutTitle": "About",
     "whoWeAre": "Who we are",
@@ -82,7 +82,7 @@
     "mentionsLegales": "Mentions légales",
     "contactTitle": "Contact",
     "bookCall": "Book a call",
-    "copyright": "© 2026 AAXLO Pte. Ltd."
+    "copyright": "© 2026 AAXLO"
   },
   "lang": {
     "switchTo": "Switch language to {lang}"

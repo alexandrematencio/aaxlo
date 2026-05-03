@@ -5,7 +5,7 @@ seo:
 
 overview:
   label: "SERVICES"
-  title: "AI-powered services for local businesses."
+  title: "AI tools and strategy for local businesses."
   ctaText: "Not sure which service you need?"
   ctaLink: "Get your free audit →"
   services:
@@ -27,7 +27,7 @@ overview:
     - label: "AUTOMATION"
       index: "04"
       title: "Automate the busywork"
-      description: "AI chatbots, review response bots, WhatsApp automation, and email campaigns on autopilot."
+      description: "AI agents, review response AI agents, WhatsApp automation, and email campaigns on autopilot."
       to: "/services/automation"
     - label: "CONSULTING"
       index: "05"
@@ -69,7 +69,7 @@ showcase:
     index: "04"
     category: "AUTOMATION"
     title: "Stop doing it by hand."
-    desc: "AI chatbots, review responses, WhatsApp bookings, email campaigns. Things that used to need a team, running on autopilot."
+    desc: "AI agents, review responses, WhatsApp bookings, email campaigns. Things that used to need a team, running on autopilot."
     stripe: true
   - slug: "consulting"
     to: "/services/consulting"
@@ -151,7 +151,7 @@ web:
     - question: "How long does it take to build a website?"
       answer: "A standard business website takes 2-4 weeks from kickoff to launch. More complex projects with booking systems or e-commerce typically take 4-8 weeks. We move fast because our AI-assisted workflows handle the repetitive work, so our team can focus on strategy and design."
     - question: "Will I be able to update the website myself?"
-      answer: "Yes. Every site we build comes with a simple content management system and a 30-minute walkthrough so you feel confident making changes. If you ever get stuck, we are one message away."
+      answer: "Yes. Every site we build comes with a simple content management system and a 30-minute walkthrough so you feel confident making changes. If you ever get stuck, we're one message away."
     - question: "Do you handle hosting and maintenance?"
       answer: "Yes. We offer managed hosting with SSL, daily backups, uptime monitoring, and monthly security updates. Your site stays fast and online while you focus on running your business."
   cta:
@@ -166,7 +166,7 @@ contentService:
   label: "CONTENT"
   index: "03"
   heroTitle: "Content that converts strangers into customers."
-  heroDesc: "Great content builds trust and keeps you top of mind. We create it consistently so people have a reason to choose you."
+  heroDesc: "Good content gives people a reason to choose you before they've even walked in. We create it consistently so you don't have to think about it."
   features:
     - title: "Social Media Management"
       description: "Content calendar, copywriting, and publishing across Instagram, Facebook, TikTok, and LinkedIn. The whole pipeline handled for you."
@@ -175,43 +175,43 @@ contentService:
     - title: "Brand Identity"
       description: "Logo, color palette, typography, brand voice guidelines, and visual templates that give your business a cohesive look everywhere it shows up."
     - title: "Photo & Video"
-      description: "Photography, short-form video production, and AI-assisted editing. High-quality content without the agency price tag."
+      description: "Photography, short-form video production, and AI-assisted editing or fully AI generated content. High-quality content without the agency price tag."
   faqs:
     - question: "How many posts per week do you create?"
-      answer: "Our standard plans include 3-5 posts per week across your chosen platforms. Each post is strategically timed and crafted with your brand voice. We also create stories, reels, and carousel content as part of the mix."
+      answer: "We adapt to your need and requirments and publish across your chosen platforms. Our standard plans include 3-5 posts per week, each post is strategically timed and crafted with your brand voice. We also create stories, reels, and carousel content as part of the mix."
     - question: "Do you need access to our social media accounts?"
       answer: "Yes, we use secure platform-native tools to manage your accounts. We never share credentials and you maintain full ownership. We can also work through Meta Business Suite or other collaboration tools if you prefer."
     - question: "Can you work with content we already have?"
       answer: "Yes, and we encourage it. We take your existing photos, videos, blog posts, and customer testimonials and repurpose them into fresh, platform-optimized content. Nothing goes to waste."
   cta:
-    title: "Ready to level up your content?"
+    title: "Ready to take content off your plate?"
     text: "Get a free audit and see what your content strategy is missing."
     button: "Get your free audit →"
 
 automation:
   seo:
     title: "AI Automation for Local Businesses | AAXLO"
-    description: "AI chatbots, review response bots, WhatsApp automation, and email campaigns for local businesses."
+    description: "AI agents, review response agents, WhatsApp automation, and email campaigns for local businesses."
   label: "AUTOMATION"
   index: "04"
   heroTitle: "Let AI handle the repetitive stuff."
-  heroDesc: "You did not start your business to spend hours responding to reviews and answering the same questions. We automate the busywork so you can get back to what you actually do."
+  heroDesc: "You didn't start your business to spend evenings answering the same questions. We automate the busywork so you can focus on what you're actually good at."
   features:
-    - title: "AI Chatbots"
-      description: "Custom chatbots trained on your business data that answer customer questions and book appointments, 24/7, in multiple languages, on your website or WhatsApp."
-    - title: "Review Response Bots"
+    - title: "AI Agents"
+      description: "Custom interactive agents trained on your business data that answer customer questions and book appointments, 24/7, in multiple languages, on your website or WhatsApp."
+    - title: "Review Response Agents"
       description: "AI-powered responses to every Google, Yelp, and TripAdvisor review within minutes. On-brand replies that show customers you care, without eating your evening."
     - title: "WhatsApp Automation"
-      description: "Automated welcome messages, order confirmations, appointment reminders, and follow-up sequences on WhatsApp Business. Meet your customers where they already are."
+      description: "Automated welcome messages, order confirmations, appointment reminders, and follow-up sequences on WhatsApp Business."
     - title: "Email & SMS Campaigns"
       description: "Automated drip campaigns, promotional blasts, abandoned cart recovery, and re-engagement sequences. Set it once and let it run."
   faqs:
-    - question: "Will the chatbot sound robotic?"
-      answer: "We train the chatbot on your actual business information, FAQs, and brand voice. Customers often cannot tell the difference. For complex queries, it hands off to a human."
+    - question: "Will the AI agent sound robotic?"
+      answer: "We train it on your actual business information, FAQs, and brand voice. Most customers can't tell the difference. For complex queries, it hands off to a human."
     - question: "How much time will automation actually save me?"
-      answer: "Most of our clients save 10-15 hours per week on repetitive tasks like responding to reviews, answering FAQs, and sending follow-ups."
-    - question: "Can I see what the bots are doing?"
-      answer: "Yes. You get a dashboard with full conversation logs, response metrics, and customer satisfaction scores. You can also set up alerts for specific triggers, like a negative review or a high-value lead."
+      answer: "Depending on your business line, it can go from 2-4 hours per week on repetitive tasks like responding to reviews, answering FAQs, and sending follow-ups, to 10-15 hours saved per week for more intensive workflows like bookkeeping."
+    - question: "Can I see what the agents are doing?"
+      answer: "Yes. You get a custom dashboard depending on your needs (full conversation logs, response metrics, customer satisfaction scores, alerts for specific triggers, like a negative review or a high-value lead)."
   cta:
     title: "Ready to automate?"
     text: "Get a free audit and see which tasks you can automate today."
@@ -224,7 +224,7 @@ consulting:
   label: "CONSULTING"
   index: "05"
   heroTitle: "Something built just for your business."
-  heroDesc: "Off-the-shelf tools solve generic problems. Your business is not generic. We build custom AI solutions that fit the way you actually work."
+  heroDesc: "Off-the-shelf tools solve generic problems. Your business isn't generic. We build custom AI solutions that fit the way you actually work."
   features:
     - title: "Custom AI Workflows"
       description: "AI workflows built around your specific operations, from automated inventory management to intelligent customer routing. Nothing off the shelf."
@@ -233,7 +233,7 @@ consulting:
     - title: "Competitor Monitoring"
       description: "AI-powered tracking of your competitors' pricing, reviews, social media activity, and search rankings. Weekly reports so you know what the market is doing."
     - title: "AI Training"
-      description: "Hands-on workshops and training sessions for your team. We teach you how to use AI tools effectively: ChatGPT, Canva AI, and custom-built solutions for your industry."
+      description: "Hands-on workshops and training sessions for your team. We teach you how to use AI tools effectively: ChatGPT, OpenClaw, Claude Code, Canva AI, and custom-built solutions for your industry."
   faqs:
     - question: "What kind of businesses do you consult with?"
       answer: "We work with local businesses of all sizes: restaurants, clinics, retail shops, service providers. If you serve a local market and want to use AI, we can help. Our solutions scale from single-location businesses to small chains."
