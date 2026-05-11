@@ -39,6 +39,14 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
+      // @ts-expect-error process is the Node global available when Nuxt loads this config
+      script: process.env.NODE_ENV === 'production' ? [
+        {
+          src: 'https://stats.aaxlo.com/script.js',
+          defer: true,
+          'data-website-id': '1901d0b6-3115-415d-b76e-6d4ef2061f81',
+        },
+      ] : [],
     },
     pageTransition: {
       name: 'page',
