@@ -191,6 +191,8 @@ onMounted(() => {
         <a
           :href="localePath('/audit')"
           class="checklist-cta"
+          data-umami-event="audit-cta-click"
+          data-umami-event-location="checklist"
           @click.prevent="navigateWithStripes(localePath('/audit'))"
         >
           {{ $t('common.getAudit') }}

@@ -1,8 +1,9 @@
 <script setup>
 import { gsap } from 'gsap'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const { track } = useUmami()
 const { data: contactData } = await useLocalizedContent('/contact')
 
 useHead({
@@ -22,6 +23,7 @@ const submitted = ref(false)
 
 function handleSubmit() {
   submitted.value = true
+  track('contact-form-submit', { locale: locale.value })
 }
 
 onMounted(() => {

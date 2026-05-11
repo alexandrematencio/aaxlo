@@ -92,7 +92,12 @@ onMounted(() => {
     <!-- Bottom CTA -->
     <section class="cta-section">
       <p class="cta-text tw-hide">{{ servicesData?.overview?.ctaText }}</p>
-      <NuxtLink :to="localePath('/audit')" class="cta-link tw-hide">
+      <NuxtLink
+        :to="localePath('/audit')"
+        class="cta-link tw-hide"
+        data-umami-event="audit-cta-click"
+        data-umami-event-location="services-overview"
+      >
         {{ servicesData?.overview?.ctaLink }}
       </NuxtLink>
     </section>

@@ -92,6 +92,8 @@ onMounted(() => {
           :href="localePath('/contact')"
           class="social-cta"
           style="opacity: 0; transform: translateY(12px)"
+          data-umami-event="contact-cta-click"
+          data-umami-event-location="social-proof"
           @click.prevent="navigateWithStripes(localePath('/contact'))"
         >
           {{ content?.cta }}

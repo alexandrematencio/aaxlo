@@ -334,6 +334,8 @@ watch(() => props.animate, (val) => {
           <a
             :href="localePath('/audit')"
             class="hero-cta tw-hide"
+            data-umami-event="audit-cta-click"
+            data-umami-event-location="hero-primary"
             @click.prevent="navigateWithStripes(localePath('/audit'))"
           >
             {{ content?.cta }}
@@ -352,6 +354,8 @@ watch(() => props.animate, (val) => {
           class="nav-cell"
           :class="{ 'nav-cell--accent nav-cta': cell.accent }"
           style="clip-path: inset(0 100% 0 0)"
+          :data-umami-event="cell.accent ? 'audit-cta-click' : 'hero-nav-cell-click'"
+          :data-umami-event-location="cell.accent ? 'hero-nav-cta' : `hero-nav-${cell.to.replace(/^\//, '').replace(/\//g, '-') || 'home'}`"
           @click.prevent="handleNav(cell)"
         >
           <template v-if="cell.accent">

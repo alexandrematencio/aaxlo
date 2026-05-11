@@ -106,7 +106,16 @@ onMounted(() => {
       <h2 class="cta-title tw-hide">{{ aboutData?.cta?.title }}</h2>
       <p class="cta-text tw-hide">{{ aboutData?.cta?.text }}</p>
       <div class="cta-links">
-        <NuxtLink v-for="btn in aboutData?.cta?.buttons" :key="btn.to" :to="localePath(btn.to)" class="cta-btn tw-hide" :class="btn.variant === 'primary' ? 'cta-btn--primary' : 'cta-btn--secondary'" v-html="btn.label" />
+        <NuxtLink
+          v-for="btn in aboutData?.cta?.buttons"
+          :key="btn.to"
+          :to="localePath(btn.to)"
+          class="cta-btn tw-hide"
+          :class="btn.variant === 'primary' ? 'cta-btn--primary' : 'cta-btn--secondary'"
+          :data-umami-event="btn.to.includes('audit') ? 'audit-cta-click' : btn.to.includes('contact') ? 'contact-cta-click' : 'about-cta-click'"
+          :data-umami-event-location="`about-${btn.variant || 'secondary'}`"
+          v-html="btn.label"
+        />
       </div>
     </section>
   </div>

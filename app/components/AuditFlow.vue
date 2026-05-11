@@ -3,8 +3,9 @@ import { gsap } from 'gsap'
 import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const { track } = useUmami()
 
 const props = defineProps({
   mode: {
@@ -55,6 +56,10 @@ const showPopup = ref(false)
 
 function onTeaserSubmit() {
   if (formData.businessName.trim().length < 2) return
+  track('audit-form-teaser-submit', {
+    has_website: formData.websiteUrl.trim().length > 0,
+    locale: locale.value,
+  })
   // If URL is also filled, show popup for contact details
   if (formData.websiteUrl.trim().length > 0) {
     showPopup.value = true
@@ -74,6 +79,7 @@ function submitPopup() {
   // Submit complete — show success
   submitted.value = true
   showPopup.value = false
+  track('audit-popup-submit', { locale: locale.value })
 }
 
 function closePopup() {
@@ -188,9 +194,11 @@ function goNext() {
   if (currentStep.value === 3) {
     // Final step — submit
     submitted.value = true
+    track('audit-flow-submit', { locale: locale.value })
     showSuccess()
     return
   }
+  track('audit-flow-step-next', { step: currentStep.value, locale: locale.value })
   animateStepForward(() => {
     currentStep.value++
     nextTick(() => {

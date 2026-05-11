@@ -92,6 +92,8 @@ onMounted(() => {
           :href="localePath('/audit')"
           class="close-cta"
           style="opacity: 0; transform: translateY(12px)"
+          data-umami-event="audit-cta-click"
+          data-umami-event-location="close"
           @click.prevent="navigateWithStripes(localePath('/audit'))"
         >
           {{ content?.cta }}

@@ -176,7 +176,12 @@ function formatDate(d: string) {
             <span class="footer-cta-label">{{ $t('blog.continueExploring') }}</span>
             <h2 class="footer-cta-heading">{{ $t('blog.ctaHeading') }}</h2>
             <p class="footer-cta-sub">{{ $t('blog.ctaSubtitle') }}</p>
-            <NuxtLink :to="localePath('/contact')" class="footer-cta-btn">
+            <NuxtLink
+              :to="localePath('/contact')"
+              class="footer-cta-btn"
+              data-umami-event="contact-cta-click"
+              data-umami-event-location="blog-article-footer"
+            >
               {{ $t('blog.ctaButton') }}
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>

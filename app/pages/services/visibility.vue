@@ -166,7 +166,12 @@ onMounted(() => {
     <section class="cta-section">
       <h2 class="cta-title tw-hide">{{ svc?.cta?.title }}</h2>
       <p class="cta-text tw-hide">{{ svc?.cta?.text }}</p>
-      <NuxtLink :to="localePath('/audit')" class="cta-btn tw-hide">{{ svc?.cta?.button }}</NuxtLink>
+      <NuxtLink
+        :to="localePath('/audit')"
+        class="cta-btn tw-hide"
+        data-umami-event="audit-cta-click"
+        data-umami-event-location="service-visibility"
+      >{{ svc?.cta?.button }}</NuxtLink>
     </section>
   </div>
 </template>

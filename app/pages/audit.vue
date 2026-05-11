@@ -1,8 +1,9 @@
 <script setup>
 import { gsap } from 'gsap'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const { track } = useUmami()
 const { data: auditData } = await useLocalizedContent('/audit')
 
 useHead({
@@ -17,6 +18,12 @@ const auditCovers = computed(() => auditData.value?.covers?.items || [])
 const faqsData = computed(() => auditData.value?.faqs || [])
 const faqOpen = ref(faqsData.value.map(() => false))
 watch(faqsData, (val) => { faqOpen.value = val.map(() => false) })
+
+function toggleFaq(index) {
+  const wasOpen = !!faqOpen.value[index]
+  faqOpen.value[index] = !wasOpen
+  if (!wasOpen) track('faq-open', { index, locale: locale.value })
+}
 
 onMounted(() => {
   const el = page.value
@@ -102,7 +109,7 @@ onMounted(() => {
             :key="faq.question"
             class="faq-item tw-hide"
             :class="{ 'faq-open': faqOpen[index] }"
-            @click="faqOpen[index] = !faqOpen[index]"
+            @click="toggleFaq(index)"
           >
             <div class="faq-question">
               <span>{{ faq.question }}</span>
