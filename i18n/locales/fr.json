@@ -55,7 +55,35 @@
     "successTitle": "C'est parti !",
     "successText": "Votre audit personnalisé arrivera dans {email} sous 24 heures.",
     "successTrust": "Sans engagement. Sans carte bancaire. Pas d'appel sauf si vous le demandez.",
-    "backHome": "← Retour à l'accueil"
+    "backHome": "← Retour à l'accueil",
+    "submitError": "Un problème est survenu. Réessayez dans un instant."
+  },
+  "audit_processing": {
+    "title": "Analyse en cours",
+    "subtitle": "Cela prend généralement 2 à 4 minutes. Restez sur la page — vos scores s'afficheront en direct.",
+    "step_gbp": "Profil Google Business",
+    "step_website": "Site web",
+    "step_reviews": "Avis",
+    "step_social": "Présence sociale",
+    "step_scoring": "Évaluation",
+    "status_running": "En cours",
+    "status_done": "Terminé",
+    "error_title": "Un problème est survenu",
+    "error_body": "Nous n'avons pas pu finaliser cet audit. Vérifiez votre boîte mail dans quelques minutes ou écrivez-nous à recon{'@'}aaxlo.com."
+  },
+  "audit_teaser": {
+    "label": "Rapport de reconnaissance",
+    "headline_prefix": "Scores de {business}",
+    "score_label_overall": "Global",
+    "score_label_gbp": "Profil Google",
+    "score_label_website": "Site web",
+    "score_label_reviews": "Avis",
+    "score_label_social": "Social",
+    "inbox_note": "Votre rapport complet arrive. Surveillez recon{'@'}aaxlo.com dans votre boîte de réception dans l'heure.",
+    "upsell_label": "Recevez la feuille de route complète",
+    "upsell_body": "L'Audit Approfondi Payant (497 €) transforme ces scores en plan d'action prioritaire sur 90 jours — et 50 % du montant est crédité sur toute mission supérieure à 2 000 €.",
+    "upsell_cta": "Réserver un échange de 15 min",
+    "booking_url": "https://calendar.app.google/AUDIT-WALKTHROUGH-ID"
   },
   "contact_form": {
     "name": "Nom *",
