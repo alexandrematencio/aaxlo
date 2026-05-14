@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
     source_cta: source_cta || undefined,
   })
 
-  triggerAuditPipeline({
+  void triggerAuditPipeline({
     audit_id: id,
     business_name,
     website_url: website_url || undefined,
