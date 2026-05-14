@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:migrate": "node --env-file=.env db/migrate.mjs"
   },
   "dependencies": {
     "@nuxt/content": "^3.12.0",
@@ -15,6 +16,7 @@
     "better-sqlite3": "^12.8.0",
     "gsap": "^3.14.2",
     "nuxt": "^4.4.4",
+    "postgres": "^3.4.4",
     "vue": "^3.5.30",
     "vue-router": "^5.0.3",
     "vue-tel-input": "^9.8.0"
