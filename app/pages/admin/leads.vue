@@ -47,6 +47,11 @@ function fmtDate(s) {
   const d = new Date(s)
   return d.toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })
 }
+
+function safeHref(url) {
+  if (!url) return null
+  return /^https?:\/\//i.test(url) ? url : null
+}
 </script>
 
 <template>
@@ -95,7 +100,7 @@ function fmtDate(s) {
         <span>
           <strong>{{ lead.business_name }}</strong>
           <br>
-          <a v-if="lead.website_url" :href="lead.website_url" target="_blank" rel="noopener" class="row-link">{{ lead.website_url }}</a>
+          <a v-if="safeHref(lead.website_url)" :href="safeHref(lead.website_url)" target="_blank" rel="noopener" class="row-link">{{ lead.website_url }}</a>
         </span>
         <span class="cell-mono">{{ lead.email }}</span>
         <span>{{ lead.locale }}</span>
