@@ -8,7 +8,7 @@ const filters = reactive({
   on_hold: '',
 })
 
-const STATUSES = ['', 'queued', 'running', 'teaser_ready', 'pdf_ready', 'on_hold', 'delivered', 'hot_lead', 'converted', 'dormant']
+const STATUSES = ['', 'queued', 'running', 'teaser_ready', 'pdf_ready', 'on_hold', 'delivered', 'opened', 'hot_lead', 'converted', 'dormant']
 
 const { data, refresh, pending } = await useFetch('/api/admin/leads', {
   query: filters,
