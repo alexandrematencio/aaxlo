@@ -3,6 +3,7 @@ import { getAuditLead } from '~/server/utils/db'
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   if (!id) throw createError({ statusCode: 400, statusMessage: 'id required' })
+  if (!/^[0-9a-f-]{36}$/i.test(id)) throw createError({ statusCode: 404, statusMessage: 'not found' })
 
   const row = await getAuditLead(id)
   if (!row) throw createError({ statusCode: 404, statusMessage: 'not found' })
