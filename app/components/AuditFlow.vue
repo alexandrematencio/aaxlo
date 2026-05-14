@@ -70,16 +70,32 @@ function onTeaserSubmit() {
   navigateWithStripes(localePath('/audit') + '?' + params.toString())
 }
 
-function submitPopup() {
+async function submitPopup() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formData.email)) {
     errors.email = t('audit_form.invalidEmail')
     return
   }
-  // Submit complete — show success
-  submitted.value = true
-  showPopup.value = false
   track('audit-popup-submit', { locale: locale.value })
+  try {
+    const res = await $fetch('/api/audit/start', {
+      method: 'POST',
+      body: {
+        business_name: formData.businessName.trim(),
+        website_url: formData.websiteUrl.trim() || undefined,
+        email: formData.email.trim(),
+        phone: formData.phone.trim() || undefined,
+        name: formData.name.trim() || undefined,
+        locale: locale.value,
+        source_cta: 'teaser_popup',
+      },
+    })
+    showPopup.value = false
+    await navigateTo(localePath(`/audit/processing/${res.audit_id}`))
+  } catch (err) {
+    console.error('[audit] start failed', err)
+    errors.email = t('audit_form.submitError')
+  }
 }
 
 function closePopup() {
@@ -189,13 +205,28 @@ function showSuccess() {
   }})
 }
 
-function goNext() {
+async function goNext() {
   if (!validateStep(currentStep.value)) return
   if (currentStep.value === 3) {
-    // Final step — submit
-    submitted.value = true
     track('audit-flow-submit', { locale: locale.value })
-    showSuccess()
+    try {
+      const res = await $fetch('/api/audit/start', {
+        method: 'POST',
+        body: {
+          business_name: formData.businessName.trim(),
+          website_url: formData.websiteUrl.trim() || undefined,
+          email: formData.email.trim(),
+          phone: formData.phone.trim() || undefined,
+          name: formData.name.trim() || undefined,
+          locale: locale.value,
+          source_cta: 'audit_flow_full',
+        },
+      })
+      await navigateTo(localePath(`/audit/processing/${res.audit_id}`))
+    } catch (err) {
+      console.error('[audit] start failed', err)
+      errors.email = t('audit_form.submitError')
+    }
     return
   }
   track('audit-flow-step-next', { step: currentStep.value, locale: locale.value })
