@@ -1,6 +1,3 @@
-import { createAuditLead } from '~/server/utils/db'
-import { triggerAuditPipeline } from '~/server/utils/n8n'
-
 type StartBody = {
   business_name?: string
   website_url?: string

@@ -1,5 +1,3 @@
-import { updateAuditLeadAdmin } from '~/server/utils/db'
-
 type PatchBody = {
   on_hold?: boolean
   nurture_halted_reason?: 'replied' | 'booked' | null
