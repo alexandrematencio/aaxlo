@@ -6,10 +6,13 @@ const localePath = useLocalePath()
 const { track } = useUmami()
 const { data: auditData } = await useLocalizedContent('/audit')
 
-useHead({
-  title: auditData.value?.seo?.title,
-  meta: [{ name: 'description', content: auditData.value?.seo?.description }],
-})
+useContentSeo(auditData)
+useSchemaOrg([
+  defineWebPage({ '@type': 'FAQPage' }),
+  ...(auditData.value?.faqs || []).map((f) =>
+    defineQuestion({ name: f.question, acceptedAnswer: f.answer }),
+  ),
+])
 
 const page = ref(null)
 
@@ -109,13 +112,25 @@ onMounted(() => {
             :key="faq.question"
             class="faq-item tw-hide"
             :class="{ 'faq-open': faqOpen[index] }"
-            @click="toggleFaq(index)"
           >
-            <div class="faq-question">
+            <button
+              :id="`faq-trigger-${index}`"
+              type="button"
+              class="faq-question"
+              :aria-expanded="faqOpen[index]"
+              :aria-controls="`faq-panel-${index}`"
+              @click="toggleFaq(index)"
+            >
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faqOpen[index] ? '&minus;' : '+' }}</span>
-            </div>
-            <div v-show="faqOpen[index]" class="faq-answer">
+              <span class="faq-toggle" aria-hidden="true">{{ faqOpen[index] ? '−' : '+' }}</span>
+            </button>
+            <div
+              v-show="faqOpen[index]"
+              :id="`faq-panel-${index}`"
+              role="region"
+              :aria-labelledby="`faq-trigger-${index}`"
+              class="faq-answer"
+            >
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -145,7 +160,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
@@ -190,7 +205,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 48px;
@@ -231,11 +246,11 @@ onMounted(() => {
 .faq-label-cell .section-label { margin-bottom: 8px; }
 .faq-title { font-family: var(--font); font-size: clamp(28px, 4vw, 44px); font-weight: 600; color: var(--color-dark); line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
 .faq-list { display: flex; flex-direction: column; }
-.faq-item { border: 0.5px solid #24272e; border-top: none; cursor: pointer; padding: 14px 12px; transition: background 0.2s; }
+.faq-item { border: 0.5px solid #24272e; border-top: none; padding: 14px 12px; transition: background 0.2s; }
 .faq-item:first-child { border-top: 0.5px solid #24272e; }
 .faq-item:hover { background: var(--color-cream, #fff1ef); }
-.faq-question { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
-.faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent); flex-shrink: 0; width: 24px; text-align: center; }
+.faq-question { width: 100%; background: none; border: none; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
+.faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent-text); flex-shrink: 0; width: 24px; text-align: center; }
 .faq-answer { padding-top: 12px; }
 .faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 

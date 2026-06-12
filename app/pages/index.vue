@@ -5,20 +5,22 @@ import { initScrollReveal, initScrollExit } from '~/composables/useScrollReveal'
 const { data: homeContent } = await useLocalizedContent('/home')
 const { data: servicesContent } = await useLocalizedContent('/services')
 
-useHead({
-  title: homeContent.value?.seo?.title || 'AAXLO',
-  meta: [
-    { name: 'description', content: homeContent.value?.seo?.description || '' },
-  ],
-})
+useContentSeo(homeContent)
 
+// Session cookie (SSR-aware) — the splash plays once per browser session and
+// replays only on a genuinely fresh visit. Functional storage; no consent needed.
+const splashSeen = useCookie('aaxlo_splash_seen', { sameSite: 'lax', path: '/' })
 const splashPlayed = useState('splashPlayed', () => false)
 const animsPlayed = useState('animsPlayed', () => false)
 
-const showSplash = ref(!splashPlayed.value)
-const heroReady = ref(splashPlayed.value)
+const showSplash = ref(!splashSeen.value && !splashPlayed.value)
+const heroReady = ref(!showSplash.value)
 const skipAnimations = computed(() => animsPlayed.value)
 const showSocialProof = ref(false)
+
+// When the splash won't show (returning this session), present the page in its
+// already-played state so the header reveals at once and forge reveals are skipped.
+if (!showSplash.value) splashPlayed.value = true
 
 // Section refs for scroll reveal
 const s2Ref = ref(null)
@@ -34,6 +36,7 @@ function onSplashReveal() {
 }
 
 function onSplashComplete() {
+  splashSeen.value = '1' // remember for this session
   splashPlayed.value = true
   showSplash.value = false
   // Set up forge BEFORE marking anims as played

@@ -10,8 +10,13 @@ declare global {
 }
 
 export function useUmami() {
+  const { analyticsAllowed } = useConsent()
+
   function track(eventName: string, data?: UmamiEventData) {
     if (import.meta.server) return
+    // Defence in depth: never emit events without analytics consent, even if
+    // the script were present for any reason.
+    if (!analyticsAllowed.value) return
     window.umami?.track(eventName, data)
   }
   return { track }

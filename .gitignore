@@ -14,3 +14,6 @@ codepen-splash.html
 pencil-new.pen
 docs/superpowers/*
 local-design-files/*
+
+# Cloned external tool (its own git repo) — not part of the AAXLO project
+claude-seo/

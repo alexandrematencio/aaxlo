@@ -7,10 +7,8 @@ const { data: servicesData } = await useLocalizedContent('/services')
 
 const svc = computed(() => servicesData.value?.visibility)
 
-useHead({
-  title: svc.value?.seo?.title,
-  meta: [{ name: 'description', content: svc.value?.seo?.description }],
-})
+useContentSeo(svc)
+useServicePageSchema(svc, 'visibility')
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
@@ -115,7 +113,7 @@ onMounted(() => {
       <div class="hero-grid">
         <div class="hero-meta">
           <span class="hero-label tw-hide">{{ svc?.label }}</span>
-          <span class="hero-index">{{ svc?.index }}</span>
+          <span class="hero-index" aria-hidden="true">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
           <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
@@ -148,13 +146,25 @@ onMounted(() => {
             :key="faq.question"
             class="faq-item tw-hide"
             :class="{ 'faq-open': faqOpen[idx] }"
-            @click="faqOpen[idx] = !faqOpen[idx]"
           >
-            <div class="faq-question">
+            <button
+              :id="`faq-trigger-${idx}`"
+              type="button"
+              class="faq-question"
+              :aria-expanded="faqOpen[idx]"
+              :aria-controls="`faq-panel-${idx}`"
+              @click="faqOpen[idx] = !faqOpen[idx]"
+            >
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
-            </div>
-            <div v-show="faqOpen[idx]" class="faq-answer">
+              <span class="faq-toggle" aria-hidden="true">{{ faqOpen[idx] ? '−' : '+' }}</span>
+            </button>
+            <div
+              v-show="faqOpen[idx]"
+              :id="`faq-panel-${idx}`"
+              role="region"
+              :aria-labelledby="`faq-trigger-${idx}`"
+              class="faq-answer"
+            >
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -230,7 +240,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
@@ -281,7 +291,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 48px;
@@ -370,6 +380,11 @@ onMounted(() => {
 }
 
 .faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -384,7 +399,7 @@ onMounted(() => {
 .faq-toggle {
   font-size: 24px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   flex-shrink: 0;
   width: 24px;
   text-align: center;

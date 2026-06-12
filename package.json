@@ -7,16 +7,23 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "clean": "rm -rf .output dist",
+    "predeploy": "npm run clean && NUXT_APP_BASE_URL=/aaxlo/ nuxt generate && touch .output/public/.nojekyll && cp .output/public/200.html .output/public/index.html",
+    "deploy": "gh-pages -d .output/public --dotfiles -m \"chore(deploy): publish static export\""
   },
   "dependencies": {
     "@nuxt/content": "^3.12.0",
     "@nuxtjs/i18n": "^10.2.3",
+    "@nuxtjs/seo": "^5.3.0",
     "better-sqlite3": "^12.8.0",
     "gsap": "^3.14.2",
     "nuxt": "^4.4.4",
     "vue": "^3.5.30",
     "vue-router": "^5.0.3",
     "vue-tel-input": "^9.8.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }

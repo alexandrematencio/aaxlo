@@ -48,6 +48,8 @@ const currentStep = ref(1)
 const submitted = ref(false)
 const errors = reactive({})
 const stepContainer = ref(null)
+const formConsent = ref(false)
+const consentError = ref(false)
 
 const { navigateWithStripes } = useStripeTransition()
 
@@ -76,6 +78,11 @@ function submitPopup() {
     errors.email = t('audit_form.invalidEmail')
     return
   }
+  if (!formConsent.value) {
+    consentError.value = true
+    return
+  }
+  consentError.value = false
   // Submit complete — show success
   submitted.value = true
   showPopup.value = false
@@ -84,6 +91,38 @@ function submitPopup() {
 
 function closePopup() {
   showPopup.value = false
+}
+
+// ── Popup as an accessible modal dialog: focus management + trap + Escape ──
+const popupCard = ref(null)
+let popupTrigger = null
+
+watch(showPopup, (open) => {
+  if (open) {
+    popupTrigger = import.meta.client ? document.activeElement : null
+    nextTick(() => popupCard.value?.querySelector('input, button')?.focus())
+  } else if (popupTrigger) {
+    popupTrigger.focus?.()
+    popupTrigger = null
+  }
+})
+
+function onPopupKeydown(e) {
+  if (e.key === 'Escape') { closePopup(); return }
+  if (e.key !== 'Tab' || !popupCard.value) return
+  const f = [...popupCard.value.querySelectorAll(
+    'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
+  )].filter(el => el.offsetParent !== null)
+  if (!f.length) return
+  const first = f[0]
+  const last = f[f.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 
 function showFinalState() {
@@ -192,7 +231,12 @@ function showSuccess() {
 function goNext() {
   if (!validateStep(currentStep.value)) return
   if (currentStep.value === 3) {
-    // Final step — submit
+    // Final step — require privacy consent, then submit
+    if (!formConsent.value) {
+      consentError.value = true
+      return
+    }
+    consentError.value = false
     submitted.value = true
     track('audit-flow-submit', { locale: locale.value })
     showSuccess()
@@ -380,11 +424,17 @@ onMounted(() => {
     <!-- Popup overlay for contact details -->
     <Teleport to="body">
       <Transition name="popup">
-        <div v-if="showPopup" class="popup-overlay" @click.self="closePopup">
-          <div class="popup-card">
-            <button type="button" class="popup-close" @click="closePopup" aria-label="Close">&times;</button>
+        <div v-if="showPopup" class="popup-overlay" @click.self="closePopup" @keydown="onPopupKeydown">
+          <div
+            ref="popupCard"
+            class="popup-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="audit-popup-title"
+          >
+            <button type="button" class="popup-close" @click="closePopup" :aria-label="$t('a11y.close')">&times;</button>
             <span class="popup-label">{{ $t('audit_form.popupTitle') }}</span>
-            <h3 class="popup-title">{{ $t('audit_form.popupDesc') }}</h3>
+            <h3 id="audit-popup-title" class="popup-title">{{ $t('audit_form.popupDesc') }}</h3>
             <p class="popup-summary">
               <strong>{{ formData.businessName }}</strong>
               <span v-if="formData.websiteUrl"> · {{ formData.websiteUrl }}</span>
@@ -395,9 +445,12 @@ onMounted(() => {
                 type="email"
                 class="popup-input"
                 :placeholder="$t('audit_form.emailPlaceholder')"
+                :aria-label="$t('audit_form.email')"
+                :aria-invalid="!!errors.email"
+                :aria-describedby="errors.email ? 'err-popup-email' : undefined"
                 required
               />
-              <span v-if="errors.email" class="flow-error">{{ errors.email }}</span>
+              <span v-if="errors.email" id="err-popup-email" class="flow-error" role="alert">{{ errors.email }}</span>
               <VueTelInput
                 v-model="formData.phone"
                 v-bind="telInputOptions"
@@ -409,7 +462,22 @@ onMounted(() => {
                 type="text"
                 class="popup-input"
                 :placeholder="$t('audit_form.namePlaceholder')"
+                :aria-label="$t('audit_form.name')"
               />
+              <div class="audit-consent">
+                <label class="audit-consent-check">
+                  <input
+                    v-model="formConsent"
+                    type="checkbox"
+                    :aria-invalid="consentError"
+                    :aria-describedby="consentError ? 'popup-consent-error' : undefined"
+                  />
+                  <span>{{ $t('privacy_notice.consent') }}
+                    <NuxtLink :to="localePath('/legal/privacy')" class="audit-consent-link">{{ $t('privacy_notice.link') }}</NuxtLink>
+                  </span>
+                </label>
+                <span v-if="consentError" id="popup-consent-error" class="flow-error" role="alert">{{ $t('privacy_notice.required') }}</span>
+              </div>
               <button type="submit" class="popup-submit">{{ $t('audit_form.submit') }}</button>
             </form>
           </div>
@@ -489,6 +557,20 @@ onMounted(() => {
           class="flow-input"
           :placeholder="$t('audit_form.nameOptionalPlaceholder')"
         />
+        <div class="audit-consent">
+          <label class="audit-consent-check">
+            <input
+              v-model="formConsent"
+              type="checkbox"
+              :aria-invalid="consentError"
+              :aria-describedby="consentError ? 'flow-consent-error' : undefined"
+            />
+            <span>{{ $t('privacy_notice.consent') }}
+              <NuxtLink :to="localePath('/legal/privacy')" class="audit-consent-link">{{ $t('privacy_notice.link') }}</NuxtLink>
+            </span>
+          </label>
+          <span v-if="consentError" id="flow-consent-error" class="flow-error" role="alert">{{ $t('privacy_notice.required') }}</span>
+        </div>
         <button type="button" class="flow-next flow-next--submit" @click="goNext">{{ $t('audit_form.submit') }}</button>
       </div>
 
@@ -526,7 +608,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(36, 39, 46, 0.5);
+  color: rgba(36, 39, 46, 0.7);
   margin-bottom: 8px;
 }
 
@@ -585,13 +667,12 @@ onMounted(() => {
   border: 0.5px solid #24272e;
   border-radius: 0;
   color: var(--color-dark);
-  outline: none;
   transition: border-color 0.25s;
   -webkit-appearance: none;
   appearance: none;
 }
 .audit-input::placeholder { color: var(--color-muted, #6e7381); }
-.audit-input:focus { border-color: var(--color-accent); }
+.audit-input:focus { border-color: var(--color-accent-text); }
 
 .cta-button {
   display: block;
@@ -673,7 +754,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   margin-bottom: 8px;
 }
 
@@ -710,11 +791,10 @@ onMounted(() => {
   border: 0.5px solid #24272e;
   border-radius: 0;
   color: var(--color-dark);
-  outline: none;
   transition: border-color 0.25s;
 }
 .popup-input::placeholder { color: var(--color-muted); opacity: 0.5; }
-.popup-input:focus { border-color: var(--color-accent); }
+.popup-input:focus { border-color: var(--color-accent-text); }
 
 /* ── Tel input overrides ── */
 .tel-input-wrap {
@@ -731,12 +811,11 @@ onMounted(() => {
   border: 0.5px solid #24272e;
   border-radius: 0;
   padding: 14px 16px;
-  outline: none;
   transition: border-color 0.25s;
   background: transparent;
 }
 .tel-input-wrap :deep(.vti__input:focus) {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent-text);
   box-shadow: none;
 }
 .tel-input-wrap :deep(.vti__dropdown) {
@@ -905,16 +984,42 @@ onMounted(() => {
   background: var(--color-cream);
   border: 0.5px solid #24272e;
   padding: 14px 16px;
-  outline: none;
   transition: border-color 0.3s;
 }
 .flow-input::placeholder { color: var(--color-muted); opacity: 0.5; }
-.flow-input:focus { border-color: var(--color-accent); }
+.flow-input:focus { border-color: var(--color-accent-text); }
 .flow-error {
   font-family: var(--font);
   font-size: 13px;
   color: #c0392b;
   margin-top: -8px;
+}
+.audit-consent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.audit-consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--color-dark);
+  cursor: pointer;
+}
+.audit-consent-check input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  flex-shrink: 0;
+}
+.audit-consent-link {
+  color: var(--color-accent-text);
+  text-decoration: underline;
 }
 .flow-next {
   align-self: flex-start;
@@ -972,7 +1077,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   text-decoration: none;
   margin-top: 24px;
 }

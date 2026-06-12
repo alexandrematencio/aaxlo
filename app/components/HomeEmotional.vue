@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(36, 39, 46, 0.5);
+  color: rgba(36, 39, 46, 0.7);
   margin-bottom: 8px;
 }
 

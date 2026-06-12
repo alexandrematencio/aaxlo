@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Accueil",
     "services": "Services",
     "about": "À propos",
     "blog": "Blog",
@@ -86,6 +87,32 @@
   },
   "lang": {
     "switchTo": "Changer la langue en {lang}"
+  },
+  "splash": {
+    "scrollHint": "Scrollez pour forger"
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu",
+    "skipIntro": "Passer l'animation d'introduction",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "mainMenu": "Menu principal",
+    "expandServices": "Afficher le sous-menu Services",
+    "close": "Fermer"
+  },
+  "privacy_notice": {
+    "consent": "J'accepte qu'AAXLO traite mes informations pour répondre à ma demande.",
+    "notice": "Vos informations servent uniquement à traiter votre demande — jamais vendues ni partagées.",
+    "link": "Politique de confidentialité",
+    "required": "Veuillez confirmer votre accord avec la politique de confidentialité."
+  },
+  "consent": {
+    "ariaLabel": "Consentement aux cookies",
+    "title": "Votre vie privée compte",
+    "message": "Nous utilisons un outil de mesure d'audience auto-hébergé et respectueux de la vie privée (Umami) pour comprendre l'usage du site. Il ne se déclenche qu'avec votre consentement. Les cookies strictement nécessaires restent toujours actifs.",
+    "accept": "Accepter la mesure d'audience",
+    "reject": "Refuser",
+    "learnMore": "Politique de confidentialité"
   },
   "blog": {
     "pageTitle": "Blog — AAXLO",

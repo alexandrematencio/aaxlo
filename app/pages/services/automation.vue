@@ -7,10 +7,8 @@ const { data: servicesData } = await useLocalizedContent('/services')
 
 const svc = computed(() => servicesData.value?.automation)
 
-useHead({
-  title: svc.value?.seo?.title,
-  meta: [{ name: 'description', content: svc.value?.seo?.description }],
-})
+useContentSeo(svc)
+useServicePageSchema(svc, 'automation')
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
@@ -97,7 +95,7 @@ onMounted(() => {
       <div class="hero-grid">
         <div class="hero-meta">
           <span class="hero-label tw-hide">{{ svc?.label }}</span>
-          <span class="hero-index">{{ svc?.index }}</span>
+          <span class="hero-index" aria-hidden="true">{{ svc?.index }}</span>
         </div>
         <div class="hero-body">
           <h1 class="hero-title tw-hide">{{ svc?.heroTitle }}</h1>
@@ -128,13 +126,25 @@ onMounted(() => {
             :key="faq.question"
             class="faq-item tw-hide"
             :class="{ 'faq-open': faqOpen[idx] }"
-            @click="faqOpen[idx] = !faqOpen[idx]"
           >
-            <div class="faq-question">
+            <button
+              :id="`faq-trigger-${idx}`"
+              type="button"
+              class="faq-question"
+              :aria-expanded="faqOpen[idx]"
+              :aria-controls="`faq-panel-${idx}`"
+              @click="faqOpen[idx] = !faqOpen[idx]"
+            >
               <span>{{ faq.question }}</span>
-              <span class="faq-toggle">{{ faqOpen[idx] ? '&minus;' : '+' }}</span>
-            </div>
-            <div v-show="faqOpen[idx]" class="faq-answer">
+              <span class="faq-toggle" aria-hidden="true">{{ faqOpen[idx] ? '−' : '+' }}</span>
+            </button>
+            <div
+              v-show="faqOpen[idx]"
+              :id="`faq-panel-${idx}`"
+              role="region"
+              :aria-labelledby="`faq-trigger-${idx}`"
+              class="faq-answer"
+            >
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -166,14 +176,14 @@ onMounted(() => {
 .hero-logo { height: 28px; width: auto; }
 .hero-grid { display: grid; grid-template-columns: 240px 1fr; }
 .hero-meta { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 48px 32px; border-right: 0.5px solid #24272e; }
-.hero-label { font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; }
+.hero-label { font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent-text); letter-spacing: 0.15em; text-transform: uppercase; }
 .hero-index { font-family: var(--font); font-size: 140px; font-weight: 700; color: rgba(36, 39, 46, 0.04); line-height: 1; opacity: 0; }
 .hero-body { display: flex; flex-direction: column; justify-content: center; gap: 32px; padding: 64px 80px; max-width: 720px; }
 .hero-title { font-family: var(--font); font-size: 48px; font-weight: 600; color: var(--color-dark); line-height: 1.05; letter-spacing: -0.02em; }
 .hero-desc { font-family: var(--font); font-size: 18px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 
 .features-section { padding: 96px 80px; border-top: 0.5px solid #24272e; }
-.section-label { display: block; font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 48px; }
+.section-label { display: block; font-family: var(--font); font-size: 11px; font-weight: 300; color: var(--color-accent-text); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 48px; }
 .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 64px; }
 .feat-card { display: flex; flex-direction: column; gap: 12px; }
 .feat-title { font-family: var(--font); font-size: 22px; font-weight: 600; color: var(--color-dark); line-height: 1.2; }
@@ -188,8 +198,8 @@ onMounted(() => {
 .faq-item { border: 0.5px solid #24272e; border-top: none; cursor: pointer; padding: 14px 12px; transition: background 0.2s; }
 .faq-item:first-child { border-top: 0.5px solid #24272e; }
 .faq-item:hover { background: var(--color-cream, #fff1ef); }
-.faq-question { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
-.faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent); flex-shrink: 0; width: 24px; text-align: center; }
+.faq-question { width: 100%; background: none; border: none; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
+.faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent-text); flex-shrink: 0; width: 24px; text-align: center; }
 .faq-answer { padding-top: 12px; }
 .faq-answer p { font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--color-muted); line-height: 1.6; }
 

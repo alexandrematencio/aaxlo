@@ -253,7 +253,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 16px;
   font-weight: 300;
-  color: var(--color-muted);
+  color: var(--color-muted-on-dark);
   line-height: 1;
 }
 
@@ -321,7 +321,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 14px;
   font-weight: 300;
-  color: var(--color-muted);
+  color: var(--color-muted-on-dark);
   line-height: 1;
 }
 
@@ -332,11 +332,11 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 14px;
   font-weight: 300;
-  color: var(--color-muted);
+  color: var(--color-muted-on-dark);
 }
 
 .footer-lang-link {
-  color: var(--color-muted);
+  color: var(--color-muted-on-dark);
   transition: color 0.3s;
 }
 .footer-lang-link:hover,
@@ -345,7 +345,7 @@ onMounted(() => {
 }
 
 .footer-lang-sep {
-  color: var(--color-muted);
+  color: var(--color-muted-on-dark);
   user-select: none;
 }
 

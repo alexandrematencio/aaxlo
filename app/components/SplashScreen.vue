@@ -2,11 +2,36 @@
 import { gsap } from 'gsap'
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 const emit = defineEmits(['reveal', 'complete'])
+const { t } = useI18n()
 
 // ── Refs ──
 const splash = ref(null)
+const skipBtn = ref(null)
+
+// Timeline + one-shot guard so Skip / Escape / reduced-motion all resolve once.
+let tl = null
+let finished = false
+
+function finish() {
+  if (finished) return
+  finished = true
+  if (tl) tl.kill()
+  emit('reveal')
+  if (splash.value) splash.value.style.display = 'none'
+  if (import.meta.client) {
+    document.removeEventListener('keydown', onKeydown)
+    // Hand focus to the main content region the splash was covering.
+    requestAnimationFrame(() => document.getElementById('main-content')?.focus?.())
+  }
+  emit('complete')
+}
+
+function onKeydown(e) {
+  if (e.key === 'Escape') finish()
+}
 const bgRect = ref(null)
 const logoGroup = ref(null)
 const logoSvg = ref(null)
@@ -25,6 +50,16 @@ const localOpsEl = ref(null)
 onMounted(async () => {
   await nextTick()
   if (!splash.value || !logoSvg.value) return
+
+  // Reduced motion: skip the intro entirely and reveal the page.
+  if (prefersReducedMotion()) {
+    finish()
+    return
+  }
+
+  // Allow keyboard dismissal and surface the Skip control to assistive tech.
+  document.addEventListener('keydown', onKeydown)
+  skipBtn.value?.focus?.()
 
   const vw = window.innerWidth
   const vh = window.innerHeight
@@ -83,11 +118,8 @@ onMounted(async () => {
   // ══════════════════════════════════════════════════════
   // TIMELINE
   // ══════════════════════════════════════════════════════
-  const tl = gsap.timeline({
-    onComplete: () => {
-      if (splash.value) splash.value.style.display = 'none'
-      emit('complete')
-    },
+  tl = gsap.timeline({
+    onComplete: finish,
   })
 
   // ══════════════════════════════════════════════════════
@@ -337,13 +369,26 @@ onMounted(async () => {
     duration: 0.4, ease: 'power3.inOut',
   })
 })
+
+onUnmounted(() => {
+  if (import.meta.client) document.removeEventListener('keydown', onKeydown)
+})
 </script>
 
 <template>
-  <div ref="splash" class="splash">
-    <div ref="bgRect" class="bg-rect" />
+  <div ref="splash" class="splash" role="presentation">
+    <button
+      ref="skipBtn"
+      type="button"
+      class="splash-skip"
+      @click="finish"
+    >
+      {{ t('a11y.skipIntro') }}
+    </button>
 
-    <div ref="logoGroup" class="logo-group">
+    <div ref="bgRect" class="bg-rect" aria-hidden="true" />
+
+    <div ref="logoGroup" class="logo-group" aria-hidden="true">
       <svg
         ref="logoSvg"
         class="logo-svg"
@@ -445,6 +490,39 @@ onMounted(async () => {
   background: white;
   will-change: clip-path, opacity, transform;
   overflow: hidden;
+}
+
+/* Skip control — keyboard-focusable, dismisses the intro at any time.
+   Bottom-center, discreet: echoes the site's small uppercase label style.
+   Padding keeps the hit area ≥ 24px (WCAG 2.5.8) despite the small type. */
+.splash-skip {
+  position: absolute;
+  bottom: max(28px, env(safe-area-inset-bottom, 28px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  padding: 10px 18px;
+  font-family: var(--font, sans-serif);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  /* The splash starts as a full dark screen, then turns white as the rect
+     shrinks — white + difference blending keeps the label legible on both. */
+  color: #fff;
+  mix-blend-mode: difference;
+  opacity: 0.55;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.25s;
+}
+.splash-skip:hover,
+.splash-skip:focus-visible { opacity: 1; }
+
+/* Reduced motion: never show the intro (also avoids a pre-hydration flash) */
+@media (prefers-reduced-motion: reduce) {
+  .splash { display: none !important; }
 }
 
 .bg-rect {

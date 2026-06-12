@@ -318,7 +318,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .fix-text {
@@ -337,7 +337,7 @@ onMounted(() => {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   text-decoration: none;
   margin-top: 4px;
   transition: color 0.2s;

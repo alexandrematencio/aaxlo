@@ -1,5 +1,6 @@
 <script setup>
 import { gsap } from 'gsap'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 const props = defineProps({
   content: { type: Object, default: null },
@@ -259,7 +260,9 @@ onBeforeUnmount(() => {
 })
 
 onMounted(() => {
-  if (props.skip) {
+  // Reduced motion: skip the scramble entirely and show the resolved hero.
+  // (The scramble cycles textContent via setInterval, which CSS cannot stop.)
+  if (props.skip || prefersReducedMotion()) {
     showFinalState()
     return
   }
@@ -269,7 +272,9 @@ onMounted(() => {
 })
 
 watch(() => props.animate, (val) => {
-  if (val && !props.skip) runAnimation()
+  if (!val) return
+  if (props.skip || prefersReducedMotion()) showFinalState()
+  else runAnimation()
 })
 </script>
 

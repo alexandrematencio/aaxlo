@@ -1,7 +1,12 @@
 /* ─────────────────────────────── */
-/* Global Fonts (Switzer via CDN)  */
+/* Global Fonts (Switzer, self-hosted) */
+/* Self-hosted to avoid leaking visitor IPs to a third-party font CDN          */
+/* (RGPD) and to remove a render-blocking external request. Files in /public/fonts. */
+/*                                                                             */
+/* The @font-face rules are NOT here: their src url() needs the runtime base   */
+/* path (e.g. /aaxlo/ on GitHub Pages) and a static .css cannot be prefixed by */
+/* Nuxt. They are injected from app.vue with useRuntimeConfig().app.baseURL.   */
 /* ─────────────────────────────── */
-@import url('https://api.fontshare.com/v2/css?f[]=switzer@100,200,300,400,500,600,700,800,900,1,2&display=swap');
 
 /* ─────────────────────────────── */
 /* Global reset & tokens           */
@@ -12,8 +17,15 @@
   --color-dark:    #24272e;
   --color-white:   #fcfcfc;
   --color-accent:  #ff8270;
+  /* Coral is too light for text on light backgrounds (WCAG 1.4.3 ~2.2:1).
+     Use this deeper coral for small coral text/links on light surfaces;
+     keep --color-accent for buttons, borders, large/decorative, and dark surfaces. */
+  --color-accent-text: #bd4329;
   --color-border:  rgba(36, 39, 46, 0.18);
-  --color-muted:   #6e7381;
+  /* Darkened from #6e7381 so muted body text clears 4.5:1 on cream/white. */
+  --color-muted:   #5e6370;
+  /* Lighter muted for use on dark surfaces (footer, dark cards). */
+  --color-muted-on-dark: rgba(252, 252, 252, 0.72);
   --font: 'Switzer', 'Inter', sans-serif;
 }
 
@@ -68,6 +80,83 @@ a { text-decoration: none; color: inherit; }
    final state: inset(-0.1em 0% -0.25em 0) */
 .tw-hide {
   clip-path: inset(-0.1em 100% -0.25em 0);
+}
+
+/* ─────────────────────────────── */
+/* Accessibility utilities          */
+/* ─────────────────────────────── */
+
+/* Screen-reader-only text (visually hidden, still announced) */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visible keyboard focus indicator site-wide (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ─────────────────────────────── */
+/* Reduced motion (respects OS pref) */
+/* Neutralises CSS transitions/animations and forces every GSAP    */
+/* reveal state to its final, visible value so nothing stays hidden */
+/* and clip-path / opacity tweens have no visible effect.           */
+/* ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Clip-path reveal system → fully revealed */
+  .tw-hide,
+  .forge-section {
+    clip-path: none !important;
+    visibility: visible !important;
+  }
+  .forge-section {
+    transform: none !important;
+  }
+
+  /* Any element hidden/faded via inline opacity (template or GSAP) → visible.
+     The substring match also clamps in-flight opacity tweens, preventing flicker. */
+  [style*="opacity: 0"],
+  [style*="opacity:0"] {
+    opacity: 1 !important;
+  }
+
+  /* Decorative sweep/scramble effects add nothing without motion, and the broad
+     opacity reset above would otherwise force these hidden decorations visible. */
+  .trail-layer,
+  .glyph-mask,
+  .btn-shine,
+  .btn-sparkle-wrap {
+    display: none !important;
+  }
+
+  /* Pen-draw lines are GSAP-scaled in; show them at rest */
+  .draw-h {
+    transform: scaleX(1) !important;
+  }
+  .draw-v {
+    transform: scaleY(1) !important;
+  }
 }
 
 /* ─────────────────────────────── */
