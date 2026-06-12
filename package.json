@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "clean": "rm -rf .output dist",
-    "predeploy": "npm run clean && NUXT_APP_BASE_URL=/aaxlo/ nuxt generate && touch .output/public/.nojekyll && cp .output/public/200.html .output/public/index.html",
+    "predeploy": "npm run clean && NUXT_APP_BASE_URL=/aaxlo/ nuxt generate && rm -f dist .output/public/dist && touch .output/public/.nojekyll && cp .output/public/200.html .output/public/index.html",
     "deploy": "gh-pages -d .output/public --dotfiles -m \"chore(deploy): publish static export\""
   },
   "dependencies": {
