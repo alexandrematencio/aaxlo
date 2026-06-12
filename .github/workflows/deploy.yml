@@ -1,0 +1,56 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "."
+          target: "/srv/aaxlo/app"
+          rm: true  # clean old files before copying
+
+      - name: Build and restart on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /srv/aaxlo
+            docker compose build --no-cache
+            docker compose up -d
+            
+            # Wait for healthy
+            echo "Waiting for container to be healthy..."
+            for i in $(seq 1 30); do
+              STATUS=$(docker inspect --format='{{.State.Health.Status}}' aaxlo 2>/dev/null)
+              if [ "$STATUS" = "healthy" ]; then
+                echo "✓ Container is healthy!"
+                break
+              fi
+              echo "  Attempt $i/30 — status: $STATUS"
+              sleep 5
+            done
+            
+            # Show status
+            docker ps | grep aaxlo
+            
+            # Cleanup old images
+            docker image prune -f

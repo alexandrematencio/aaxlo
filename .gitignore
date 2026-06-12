@@ -1,0 +1,19 @@
+node_modules
+.nuxt
+.output
+.env*.local
+dev.log
+.DS_Store
+*.otf
+.data
+AAXLO—Branding colors.pdf
+AAXLO_Branding.md
+aaxlo_landing_page_execute.md
+aaxlo_sitemap.md
+codepen-splash.html
+pencil-new.pen
+docs/superpowers/*
+local-design-files/*
+
+# Cloned external tool (its own git repo) — not part of the AAXLO project
+claude-seo/
