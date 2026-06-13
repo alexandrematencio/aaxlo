@@ -20,7 +20,7 @@ privacy:
         Nous ne collectons que ce qui est nécessaire :
 
         • Les informations que vous nous transmettez via nos formulaires — votre nom, adresse e-mail, numéro de téléphone, nom de votre entreprise, URL de votre site et tout message envoyé lorsque vous demandez un audit ou nous contactez.
-        • Des données d'utilisation limitées — si vous consentez à la mesure d'audience, notre outil respectueux de la vie privée enregistre des statistiques telles que les pages vues, le site référent, votre région approximative et le type d'appareil. Nous ne créons pas de profils publicitaires et ne vous suivons pas sur d'autres sites.
+        • Des données d'utilisation limitées et anonymes — notre outil de mesure d'audience respectueux de la vie privée enregistre des statistiques agrégées telles que les pages vues, le site référent, votre région approximative et le type d'appareil. Il fonctionne sans cookie et sans identifiant persistant : nous ne créons pas de profils publicitaires et ne vous suivons pas sur d'autres sites.
 
         Nous ne collectons pas sciemment de données concernant des mineurs et ne traitons pas de données sensibles.
     - heading: "3. Finalités et base légale"
@@ -28,19 +28,18 @@ privacy:
         Conformément au RGPD et à la loi Informatique et Libertés, nous nous appuyons sur les bases légales suivantes :
 
         • Répondre à votre demande et préparer votre audit — sur la base des mesures prises à votre demande avant tout contrat (article 6(1)(b) du RGPD) et de votre consentement lorsque vous cochez la case prévue à cet effet.
-        • Mesurer et améliorer notre site — sur la base de votre consentement aux cookies de mesure d'audience (article 6(1)(a) du RGPD), que vous pouvez donner ou retirer à tout moment.
+        • Mesurer et améliorer notre site — sur la base de notre intérêt légitime à comprendre l'usage de nos contenus (article 6(1)(f) du RGPD). Notre mesure d'audience étant anonyme et sans cookie, elle relève des solutions exemptées de consentement par la CNIL ; vous pouvez néanmoins vous y opposer à tout moment (voir « Vos droits »).
         • Respecter nos obligations légales — lorsque la loi nous impose de conserver certaines informations (article 6(1)(c) du RGPD).
     - heading: "4. Cookies et mesure d'audience"
       text: |
-        Nous limitons les cookies et stockages similaires au strict minimum et demandons votre consentement avant tout dépôt non strictement nécessaire. Vous pouvez modifier votre choix à tout moment en supprimant le cookie aaxlo_consent dans votre navigateur.
+        Nous limitons les cookies et stockages similaires au strict minimum. Nous n'affichons pas de bandeau cookies car nous ne déposons aucun cookie de pistage : seuls quelques cookies strictement nécessaires/fonctionnels sont utilisés, et notre mesure d'audience fonctionne sans cookie.
 
         Strictement nécessaires / fonctionnels (sans consentement) :
         • i18n_redirected — mémorise votre langue. Jusqu'à ~1 an.
-        • aaxlo_consent — mémorise vos choix de cookies. Jusqu'à 180 jours.
         • aaxlo_splash_seen — mémorise que l'animation d'introduction a déjà été jouée pendant votre visite. Supprimé à la fermeture du navigateur.
 
-        Mesure d'audience (uniquement avec votre consentement) :
-        • Umami — notre outil de mesure d'audience auto-hébergé et respectueux de la vie privée, servi depuis stats.aaxlo.com (identifiant de site 1901d0b6-3115-415d-b76e-6d4ef2061f81). Il n'est chargé qu'après votre acceptation et nous aide à comprendre quels contenus sont utiles. Aucune donnée n'est partagée avec des régies publicitaires.
+        Mesure d'audience (sans cookie, exemptée de consentement) :
+        • Umami — notre outil de mesure d'audience auto-hébergé et respectueux de la vie privée, servi depuis stats.aaxlo.com (identifiant de site 1901d0b6-3115-415d-b76e-6d4ef2061f81). Il ne dépose aucun cookie, n'utilise aucun identifiant persistant et produit uniquement des statistiques agrégées et anonymes. Aucune donnée n'est partagée avec des régies publicitaires.
     - heading: "5. Destinataires"
       text: |
         Nous ne vendons jamais vos données personnelles. Nous les partageons uniquement avec les prestataires qui nous aident à faire fonctionner AAXLO, et seulement dans la mesure nécessaire :
@@ -54,7 +53,7 @@ privacy:
         AAXLO opère à l'international et ses clients sont situés en France, ailleurs dans l'Union européenne, et hors UE (par exemple aux États-Unis). À mesure que nous déplaçons nos opérations vers Singapour, certaines données pourront être traitées en dehors de l'Espace économique européen. Dans ce cas, nous nous appuyons sur une décision d'adéquation de la Commission européenne lorsqu'elle existe, ou à défaut sur les clauses contractuelles types de l'UE assorties de garanties appropriées, afin que vos données bénéficient d'un niveau de protection essentiellement équivalent.
     - heading: "7. Durée de conservation"
       text: |
-        Nous conservons les informations de demande et d'audit uniquement le temps nécessaire au traitement de votre demande et à notre relation, puis pendant la durée requise par nos obligations légales, après quoi elles sont supprimées ou anonymisées. Nous conservons la preuve de vos choix de consentement aussi longtemps que la loi l'exige.
+        Nous conservons les informations de demande et d'audit uniquement le temps nécessaire au traitement de votre demande et à notre relation, puis pendant la durée requise par nos obligations légales, après quoi elles sont supprimées ou anonymisées. Lorsque vous cochez la case de consentement d'un formulaire, nous en conservons la preuve aussi longtemps que la loi l'exige. Les statistiques de mesure d'audience sont anonymes et ne se rattachent à aucune personne identifiable.
     - heading: "8. Vos droits"
       text: |
         Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et d'opposition au traitement, d'un droit à la portabilité, ainsi que du droit de retirer votre consentement à tout moment sans remettre en cause les traitements déjà effectués. Pour exercer ces droits, écrivez-nous à hi@aaxlo.com ; nous répondrons dans les délais prévus par le RGPD.

@@ -52,7 +52,6 @@ useHead(() => ({
     </main>
     <AppFooter />
     <StripeTransition />
-    <CookieConsent />
   </div>
 </template>
 

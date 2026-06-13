@@ -18,3 +18,10 @@ local-design-files/*
 
 # Cloned external tool (its own git repo) — not part of the AAXLO project
 claude-seo/
+
+# Splash experiment pages — kept local, not shipped
+app/pages/splash-lab.vue
+app/pages/splash-lab-2.vue
+app/pages/splash-lab-3.vue
+app/pages/splash-lab-3-2.vue
+app/pages/splash-pace-test.vue

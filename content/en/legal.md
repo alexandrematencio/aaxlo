@@ -20,7 +20,7 @@ privacy:
         We only collect what we need:
 
         • Information you give us through our forms — your name, email address, phone number, business name, website URL and any message you send when you request an audit or contact us.
-        • Limited usage data — if you consent to analytics, our privacy-friendly tool records usage statistics such as pages viewed, the site that referred you, your approximate region and your device type. We do not build advertising profiles and we do not track you across other websites.
+        • Limited, anonymous usage data — our privacy-friendly analytics tool records aggregated statistics such as pages viewed, the site that referred you, your approximate region and your device type. It runs without cookies and without persistent identifiers: we do not build advertising profiles and we do not track you across other websites.
 
         We do not knowingly collect data from children and we do not process special-category data.
     - heading: "3. Why we use your data and our legal basis"
@@ -28,19 +28,18 @@ privacy:
         Under the GDPR and France's loi Informatique et Libertés, we rely on the following legal bases:
 
         • To answer your enquiry and prepare your audit — on the basis of the steps taken at your request prior to any contract (GDPR Article 6(1)(b)), and on your consent where you tick the consent box on a form.
-        • To measure and improve our website — on the basis of your consent for analytics cookies (GDPR Article 6(1)(a)), which you can give or withdraw at any time.
+        • To measure and improve our website — on the basis of our legitimate interest in understanding how our content is used (GDPR Article 6(1)(f)). Because our analytics are anonymous and cookieless, they fall within the analytics solutions that France's CNIL exempts from consent; you can still object at any time (see "Your rights").
         • To meet our legal obligations — where the law requires us to keep certain records (GDPR Article 6(1)(c)).
     - heading: "4. Cookies and analytics"
       text: |
-        We keep cookies and similar storage to a minimum and ask for your consent before using anything that is not strictly necessary. You can change your choice at any time by clearing the aaxlo_consent cookie in your browser.
+        We keep cookies and similar storage to a minimum. We do not show a cookie banner because we set no tracking cookies: we use only a few strictly necessary/functional cookies, and our analytics run without cookies.
 
         Strictly necessary / functional (no consent required):
         • i18n_redirected — remembers your language preference. Up to ~1 year.
-        • aaxlo_consent — remembers your cookie choices. Up to 180 days.
         • aaxlo_splash_seen — remembers that the intro animation has already played during your visit. Cleared when you close the browser.
 
-        Analytics (only with your consent):
-        • Umami — our self-hosted, privacy-friendly analytics, served from stats.aaxlo.com (website ID 1901d0b6-3115-415d-b76e-6d4ef2061f81). It loads only after you accept analytics and helps us understand which content is useful. No data is shared with advertising networks.
+        Analytics (cookieless, exempt from consent):
+        • Umami — our self-hosted, privacy-friendly analytics, served from stats.aaxlo.com (website ID 1901d0b6-3115-415d-b76e-6d4ef2061f81). It sets no cookies, uses no persistent identifiers and produces only aggregated, anonymous statistics. No data is shared with advertising networks.
     - heading: "5. Who we share it with"
       text: |
         We never sell your personal data. We share it only with the service providers that help us run AAXLO, and only as far as needed:
@@ -54,7 +53,7 @@ privacy:
         AAXLO operates internationally and our clients are based in France, elsewhere in the European Union, and outside it (for example the United States). As we move operations toward Singapore, some data may be processed outside the European Economic Area. Where that happens we rely on a European Commission adequacy decision where one exists, or otherwise on the EU Standard Contractual Clauses together with appropriate safeguards, so that your data continues to receive an essentially equivalent level of protection.
     - heading: "7. How long we keep your data"
       text: |
-        We keep enquiry and audit information only as long as needed to handle your request and our relationship with you, and then for any period required to meet our legal obligations, after which it is deleted or anonymised. We keep a record of your consent choices for as long as the law requires us to be able to demonstrate them.
+        We keep enquiry and audit information only as long as needed to handle your request and our relationship with you, and then for any period required to meet our legal obligations, after which it is deleted or anonymised. Where you tick a consent box on a form, we keep a record of it for as long as the law requires us to be able to demonstrate it. Analytics statistics are anonymous and are not tied to any identifiable person.
     - heading: "8. Your rights"
       text: |
         You have the right to access your personal data, to have it corrected or deleted, to restrict or object to its processing, to data portability, and to withdraw consent at any time without affecting processing carried out beforehand. To exercise any of these rights, email us at hi@aaxlo.com and we will respond within the timeframes set by the GDPR.
