@@ -1,0 +1,1 @@
+import{_ as t,o as s,c as a,a as c,a0 as o}from"./CPVMVdbs.js";const n={},r={class:"reveal-section content-section art-list"},i={class:"art-list-items"};function _(e,d){return s(),a("div",r,[c("ol",i,[o(e.$slots,"default",{},void 0,!0)])])}const f=Object.assign(t(n,[["render",_],["__scopeId","data-v-f3d4a3db"]]),{__name:"ArticleList"});export{f as default};
