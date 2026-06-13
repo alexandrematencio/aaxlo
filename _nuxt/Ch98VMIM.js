@@ -1,1 +1,0 @@
-import{_ as t,o as a,c as s,a as c,a0 as o}from"./CPVMVdbs.js";const n={},r={class:"reveal-section content-section art-lead"},d={class:"lead-text"};function _(e,l){return a(),s("div",r,[c("p",d,[o(e.$slots,"default",{},void 0,!0)])])}const f=Object.assign(t(n,[["render",_],["__scopeId","data-v-84a038f6"]]),{__name:"ArticleLead"});export{f as default};
