@@ -97,25 +97,25 @@
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/about</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/about" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/about" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/about" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/about" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/about" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/about" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/about" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/about" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/about" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/about" />
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/audit</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/audit" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/audit" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/audit" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/audit" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/audit" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/audit" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/audit" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/audit" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/audit" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/audit" />
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/blog</loc>
@@ -422,42 +422,42 @@
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/legal/privacy</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/legal/privacy" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/legal/privacy" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/legal/privacy" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/legal/privacy" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/legal/privacy" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/legal/privacy" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/legal/privacy" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/legal/privacy" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/legal/privacy" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/legal/privacy" />
         <image:image>
             <image:loc>https://aaxlo.com/images/axxlo-logo.svg</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/legal/terms</loc>
-        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/legal/terms" hreflang="x-default" />
-        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/legal/terms" hreflang="en-US" />
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/legal/terms" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/legal/terms" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/legal/terms" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/legal/terms" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/legal/terms" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/legal/terms" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/legal/terms" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/legal/terms" />
         <image:image>
             <image:loc>https://aaxlo.com/images/axxlo-logo.svg</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/services/automation</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/services/automation" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/automation" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/automation" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/services/automation" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/services/automation" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/services/automation" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/services/automation" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/services/automation" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/services/automation" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/services/automation" />
         <image:image>
             <image:loc>https://aaxlo.com/images/axxlo-logo.svg</image:loc>
         </image:image>
@@ -492,28 +492,28 @@
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/services/visibility</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/services/visibility" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/visibility" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/visibility" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/services/visibility" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/services/visibility" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/services/visibility" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/services/visibility" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/services/visibility" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/services/visibility" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/services/visibility" />
         <image:image>
             <image:loc>https://aaxlo.com/images/axxlo-logo.svg</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://aaxlo.com/aaxlo/en/services/web</loc>
-        <xhtml:link rel="alternate" hreflang="en-US" href="https://aaxlo.com/aaxlo/en/services/web" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/web" hreflang="x-default" />
+        <xhtml:link rel="alternate" href="https://aaxlo.com/aaxlo/en/services/web" hreflang="en-US" />
         <xhtml:link rel="alternate" hreflang="fr-FR" href="https://aaxlo.com/aaxlo/fr/services/web" />
         <xhtml:link rel="alternate" hreflang="es-ES" href="https://aaxlo.com/aaxlo/es/services/web" />
         <xhtml:link rel="alternate" hreflang="de-DE" href="https://aaxlo.com/aaxlo/de/services/web" />
         <xhtml:link rel="alternate" hreflang="pt-BR" href="https://aaxlo.com/aaxlo/pt/services/web" />
         <xhtml:link rel="alternate" hreflang="ru-RU" href="https://aaxlo.com/aaxlo/ru/services/web" />
         <xhtml:link rel="alternate" hreflang="vi-VN" href="https://aaxlo.com/aaxlo/vi/services/web" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://aaxlo.com/aaxlo/en/services/web" />
         <image:image>
             <image:loc>https://aaxlo.com/images/axxlo-logo.svg</image:loc>
         </image:image>
@@ -869,4 +869,4 @@
         </image:image>
     </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v8.2.1 at 2026-06-13T23:06:16.280Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v8.2.1 at 2026-06-13T23:16:12.176Z -->
