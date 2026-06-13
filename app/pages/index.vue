@@ -92,7 +92,7 @@ onMounted(() => {
 
 <template>
   <div class="homepage">
-    <SplashScreen
+    <SplashScreenV5
       v-if="showSplash"
       @reveal="onSplashReveal"
       @complete="onSplashComplete"

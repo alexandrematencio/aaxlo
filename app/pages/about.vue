@@ -154,7 +154,7 @@ onMounted(() => {
 /* ── STORY ── */
 .story-section {
   padding: 96px 80px;
-  border-top: 0.5px solid #24272e;
+  /* No border-top: the hero's border-bottom above owns the shared delimiter */
 }
 
 .story-grid {

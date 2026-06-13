@@ -89,7 +89,8 @@
     "switchTo": "Changer la langue en {lang}"
   },
   "splash": {
-    "scrollHint": "Scrollez pour forger"
+    "scrollHint": "Scrollez pour forger",
+    "skipAnimation": "Passer l'animation"
   },
   "a11y": {
     "skipToContent": "Aller au contenu",

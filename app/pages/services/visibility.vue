@@ -364,15 +364,13 @@ onMounted(() => {
   flex-direction: column;
 }
 
+/* Top edge owned by .faq-label-cell's border-bottom — no border-top here */
 .faq-item {
   border: 0.5px solid #24272e;
   border-top: none;
   cursor: pointer;
   padding: 14px 12px;
   transition: background 0.2s;
-}
-.faq-item:first-child {
-  border-top: 0.5px solid #24272e;
 }
 
 .faq-item:hover {

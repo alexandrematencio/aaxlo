@@ -246,8 +246,7 @@ onMounted(() => {
 .faq-label-cell .section-label { margin-bottom: 8px; }
 .faq-title { font-family: var(--font); font-size: clamp(28px, 4vw, 44px); font-weight: 600; color: var(--color-dark); line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
 .faq-list { display: flex; flex-direction: column; }
-.faq-item { border: 0.5px solid #24272e; border-top: none; padding: 14px 12px; transition: background 0.2s; }
-.faq-item:first-child { border-top: 0.5px solid #24272e; }
+.faq-item { border: 0.5px solid #24272e; border-top: none; padding: 14px 12px; transition: background 0.2s; } /* top edge owned by .faq-label-cell's border-bottom */
 .faq-item:hover { background: var(--color-cream, #fff1ef); }
 .faq-question { width: 100%; background: none; border: none; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 24px; font-family: var(--font); font-size: 18px; font-weight: 500; color: var(--color-dark); line-height: 1.3; }
 .faq-toggle { font-size: 24px; font-weight: 300; color: var(--color-accent-text); flex-shrink: 0; width: 24px; text-align: center; }
