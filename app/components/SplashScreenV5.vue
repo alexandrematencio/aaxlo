@@ -24,6 +24,13 @@ gsap.registerPlugin(MorphSVGPlugin)
 const emit = defineEmits(['reveal', 'complete'])
 const { t } = useI18n()
 
+const props = defineProps({
+  // Cadence du reveal. 'auto' (production) : détecte le type d'appareil.
+  // 'touch' / 'desktop' : force la cadence — utilisé par la page de test dédiée
+  // pour comparer les deux rendus sur une même machine.
+  pace: { type: String, default: 'auto' },
+})
+
 // ── Refs ──
 const splash = ref(null)
 const skipBtn = ref(null)
@@ -58,6 +65,19 @@ let current = 0         // lerped progress applied to ftl
 // 44% là où V4 révélait 50% → budget = 960 × (50/44) ≈ 1091.
 const SCROLL_BUDGET = 1091 // px of accumulated delta for full formation
 
+// Appareils tactiles (smartphone / tablette — PAS un laptop/desktop, même
+// tactile : leur pointeur PRIMAIRE reste fin) : un swipe au pouce déplace bien
+// plus de « contenu » qu'un cran de molette ou un geste de touchpad. On réduit
+// donc de 15 % le budget de scroll (formation) ET la durée de l'animation de fin
+// (glyph), pour que le splash se vive à la même cadence ressentie. La vue
+// desktop/laptop n'est pas touchée.
+const TOUCH_FACTOR = 0.85
+
+// Résolus côté client dans onMounted (selon `pace` + media query). Définis ici
+// pour que les handlers wheel/touch (portée setup) lisent la bonne valeur.
+let isTouch = false
+let activeBudget = SCROLL_BUDGET
+
 const clamp01 = v => Math.min(1, Math.max(0, v))
 
 function finish() {
@@ -89,7 +109,7 @@ function interact(delta) {
 function onWheel(e) {
   e.preventDefault()
   const px = e.deltaY * (e.deltaMode === 1 ? 16 : 1)
-  interact(px / SCROLL_BUDGET)
+  interact(px / activeBudget)
 }
 
 let lastTouchY = null
@@ -101,7 +121,7 @@ function onTouchMove(e) {
   e.preventDefault()
   const y = e.touches[0].clientY
   // ×2 : un geste de pouce confortable doit suffire à forger le logo entier
-  interact(((lastTouchY - y) * 2) / SCROLL_BUDGET)
+  interact(((lastTouchY - y) * 2) / activeBudget)
   lastTouchY = y
 }
 
@@ -166,6 +186,15 @@ onMounted(async () => {
   const vw = window.innerWidth
   const vh = window.innerHeight
   const headerH = 64
+
+  // Cadence : tactile (smartphone/tablette) = budget de scroll et animation de
+  // fin réduits de 15 %. Un appareil tactile « vrai » a un pointeur primaire
+  // grossier ET pas de survol — ce qui exclut les laptops/desktops, même ceux
+  // dotés d'un écran tactile (leur pointeur primaire reste le trackpad/souris).
+  isTouch = props.pace === 'auto'
+    ? window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    : props.pace === 'touch'
+  activeBudget = isTouch ? SCROLL_BUDGET * TOUCH_FACTOR : SCROLL_BUDGET
 
   // Centre le logo-group via GSAP (pas CSS) pour composer avec x/y du collapse
   gsap.set(logoGroup.value, { xPercent: -50, yPercent: -50 })
@@ -250,6 +279,9 @@ onMounted(async () => {
     gsap.to(readoutEl.value, { autoAlpha: 0, duration: 0.3, delay: 0.2 })
 
     endTl = gsap.timeline({ onComplete: finish, delay: 0.15 })
+    // Tactile : l'animation de fin (glyph) joue 15 % plus vite. timeScale est
+    // appliqué à toute la timeline quel que soit le moment où on le pose.
+    if (isTouch) endTl.timeScale(1 / TOUCH_FACTOR)
 
     // O → disque parfait (block5 porte désormais la forme du O)
     endTl.to(block5.value, {
