@@ -68,10 +68,17 @@ const SCROLL_BUDGET = 1091 // px of accumulated delta for full formation
 // Appareils tactiles (smartphone / tablette — PAS un laptop/desktop, même
 // tactile : leur pointeur PRIMAIRE reste fin) : un swipe au pouce déplace bien
 // plus de « contenu » qu'un cran de molette ou un geste de touchpad. On réduit
-// donc de 15 % le budget de scroll (formation) ET la durée de l'animation de fin
-// (glyph), pour que le splash se vive à la même cadence ressentie. La vue
-// desktop/laptop n'est pas touchée.
-const TOUCH_FACTOR = 0.85
+// donc le budget de scroll (formation) ET la durée de l'animation de fin (glyph),
+// pour que le splash se vive à la même cadence ressentie. La vue desktop/laptop
+// n'est pas touchée.
+const TOUCH_FACTOR = 0.85 // animation de fin (glyph) : −15 %
+// Reveal scroll (formation) sur tactile, affiné par itérations successives :
+//  • deux crans −15 % au-delà de l'endgame (× 0,85 × 0,85 ≈ 0,6141),
+//  • puis +5 % de vitesse ressentie (budget ÷ 1,05) → la formation se complète
+//    un peu plus vite pour un même geste.
+// Le swipe au pouce restant le geste le plus « généreux ». Desktop/laptop non
+// touchés (le budget plein SCROLL_BUDGET reste utilisé hors tactile).
+const SCROLL_TOUCH_FACTOR = (TOUCH_FACTOR * 0.85 * 0.85) / 1.05 // ≈ 0.5849 → budget tactile −41,5 %
 
 // Résolus côté client dans onMounted (selon `pace` + media query). Définis ici
 // pour que les handlers wheel/touch (portée setup) lisent la bonne valeur.
@@ -187,14 +194,14 @@ onMounted(async () => {
   const vh = window.innerHeight
   const headerH = 64
 
-  // Cadence : tactile (smartphone/tablette) = budget de scroll et animation de
-  // fin réduits de 15 %. Un appareil tactile « vrai » a un pointeur primaire
-  // grossier ET pas de survol — ce qui exclut les laptops/desktops, même ceux
-  // dotés d'un écran tactile (leur pointeur primaire reste le trackpad/souris).
+  // Cadence : tactile (smartphone/tablette) = budget de scroll (−41,5 %, +5 % de
+  // vitesse) et animation de fin (−15 %). Un appareil tactile « vrai » a un pointeur
+  // primaire grossier ET pas de survol — ce qui exclut les laptops/desktops, même
+  // ceux dotés d'un écran tactile (leur pointeur primaire reste le trackpad/souris).
   isTouch = props.pace === 'auto'
     ? window.matchMedia('(hover: none) and (pointer: coarse)').matches
     : props.pace === 'touch'
-  activeBudget = isTouch ? SCROLL_BUDGET * TOUCH_FACTOR : SCROLL_BUDGET
+  activeBudget = isTouch ? SCROLL_BUDGET * SCROLL_TOUCH_FACTOR : SCROLL_BUDGET
 
   // Centre le logo-group via GSAP (pas CSS) pour composer avec x/y du collapse
   gsap.set(logoGroup.value, { xPercent: -50, yPercent: -50 })
