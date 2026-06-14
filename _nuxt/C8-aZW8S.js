@@ -1,0 +1,1 @@
+import{_ as a,o as t,c as s,a as r,a0 as c}from"./B6LlTLR-.js";const o={},n={class:"reveal-section content-section art-paragraph"},_={class:"paragraph-text"};function d(e,p){return t(),s("div",n,[r("p",_,[c(e.$slots,"default",{},void 0,!0)])])}const l=Object.assign(a(o,[["render",d],["__scopeId","data-v-6462ebc6"]]),{__name:"ArticleParagraph"});export{l as default};
