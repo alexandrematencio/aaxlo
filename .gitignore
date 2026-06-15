@@ -24,4 +24,4 @@ app/pages/splash-lab.vue
 app/pages/splash-lab-2.vue
 app/pages/splash-lab-3.vue
 app/pages/splash-lab-3-2.vue
-# splash-pace-test.vue is now versioned (cadence test + full scroll/endgame specs)
+app/pages/splash-pace-test.vue
