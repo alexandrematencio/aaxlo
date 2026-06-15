@@ -47,6 +47,7 @@ const solidDisk = ref(null)
 const glyphGroup = ref(null)
 const hintEl = ref(null)
 const readoutEl = ref(null)
+const progressFill = ref(null)
 
 // ── State ──
 let ftl = null          // formation timeline (paused, scrubbed)
@@ -74,11 +75,12 @@ const SCROLL_BUDGET = 1091 // px of accumulated delta for full formation
 const TOUCH_FACTOR = 0.85 // animation de fin (glyph) : −15 %
 // Reveal scroll (formation) sur tactile, affiné par itérations successives :
 //  • deux crans −15 % au-delà de l'endgame (× 0,85 × 0,85 ≈ 0,6141),
-//  • puis +5 % de vitesse ressentie (budget ÷ 1,05) → la formation se complète
-//    un peu plus vite pour un même geste.
+//  • puis +5 % de vitesse ressentie (budget ÷ 1,05),
+//  • puis −9 % de scroll en plus (× 0,91) → la formation se complète encore
+//    plus vite pour un même geste.
 // Le swipe au pouce restant le geste le plus « généreux ». Desktop/laptop non
 // touchés (le budget plein SCROLL_BUDGET reste utilisé hors tactile).
-const SCROLL_TOUCH_FACTOR = (TOUCH_FACTOR * 0.85 * 0.85) / 1.05 // ≈ 0.5849 → budget tactile −41,5 %
+const SCROLL_TOUCH_FACTOR = (TOUCH_FACTOR * 0.85 * 0.85) / 1.05 * 0.91 // ≈ 0.5322 → budget tactile −46,8 %
 
 // Résolus côté client dans onMounted (selon `pace` + media query). Définis ici
 // pour que les handlers wheel/touch (portée setup) lisent la bonne valeur.
@@ -194,8 +196,8 @@ onMounted(async () => {
   const vh = window.innerHeight
   const headerH = 64
 
-  // Cadence : tactile (smartphone/tablette) = budget de scroll (−41,5 %, +5 % de
-  // vitesse) et animation de fin (−15 %). Un appareil tactile « vrai » a un pointeur
+  // Cadence : tactile (smartphone/tablette) = budget de scroll (−46,8 %) et
+  // animation de fin (−15 %). Un appareil tactile « vrai » a un pointeur
   // primaire grossier ET pas de survol — ce qui exclut les laptops/desktops, même
   // ceux dotés d'un écran tactile (leur pointeur primaire reste le trackpad/souris).
   isTouch = props.pace === 'auto'
@@ -259,8 +261,8 @@ onMounted(async () => {
     current += (input.t - current) * 0.14
     if (Math.abs(input.t - current) < 0.0005) current = input.t
     ftl.progress(current)
-    if (readoutEl.value) {
-      readoutEl.value.textContent = `MORPHING — ${String(Math.round(current * 100)).padStart(2, '0')}%`
+    if (progressFill.value) {
+      progressFill.value.style.transform = `scaleX(${current})`
     }
     if (!hintHidden && current > 0.05) hideHint()
     if (current >= 0.999 && input.t >= 1) startEndgame()
@@ -282,7 +284,7 @@ onMounted(async () => {
     if (idleTimer) clearTimeout(idleTimer)
     if (autoTween) { autoTween.kill(); autoTween = null }
     ftl.progress(1)
-    if (readoutEl.value) readoutEl.value.textContent = 'MORPHING — 100%'
+    if (progressFill.value) progressFill.value.style.transform = 'scaleX(1)'
     gsap.to(readoutEl.value, { autoAlpha: 0, duration: 0.3, delay: 0.2 })
 
     endTl = gsap.timeline({ onComplete: finish, delay: 0.15 })
@@ -384,10 +386,13 @@ onUnmounted(() => {
       {{ t('splash.skipAnimation') }}
     </button>
 
-    <!-- Readout mono — passe AU-DESSUS du logo (symétrique au hint).
-         Caché inline jusqu'à ce que onMounted l'ait positionné, pour qu'il
-         apparaisse directement à sa place (jamais en flux avant le style). -->
-    <span ref="readoutEl" class="morph-readout" style="visibility: hidden" aria-hidden="true">MORPHING — 00%</span>
+    <!-- Barre de progression fine — passe AU-DESSUS du logo (symétrique au hint).
+         Le fond (track) montre ce qu'il reste à former ; le remplissage suit le
+         scroll. Caché inline jusqu'à ce que onMounted l'ait positionné, pour
+         qu'il apparaisse directement à sa place (jamais en flux avant le style). -->
+    <div ref="readoutEl" class="morph-progress" style="visibility: hidden" aria-hidden="true">
+      <span ref="progressFill" class="morph-progress-fill" />
+    </div>
 
     <!-- visibility:hidden inline (pas seulement via CSS scopé) → garanti dès le
          tout premier paint du HTML SSR, avant même l'injection du style en dev.
@@ -575,18 +580,29 @@ onUnmounted(() => {
 }
 
 /* ── Readout mono — au-dessus du logo, symétrique au hint sous le logo ── */
-.morph-readout {
+/* Barre de progression fine du morph — track (fond) + remplissage piloté au
+   scroll via scaleX inline (GSAP ticker). Le fond reste visible pour montrer
+   ce qu'il reste à former. */
+.morph-progress {
   position: absolute;
   bottom: calc(50% + clamp(48px, 9vw, 130px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: clamp(10px, 1.1vw, 12px);
-  letter-spacing: 0.1em;
-  color: #24272e;
-  opacity: 0.85;
-  font-variant-numeric: tabular-nums;
+  width: clamp(120px, 22vw, 220px);
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(36, 39, 46, 0.16); /* fond : reste à compléter */
+  overflow: hidden;
   pointer-events: none;
+}
+.morph-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #24272e; /* progrès accompli */
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
 }
 </style>

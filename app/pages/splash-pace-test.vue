@@ -1,24 +1,24 @@
 <script setup>
 /**
- * PAGE DE TEST (non versionnée — gitignore) — cadence du splash sur tactile.
+ * PAGE DE TEST — cadence du splash sur tactile + specs complètes scroll/endgame.
  *
  * Permet de comparer la cadence du SplashScreenV5 :
  *  • Auto      → détection réelle de l'appareil (média query pointer/hover)
- *  • Tactile   → force la réduction (budget de scroll −27,75 % + animation de fin −15 %)
+ *  • Tactile   → force la réduction (budget de scroll −46,8 % + animation de fin −15 %)
  *  • Desktop   → cadence de référence (inchangée)
  *
  * Sur desktop, utilise « Forcer Tactile » pour ressentir la version tactile sans
  * avoir besoin d'un vrai smartphone.
  */
 const TOUCH_FACTOR = 0.85 // animation de fin (glyph)
-const SCROLL_TOUCH_FACTOR = (TOUCH_FACTOR * 0.85 * 0.85) / 1.05 // reveal scroll : +5 % vitesse ≈ 0.5849
+const SCROLL_TOUCH_FACTOR = (TOUCH_FACTOR * 0.85 * 0.85) / 1.05 * 0.91 // reveal scroll : −9 % de plus ≈ 0.5322
 const BASE_BUDGET = 1091
 
 // Tampon de build figé à la main à chaque déploiement. Sert à vérifier, après
 // avoir vidé le cache de Chrome sur mobile, qu'on charge bien le dernier bundle :
 // si l'heure/version affichée correspond, le nouveau JS est actif.
-const BUILD_VERSION = 'reveal scroll v5 · ×0,5849 (−41,5 %, +5 % vitesse) · +specs'
-const BUILD_TIME = '2026-06-14 15:30 CEST'
+const BUILD_VERSION = 'reveal scroll v6 · ×0,5322 (−46,8 %) · barre de progression'
+const BUILD_TIME = '2026-06-15 11:52 CEST'
 
 const open = ref(false) // fermée par défaut : on l'ouvre via l'icône réglages
 const mode = ref('auto') // 'auto' | 'touch' | 'desktop'
@@ -40,7 +40,7 @@ const endgame = computed(() =>
 const scrollSpecs = computed(() => [
   ['Mécanique', 'Scroll virtuel — la page derrière ne bouge jamais ; le delta cumulé pilote input.t (0→1)'],
   ['Budget desktop/laptop', `${BASE_BUDGET} px de delta cumulé pour la formation complète`],
-  ['Facteur tactile', `×${SCROLL_TOUCH_FACTOR.toFixed(4)} = (0,85 × 0,85 × 0,85) ÷ 1,05 → −41,5 % (+5 % vitesse)`],
+  ['Facteur tactile', `×${SCROLL_TOUCH_FACTOR.toFixed(4)} = (0,85 × 0,85 × 0,85) ÷ 1,05 × 0,91 → −46,8 %`],
   ['Budget tactile', `${Math.round(BASE_BUDGET * SCROLL_TOUCH_FACTOR)} px`],
   ['Budget actif (ici)', `${budget.value} px`],
   ['Détection tactile', '(hover: none) and (pointer: coarse) — exclut laptop/desktop tactiles'],
@@ -49,7 +49,7 @@ const scrollSpecs = computed(() => [
   ['Clavier', '↓ / PgDn / Espace = +0,12 · ↑ / PgUp = −0,12 · Échap = termine'],
   ['Lissage (lerp)', 'current += (input.t − current) × 0,14 à chaque frame du ticker GSAP'],
   ['Snap final', 'si |input.t − current| < 0,0005 → current = input.t'],
-  ['Compteur', 'MORPHING — NN % (arrondi de current × 100)'],
+  ['Indicateur', 'barre de progression fine (track + remplissage scaleX = current) au-dessus du logo'],
   ['Hint masqué', 'dès que current > 5 % (fade y+8, 0,3 s, power2.in)'],
   ['Auto-play idle', 'après 2500 ms d\'inactivité → input.t →1, durée max(0,8 ; 2,2 × (1−t)), power1.inOut'],
   ['Formation (ftl)', 'timeline en pause, durée normalisée 1, scrubbée par le scroll'],
@@ -64,7 +64,7 @@ const scrollSpecs = computed(() => [
 const endgameSpecs = computed(() => [
   ['Timeline', 'autoplay · delay 0,15 s · onComplete → reveal du site'],
   ['Vitesse (timeScale)', effectiveTouch.value ? '×1,1765 = 1 ÷ 0,85 → joue 15 % plus vite (tactile)' : '×1 (desktop/laptop, référence)'],
-  ['Fondu compteur', 'autoAlpha 0 · 0,3 s · delay 0,2'],
+  ['Fondu de la barre', 'autoAlpha 0 · 0,3 s · delay 0,2'],
   ['1 · O → disque', 'block5 morph vers cercle parfait · 0,32 s · power2.inOut @ 0'],
   ['   oInner', 'scale 0 / opacity 0 · 0,26 s · power2.in @ 0'],
   ['2 · Swap disque', '@ 0,34 — morphGroup + solidDisk on, block5 off (géométries identiques)'],
@@ -120,7 +120,7 @@ function onComplete() {
               {{ effectiveTouch ? 'TACTILE' : 'DESKTOP (référence)' }}
             </dd></div>
             <div><dt>Budget de scroll</dt><dd>
-              {{ budget }} px<template v-if="effectiveTouch"> (−41,5 %)</template>
+              {{ budget }} px<template v-if="effectiveTouch"> (−46,8 %)</template>
             </dd></div>
             <div><dt>Animation de fin</dt><dd>{{ endgame }}</dd></div>
             <div><dt>État</dt><dd>{{ state }}</dd></div>
