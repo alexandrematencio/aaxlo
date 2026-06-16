@@ -5,6 +5,9 @@ const { t, locale, locales } = useI18n()
 const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const { data: footerContent } = await useLocalizedContent('/footer')
+// Legal notice (mentions/Impressum/Aviso) only exists for locales whose
+// jurisdiction has such a regime — hide the footer link where it doesn't.
+const { data: legalData } = await useLocalizedContent('/legal')
 
 const availableLocales = computed(() => locales.value.filter(l => typeof l === 'object'))
 
@@ -133,7 +136,7 @@ onMounted(() => {
           <ul class="footer-links">
             <li><NuxtLink :to="localePath('/legal/privacy')">{{ $t('footer.privacyPolicy') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/legal/terms')">{{ $t('footer.termsOfService') }}</NuxtLink></li>
-            <li><NuxtLink :to="localePath('/legal/mentions')">{{ $t('footer.mentionsLegales') }}</NuxtLink></li>
+            <li v-if="legalData?.mentions"><NuxtLink :to="localePath('/legal/mentions')">{{ $t('footer.mentionsLegales') }}</NuxtLink></li>
           </ul>
         </div>
 

@@ -81,27 +81,4 @@ terms:
       text: "Настоящие условия регулируются применимым правом. Любые споры разрешаются путём добросовестных переговоров."
     - heading: "6. Контакт"
       text: "По вопросам, касающимся настоящих условий, свяжитесь с нами по адресу hi@aaxlo.com."
-
-mentions:
-  label: "JURIDIQUE"
-  title: "Mentions légales"
-  description: "Informations légales sur AAXLO : éditeur du site, directeur de la publication, hébergeur et propriété intellectuelle."
-  lastUpdated: "Dernière mise à jour : juin 2026"
-  sections:
-    - heading: "1. Éditeur du site"
-      text: |
-        AAXLO — Entrepreneur individuel
-        Représentant : Alexandre Matencio
-        SIREN : 878 616 119 (non inscrit au RCS)
-        N° de TVA intracommunautaire : FR51878616119
-        Siège : 139 boulevard Maxime Gorki, 94800 Villejuif, France
-        E-mail : hi@aaxlo.com
-    - heading: "2. Directeur de la publication"
-      text: "Le directeur de la publication est Alexandre Matencio."
-    - heading: "3. Hébergement"
-      text: "Ce site est hébergé par Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Chypre."
-    - heading: "4. Propriété intellectuelle"
-      text: "L'ensemble du contenu de ce site (textes, images, graphismes, logo, icônes) est la propriété exclusive de AAXLO, sauf mention contraire. Toute reproduction est interdite sans autorisation préalable."
-    - heading: "5. Données personnelles"
-      text: "Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Pour exercer ce droit, veuillez nous contacter à hi@aaxlo.com."
 ---
