@@ -1,5 +1,6 @@
 <script setup>
 import { gsap } from 'gsap'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 const props = defineProps({
   content: { type: Object, default: null },
@@ -259,7 +260,9 @@ onBeforeUnmount(() => {
 })
 
 onMounted(() => {
-  if (props.skip) {
+  // Reduced motion: skip the scramble entirely and show the resolved hero.
+  // (The scramble cycles textContent via setInterval, which CSS cannot stop.)
+  if (props.skip || prefersReducedMotion()) {
     showFinalState()
     return
   }
@@ -269,7 +272,9 @@ onMounted(() => {
 })
 
 watch(() => props.animate, (val) => {
-  if (val && !props.skip) runAnimation()
+  if (!val) return
+  if (props.skip || prefersReducedMotion()) showFinalState()
+  else runAnimation()
 })
 </script>
 
@@ -386,6 +391,9 @@ watch(() => props.animate, (val) => {
 <style scoped>
 .homepage-hero {
   position: relative;
+  /* The first forge-section overlaps the hero by 1px (margin-top: -1px);
+     paint the hero above it so the .hero-nav border-bottom stays visible. */
+  z-index: 1;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -560,6 +568,9 @@ watch(() => props.animate, (val) => {
   flex-direction: column;
   background: var(--color-dark);
   border-top: 0.5px solid #24272e;
+  /* Global delimiter with the next section — the section below must NOT
+     redeclare a border-top (single-owner rule, no double borders). */
+  border-bottom: 0.5px solid #24272e;
 }
 
 .hero-nav-grid {
@@ -743,6 +754,10 @@ watch(() => props.animate, (val) => {
     border-bottom: 0.5px solid #24272e;
     padding: 32px 20px;
     min-height: 80px;
+  }
+  /* .hero-nav owns the grid's bottom edge — no double border */
+  .nav-cell:last-child {
+    border-bottom: none;
   }
   .nav-label {
     font-size: 18px;

@@ -1,5 +1,6 @@
 <script setup>
 import { gsap } from 'gsap'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 const { t, locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
@@ -9,6 +10,8 @@ const { track } = useUmami()
 const header = ref(null)
 const dropdownOpen = ref(false)
 const mobileOpen = ref(false)
+const hamburgerBtn = ref(null)
+const servicesWrap = ref(null)
 
 // Check if splash screen is playing — if so, delay header animation
 const splashPlayed = useState('splashPlayed', () => false)
@@ -42,34 +45,82 @@ function closeDropdown() {
   }, 120)
 }
 
-function toggleMobile() {
-  mobileOpen.value = !mobileOpen.value
-  if (mobileOpen.value) {
-    track('mobile-menu-open', { locale: locale.value })
-    document.body.style.overflow = 'hidden'
-    nextTick(() => {
-      const overlay = header.value?.querySelector('.mobile-overlay')
-      if (!overlay) return
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
-      tl.fromTo(overlay, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.4 })
-      const items = overlay.querySelectorAll('.mobile-nav-item')
-      tl.fromTo(items, { clipPath: 'inset(-0.1em 100% -0.25em 0)' }, { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.25, stagger: 0.06, ease: 'steps(10)' }, '-=0.15')
-      const cta = overlay.querySelector('.mobile-cta')
-      if (cta) tl.fromTo(cta, { clipPath: 'inset(-0.1em 100% -0.25em 0)' }, { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.3 }, '-=0.1')
-    })
-  } else {
-    document.body.style.overflow = ''
+// Keyboard: open the services submenu on focus, close on Escape / focus leaving.
+function closeDropdownNow() {
+  clearTimeout(dropdownTimeout)
+  dropdownOpen.value = false
+}
+function onDropdownKeydown(e) {
+  if (e.key === 'Escape' && dropdownOpen.value) {
+    closeDropdownNow()
+    servicesWrap.value?.querySelector('.nav-link')?.focus()
   }
+}
+function onDropdownFocusOut(e) {
+  if (!servicesWrap.value) return
+  if (e.relatedTarget && servicesWrap.value.contains(e.relatedTarget)) return
+  dropdownOpen.value = false
+}
+
+function toggleMobile() {
+  if (mobileOpen.value) { closeMobile(); return }
+
+  mobileOpen.value = true
+  track('mobile-menu-open', { locale: locale.value })
+  document.body.style.overflow = 'hidden'
+
+  nextTick(() => {
+    const overlay = document.querySelector('.mobile-overlay')
+    if (!overlay) return
+    // Move focus into the dialog so it can be operated and trapped by keyboard.
+    overlay.querySelector('a, button')?.focus()
+
+    if (prefersReducedMotion()) return
+
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
+    tl.fromTo(overlay, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.4 })
+    const items = overlay.querySelectorAll('.mobile-nav-item')
+    tl.fromTo(items, { clipPath: 'inset(-0.1em 100% -0.25em 0)' }, { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.25, stagger: 0.06, ease: 'steps(10)' }, '-=0.15')
+    const cta = overlay.querySelector('.mobile-cta')
+    if (cta) tl.fromTo(cta, { clipPath: 'inset(-0.1em 100% -0.25em 0)' }, { clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.3 }, '-=0.1')
+  })
 }
 
 function closeMobile() {
   mobileOpen.value = false
   document.body.style.overflow = ''
+  // Restore focus to the control that opened the menu.
+  hamburgerBtn.value?.focus()
+}
+
+// Dialog keyboard handling: Escape closes, Tab is trapped within the overlay.
+function onMobileKeydown(e) {
+  if (e.key === 'Escape') {
+    closeMobile()
+    return
+  }
+  if (e.key !== 'Tab') return
+  const overlay = document.querySelector('.mobile-overlay')
+  if (!overlay) return
+  const focusables = [...overlay.querySelectorAll('a[href], button:not([disabled])')]
+  if (!focusables.length) return
+  const first = focusables[0]
+  const last = focusables[focusables.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 
 function runHeaderReveal() {
   const el = header.value
   if (!el) return
+
+  // Reduced motion: the global CSS already reveals .tw-hide / .draw-h at rest.
+  if (prefersReducedMotion()) return
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
@@ -143,15 +194,24 @@ onUnmounted(() => {
       </NuxtLink>
 
       <!-- Desktop Nav -->
-      <nav class="header-nav">
+      <nav class="header-nav" :aria-label="$t('a11y.mainMenu')">
         <div
+          ref="servicesWrap"
           class="nav-link-wrap services-trigger"
           @mouseenter="openDropdown"
           @mouseleave="closeDropdown"
+          @focusin="openDropdown"
+          @focusout="onDropdownFocusOut"
+          @keydown="onDropdownKeydown"
         >
-          <NuxtLink :to="localePath('/services')" class="nav-link tw-hide">
+          <NuxtLink
+            :to="localePath('/services')"
+            class="nav-link tw-hide"
+            aria-haspopup="true"
+            :aria-expanded="dropdownOpen"
+          >
             {{ $t('nav.services') }}
-            <svg class="chevron" :class="{ open: dropdownOpen }" width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <svg class="chevron" :class="{ open: dropdownOpen }" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
               <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </NuxtLink>
@@ -207,9 +267,18 @@ onUnmounted(() => {
         </NuxtLink>
 
         <!-- Hamburger -->
-        <button class="hamburger" :class="{ active: mobileOpen }" @click="toggleMobile" aria-label="Menu">
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
+        <button
+          ref="hamburgerBtn"
+          class="hamburger"
+          :class="{ active: mobileOpen }"
+          type="button"
+          :aria-label="mobileOpen ? $t('a11y.closeMenu') : $t('a11y.openMenu')"
+          :aria-expanded="mobileOpen"
+          aria-controls="mobile-menu"
+          @click="toggleMobile"
+        >
+          <span class="hamburger-line" aria-hidden="true"></span>
+          <span class="hamburger-line" aria-hidden="true"></span>
         </button>
       </div>
     </div>
@@ -219,8 +288,17 @@ onUnmounted(() => {
 
     <!-- Mobile overlay -->
     <Teleport to="body">
-      <div v-if="mobileOpen" class="mobile-overlay" @click.self="closeMobile">
-        <nav class="mobile-nav">
+      <div
+        v-if="mobileOpen"
+        id="mobile-menu"
+        class="mobile-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="$t('a11y.mainMenu')"
+        @click.self="closeMobile"
+        @keydown="onMobileKeydown"
+      >
+        <nav class="mobile-nav" :aria-label="$t('a11y.mainMenu')">
           <NuxtLink :to="localePath('/services')" class="mobile-nav-item" @click="closeMobile">{{ $t('nav.services') }}</NuxtLink>
           <NuxtLink v-for="s in services" :key="s.label" :to="s.to" class="mobile-nav-item mobile-sub" @click="closeMobile">
             {{ s.label }}
@@ -237,7 +315,12 @@ onUnmounted(() => {
               data-umami-event-location="mobile-menu"
               @click="closeMobile"
             >{{ $t('nav.freeAudit') }}</NuxtLink>
-            <button class="mobile-lang" @click="toggleLang">{{ locale === 'en' ? 'FR' : 'EN' }}</button>
+            <button
+              class="mobile-lang"
+              type="button"
+              :aria-label="$t('lang.switchTo', { lang: locale === 'en' ? 'Français' : 'English' })"
+              @click="toggleLang"
+            >{{ locale === 'en' ? 'FR' : 'EN' }}</button>
           </div>
         </nav>
       </div>
