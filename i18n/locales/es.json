@@ -1,1 +1,135 @@
-{}
+{
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "about": "Quiénes somos",
+    "blog": "Blog",
+    "freeAudit": "Auditoría gratuita",
+    "backToServices": "← TODOS LOS SERVICIOS"
+  },
+  "services_dropdown": {
+    "visibility": { "label": "Visibilidad", "desc": "GBP, SEO local y directorios" },
+    "web": { "label": "Web", "desc": "Webs, menús y reservas" },
+    "content": { "label": "Contenido", "desc": "Redes sociales e identidad de marca" },
+    "automation": { "label": "Automatización", "desc": "Agentes de IA, reseñas y mensajería" },
+    "consulting": { "label": "Consultoría", "desc": "Flujos de IA y formación a medida" }
+  },
+  "common": {
+    "learnMore": "SABER MÁS →",
+    "getAudit": "AUDITORÍA GRATUITA →",
+    "whatsIncluded": "QUÉ INCLUYE",
+    "frequentlyAsked": "PREGUNTAS FRECUENTES",
+    "questionsAnswers": "Preguntas y respuestas"
+  },
+  "audit_form": {
+    "businessName": "Nombre del negocio",
+    "businessNamePlaceholder": "El nombre de tu negocio",
+    "websiteUrl": "URL del sitio web",
+    "websiteUrlPlaceholder": "https://tunegocio.com",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Dirección de correo *",
+    "phone": "Teléfono",
+    "name": "Tu nombre",
+    "namePlaceholder": "Tu nombre",
+    "nameOptionalPlaceholder": "Tu nombre (opcional)",
+    "next": "Siguiente →",
+    "back": "← Volver",
+    "submit": "Lanzar mi auditoría gratuita →",
+    "step": "Paso",
+    "of": "de",
+    "teaserLabel": "AUDITORÍA GRATUITA",
+    "teaserHeadline": "Descubre qué te está haciendo perder clientes ahora mismo.",
+    "teaserSubtitle": "Analizamos toda tu presencia digital: sitio web, visibilidad en buscadores, reseñas, redes sociales y cómo te comparas con tu competencia. Y te lo entregamos en un informe claro, con puntuaciones y un plan de acción. Nos lleva 24 horas. A ti no te cuesta nada.",
+    "teaserBusinessPlaceholder": "El nombre de tu negocio (obligatorio)",
+    "teaserUrlPlaceholder": "La URL de tu sitio web (opcional, si ya existe)",
+    "teaserPlaceholder": "El nombre de tu negocio",
+    "teaserSubmit": "Obtén tu auditoría gratuita →",
+    "teaserDisclaimer": "Sin compromiso. Sin tarjeta. Sin llamadas, salvo que tú las pidas. Recibes un informe completo con recomendaciones concretas en 24 horas, trabajes después con nosotros o no.",
+    "step1Label": "Cuéntanos sobre tu negocio",
+    "step2Label": "¿A dónde te enviamos la auditoría?",
+    "step3Label": "¿Para quién preparamos esta auditoría?",
+    "popupTitle": "CASI LISTO",
+    "popupDesc": "¿A dónde te enviamos la auditoría?",
+    "invalidEmail": "Introduce un correo válido",
+    "invalidBusinessName": "Introduce el nombre de tu negocio",
+    "invalidUrl": "Introduce una URL válida (p. ej. https://example.com)",
+    "successTitle": "¡Manos a la obra!",
+    "successText": "Tu auditoría personalizada llegará a {email} en menos de 24 horas.",
+    "successTrust": "Sin compromiso. Sin tarjeta. Sin llamadas, salvo que tú las pidas.",
+    "backHome": "← Volver al inicio"
+  },
+  "contact_form": {
+    "name": "Nombre *",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico *",
+    "emailPlaceholder": "tu{'@'}email.com",
+    "message": "Mensaje *",
+    "messagePlaceholder": "Cuéntanos sobre tu proyecto o tu pregunta...",
+    "submit": "Enviar mensaje →",
+    "successTitle": "¡Mensaje enviado!",
+    "successText": "Te responderemos en menos de 24 horas a",
+    "backHome": "← Volver al inicio"
+  },
+  "footer": {
+    "tagline": "Tu negocio local, potenciado por la IA.",
+    "location": "Presencia mundial",
+    "servicesTitle": "Servicios",
+    "aboutTitle": "Quiénes somos",
+    "whoWeAre": "Quiénes somos",
+    "resourcesTitle": "Recursos",
+    "legalTitle": "Legal",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Condiciones del servicio",
+    "mentionsLegales": "Aviso legal",
+    "contactTitle": "Contacto",
+    "bookCall": "Reservar una llamada",
+    "copyright": "© 2026 AAXLO"
+  },
+  "lang": {
+    "switchTo": "Cambiar el idioma a {lang}"
+  },
+  "splash": {
+    "scrollHint": "Desplázate para forjar",
+    "skipAnimation": "Saltar animación"
+  },
+  "a11y": {
+    "skipToContent": "Ir al contenido",
+    "skipIntro": "Saltar animación de introducción",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "mainMenu": "Menú principal",
+    "expandServices": "Desplegar submenú de servicios",
+    "close": "Cerrar"
+  },
+  "privacy_notice": {
+    "consent": "Acepto que AAXLO trate mis datos para responder a mi solicitud.",
+    "notice": "Tus datos se usan únicamente para gestionar tu solicitud: nunca se venden ni se comparten.",
+    "link": "Política de privacidad",
+    "required": "Confirma que aceptas la política de privacidad."
+  },
+  "blog": {
+    "pageTitle": "Blog — AAXLO",
+    "label": "// BLOG",
+    "headlineLine1": "Ideas que hacen avanzar",
+    "headlineLine2": "a los negocios.",
+    "subtitle": "Estrategia, visibilidad, contenido y automatización, escrito para negocios que quieren crecer sin perder lo que los hace únicos.",
+    "articlesCount": "artículos",
+    "editorsPick": "// Selección de la redacción",
+    "allArticles": "// Todos los artículos",
+    "readArticle": "Leer artículo",
+    "readSuffix": "de lectura",
+    "skipToContent": "Ir al contenido",
+    "readingProgressLabel": "Progreso de lectura: {pct}%",
+    "articleNavigation": "Navegación del artículo",
+    "tableOfContents": "Índice de contenidos",
+    "reading": "// Lectura",
+    "inThisArticle": "// En este artículo",
+    "backToArticles": "Todos los artículos",
+    "backToArticlesAria": "Volver a todos los artículos",
+    "by": "Por",
+    "continueExploring": "// Seguir explorando",
+    "ctaHeading": "¿Listo para hacer crecer tu negocio?",
+    "ctaSubtitle": "Descubre cómo AAXLO ayuda a los negocios locales a competir y ganar.",
+    "ctaButton": "Programar una llamada"
+  }
+}

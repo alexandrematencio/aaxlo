@@ -1,1 +1,135 @@
-{}
+{
+  "nav": {
+    "home": "Trang chủ",
+    "services": "Dịch vụ",
+    "about": "Giới thiệu",
+    "blog": "Blog",
+    "freeAudit": "Nhận đánh giá miễn phí",
+    "backToServices": "← TẤT CẢ DỊCH VỤ"
+  },
+  "services_dropdown": {
+    "visibility": { "label": "Hiện diện", "desc": "GBP, SEO địa phương & danh bạ" },
+    "web": { "label": "Web", "desc": "Website, thực đơn & đặt chỗ" },
+    "content": { "label": "Nội dung", "desc": "Mạng xã hội & nhận diện thương hiệu" },
+    "automation": { "label": "Tự động hóa", "desc": "Trợ lý AI, đánh giá & nhắn tin" },
+    "consulting": { "label": "Tư vấn", "desc": "Quy trình AI & đào tạo theo nhu cầu" }
+  },
+  "common": {
+    "learnMore": "TÌM HIỂU THÊM →",
+    "getAudit": "NHẬN ĐÁNH GIÁ MIỄN PHÍ →",
+    "whatsIncluded": "BAO GỒM NHỮNG GÌ",
+    "frequentlyAsked": "CÂU HỎI THƯỜNG GẶP",
+    "questionsAnswers": "Hỏi & Đáp"
+  },
+  "audit_form": {
+    "businessName": "Tên doanh nghiệp",
+    "businessNamePlaceholder": "Tên doanh nghiệp của bạn",
+    "websiteUrl": "Địa chỉ website",
+    "websiteUrlPlaceholder": "https://doanhnghiepcuaban.com",
+    "email": "Email",
+    "emailPlaceholder": "Địa chỉ email *",
+    "phone": "Số điện thoại",
+    "name": "Tên của bạn",
+    "namePlaceholder": "Tên của bạn",
+    "nameOptionalPlaceholder": "Tên của bạn (không bắt buộc)",
+    "next": "Tiếp tục →",
+    "back": "← Quay lại",
+    "submit": "Bắt đầu đánh giá miễn phí →",
+    "step": "Bước",
+    "of": "trên",
+    "teaserLabel": "ĐÁNH GIÁ MIỄN PHÍ",
+    "teaserHeadline": "Khám phá điều gì đang khiến bạn mất khách hàng ngay lúc này.",
+    "teaserSubtitle": "Chúng tôi rà soát toàn bộ hiện diện trực tuyến của bạn — website, khả năng hiển thị trên tìm kiếm, đánh giá, mạng xã hội, vị trí so với đối thủ — rồi đúc kết thành một báo cáo rõ ràng kèm điểm số và kế hoạch hành động. Chỉ mất 24 giờ. Hoàn toàn miễn phí.",
+    "teaserBusinessPlaceholder": "Tên doanh nghiệp của bạn (bắt buộc)",
+    "teaserUrlPlaceholder": "Địa chỉ website của bạn (không bắt buộc, nếu có)",
+    "teaserPlaceholder": "Tên doanh nghiệp của bạn",
+    "teaserSubmit": "Nhận đánh giá miễn phí →",
+    "teaserDisclaimer": "Không ràng buộc. Không cần thẻ. Không gọi điện trừ khi bạn yêu cầu. Bạn nhận được một báo cáo đầy đủ kèm khuyến nghị cụ thể trong vòng 24 giờ — dù sau đó bạn có hợp tác với chúng tôi hay không.",
+    "step1Label": "Hãy cho chúng tôi biết về doanh nghiệp của bạn",
+    "step2Label": "Chúng tôi nên gửi đánh giá đến đâu?",
+    "step3Label": "Chúng tôi đang chuẩn bị báo cáo này cho ai?",
+    "popupTitle": "SẮP XONG RỒI",
+    "popupDesc": "Chúng tôi nên gửi đánh giá đến đâu?",
+    "invalidEmail": "Vui lòng nhập một email hợp lệ",
+    "invalidBusinessName": "Vui lòng nhập tên doanh nghiệp của bạn",
+    "invalidUrl": "Vui lòng nhập một địa chỉ hợp lệ (ví dụ: https://example.com)",
+    "successTitle": "Chúng tôi đang bắt tay vào việc.",
+    "successText": "Bản đánh giá riêng của bạn sẽ đến {email} trong vòng 24 giờ.",
+    "successTrust": "Không ràng buộc. Không cần thẻ. Không gọi điện trừ khi bạn yêu cầu.",
+    "backHome": "← Về trang chủ"
+  },
+  "contact_form": {
+    "name": "Họ tên *",
+    "namePlaceholder": "Tên của bạn",
+    "email": "Email *",
+    "emailPlaceholder": "ban{'@'}email.com",
+    "message": "Tin nhắn *",
+    "messagePlaceholder": "Hãy chia sẻ về dự án hoặc câu hỏi của bạn...",
+    "submit": "Gửi tin nhắn →",
+    "successTitle": "Đã gửi tin nhắn!",
+    "successText": "Chúng tôi sẽ phản hồi bạn trong vòng 24 giờ tại",
+    "backHome": "← Về trang chủ"
+  },
+  "footer": {
+    "tagline": "Doanh nghiệp địa phương của bạn, được khuếch đại bằng AI.",
+    "location": "Hoạt động trên toàn cầu",
+    "servicesTitle": "Dịch vụ",
+    "aboutTitle": "Giới thiệu",
+    "whoWeAre": "Chúng tôi là ai",
+    "resourcesTitle": "Tài nguyên",
+    "legalTitle": "Pháp lý",
+    "privacyPolicy": "Chính sách quyền riêng tư",
+    "termsOfService": "Điều khoản dịch vụ",
+    "mentionsLegales": "Mentions légales",
+    "contactTitle": "Liên hệ",
+    "bookCall": "Đặt lịch gọi",
+    "copyright": "© 2026 AAXLO"
+  },
+  "lang": {
+    "switchTo": "Chuyển ngôn ngữ sang {lang}"
+  },
+  "splash": {
+    "scrollHint": "Cuộn để rèn giũa",
+    "skipAnimation": "Bỏ qua hoạt ảnh"
+  },
+  "a11y": {
+    "skipToContent": "Đến phần nội dung",
+    "skipIntro": "Bỏ qua hoạt ảnh mở đầu",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu",
+    "mainMenu": "Menu chính",
+    "expandServices": "Mở menu phụ Dịch vụ",
+    "close": "Đóng"
+  },
+  "privacy_notice": {
+    "consent": "Tôi đồng ý để AAXLO xử lý thông tin của tôi nhằm phản hồi yêu cầu của tôi.",
+    "notice": "Thông tin của bạn chỉ được dùng để xử lý yêu cầu — không bao giờ bị bán hay chia sẻ.",
+    "link": "Chính sách quyền riêng tư",
+    "required": "Vui lòng xác nhận rằng bạn đồng ý với chính sách quyền riêng tư."
+  },
+  "blog": {
+    "pageTitle": "Blog — AAXLO",
+    "label": "// BLOG",
+    "headlineLine1": "Những ý tưởng đưa",
+    "headlineLine2": "doanh nghiệp tiến lên.",
+    "subtitle": "Chiến lược, hiện diện, nội dung và tự động hóa — viết cho những doanh nghiệp muốn phát triển mà không đánh mất điều làm nên sự khác biệt của mình.",
+    "articlesCount": "bài viết",
+    "editorsPick": "// Lựa chọn của ban biên tập",
+    "allArticles": "// Tất cả bài viết",
+    "readArticle": "Đọc bài viết",
+    "readSuffix": "đọc",
+    "skipToContent": "Đến phần nội dung",
+    "readingProgressLabel": "Tiến độ đọc: {pct}%",
+    "articleNavigation": "Điều hướng bài viết",
+    "tableOfContents": "Mục lục",
+    "reading": "// Đang đọc",
+    "inThisArticle": "// Trong bài viết này",
+    "backToArticles": "Tất cả bài viết",
+    "backToArticlesAria": "Quay lại tất cả bài viết",
+    "by": "Bởi",
+    "continueExploring": "// Tiếp tục khám phá",
+    "ctaHeading": "Sẵn sàng phát triển doanh nghiệp của bạn?",
+    "ctaSubtitle": "Xem cách AAXLO giúp các doanh nghiệp địa phương cạnh tranh và chiến thắng.",
+    "ctaButton": "Đặt lịch gọi"
+  }
+}

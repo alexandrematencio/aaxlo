@@ -1,1 +1,135 @@
-{}
+{
+  "nav": {
+    "home": "Start",
+    "services": "Leistungen",
+    "about": "Über uns",
+    "blog": "Blog",
+    "freeAudit": "Kostenloses Audit",
+    "backToServices": "← ALLE LEISTUNGEN"
+  },
+  "services_dropdown": {
+    "visibility": { "label": "Sichtbarkeit", "desc": "GBP, lokales SEO & Verzeichnisse" },
+    "web": { "label": "Web", "desc": "Websites, Speisekarten & Buchung" },
+    "content": { "label": "Content", "desc": "Social Media & Markenidentität" },
+    "automation": { "label": "Automatisierung", "desc": "KI-Agenten, Bewertungen & Messaging" },
+    "consulting": { "label": "Beratung", "desc": "Individuelle KI-Workflows & Schulungen" }
+  },
+  "common": {
+    "learnMore": "MEHR ERFAHREN →",
+    "getAudit": "KOSTENLOSES AUDIT →",
+    "whatsIncluded": "WAS ENTHALTEN IST",
+    "frequentlyAsked": "HÄUFIGE FRAGEN",
+    "questionsAnswers": "Fragen & Antworten"
+  },
+  "audit_form": {
+    "businessName": "Name des Unternehmens",
+    "businessNamePlaceholder": "Name Ihres Unternehmens",
+    "websiteUrl": "Website-URL",
+    "websiteUrlPlaceholder": "https://ihrunternehmen.de",
+    "email": "E-Mail",
+    "emailPlaceholder": "E-Mail-Adresse *",
+    "phone": "Telefonnummer",
+    "name": "Ihr Name",
+    "namePlaceholder": "Ihr Name",
+    "nameOptionalPlaceholder": "Ihr Name (optional)",
+    "next": "Weiter →",
+    "back": "← Zurück",
+    "submit": "Mein kostenloses Audit starten →",
+    "step": "Schritt",
+    "of": "von",
+    "teaserLabel": "KOSTENLOSES AUDIT",
+    "teaserHeadline": "Finden Sie heraus, was Sie gerade jetzt Kunden kostet.",
+    "teaserSubtitle": "Wir analysieren Ihre gesamte digitale Präsenz — Website, Sichtbarkeit in Suchmaschinen, Bewertungen, Social Media, der Vergleich mit Ihren Mitbewerbern — und liefern Ihnen einen klaren Bericht mit Bewertungen und einem Aktionsplan. In 24 Stunden. Kostenlos.",
+    "teaserBusinessPlaceholder": "Name Ihres Unternehmens (erforderlich)",
+    "teaserUrlPlaceholder": "URL Ihrer Website (optional, falls vorhanden)",
+    "teaserPlaceholder": "Name Ihres Unternehmens",
+    "teaserSubmit": "Kostenloses Audit erhalten →",
+    "teaserDisclaimer": "Unverbindlich. Keine Kreditkarte. Keine Anrufe, außer Sie wünschen es. Sie erhalten innerhalb von 24 Stunden einen vollständigen Bericht mit konkreten Empfehlungen — ganz gleich, ob Sie danach mit uns zusammenarbeiten oder nicht.",
+    "step1Label": "Erzählen Sie uns von Ihrem Unternehmen",
+    "step2Label": "Wohin sollen wir Ihr Audit senden?",
+    "step3Label": "Für wen erstellen wir dieses Audit?",
+    "popupTitle": "FAST GESCHAFFT",
+    "popupDesc": "Wohin sollen wir Ihr Audit senden?",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "invalidBusinessName": "Bitte geben Sie den Namen Ihres Unternehmens ein",
+    "invalidUrl": "Bitte geben Sie eine gültige URL ein (z. B. https://example.com)",
+    "successTitle": "Wir kümmern uns darum.",
+    "successText": "Ihr persönliches Audit erreicht {email} innerhalb von 24 Stunden.",
+    "successTrust": "Unverbindlich. Keine Kreditkarte. Keine Anrufe, außer Sie wünschen es.",
+    "backHome": "← Zurück zur Startseite"
+  },
+  "contact_form": {
+    "name": "Name *",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail *",
+    "emailPlaceholder": "ihre{'@'}email.de",
+    "message": "Nachricht *",
+    "messagePlaceholder": "Erzählen Sie uns von Ihrem Projekt oder Ihrer Frage...",
+    "submit": "Nachricht senden →",
+    "successTitle": "Nachricht gesendet!",
+    "successText": "Wir melden uns innerhalb von 24 Stunden bei Ihnen unter",
+    "backHome": "← Zurück zur Startseite"
+  },
+  "footer": {
+    "tagline": "Ihr lokales Unternehmen, verstärkt durch KI.",
+    "location": "Weltweit tätig",
+    "servicesTitle": "Leistungen",
+    "aboutTitle": "Über uns",
+    "whoWeAre": "Wer wir sind",
+    "resourcesTitle": "Ressourcen",
+    "legalTitle": "Rechtliches",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsOfService": "Nutzungsbedingungen",
+    "mentionsLegales": "Impressum",
+    "contactTitle": "Kontakt",
+    "bookCall": "Termin buchen",
+    "copyright": "© 2026 AAXLO"
+  },
+  "lang": {
+    "switchTo": "Sprache wechseln zu {lang}"
+  },
+  "splash": {
+    "scrollHint": "Scrollen zum Schmieden",
+    "skipAnimation": "Animation überspringen"
+  },
+  "a11y": {
+    "skipToContent": "Zum Inhalt springen",
+    "skipIntro": "Intro-Animation überspringen",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "mainMenu": "Hauptmenü",
+    "expandServices": "Untermenü Leistungen anzeigen",
+    "close": "Schließen"
+  },
+  "privacy_notice": {
+    "consent": "Ich bin damit einverstanden, dass AAXLO meine Angaben verarbeitet, um meine Anfrage zu beantworten.",
+    "notice": "Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet — niemals verkauft oder weitergegeben.",
+    "link": "Datenschutzerklärung",
+    "required": "Bitte bestätigen Sie Ihr Einverständnis mit der Datenschutzerklärung."
+  },
+  "blog": {
+    "pageTitle": "Blog — AAXLO",
+    "label": "// BLOG",
+    "headlineLine1": "Ideen, die Unternehmen",
+    "headlineLine2": "voranbringen.",
+    "subtitle": "Strategie, Sichtbarkeit, Content und Automatisierung — geschrieben für Unternehmen, die wachsen wollen, ohne das zu verlieren, was sie einzigartig macht.",
+    "articlesCount": "Artikel",
+    "editorsPick": "// Empfehlung der Redaktion",
+    "allArticles": "// Alle Artikel",
+    "readArticle": "Artikel lesen",
+    "readSuffix": "Lesezeit",
+    "skipToContent": "Zum Inhalt springen",
+    "readingProgressLabel": "Lesefortschritt: {pct}%",
+    "articleNavigation": "Artikelnavigation",
+    "tableOfContents": "Inhaltsverzeichnis",
+    "reading": "// Lesen",
+    "inThisArticle": "// In diesem Artikel",
+    "backToArticles": "Alle Artikel",
+    "backToArticlesAria": "Zurück zu allen Artikeln",
+    "by": "Von",
+    "continueExploring": "// Weiter entdecken",
+    "ctaHeading": "Bereit, Ihr Unternehmen wachsen zu lassen?",
+    "ctaSubtitle": "Sehen Sie, wie AAXLO lokalen Unternehmen hilft, sich durchzusetzen und zu gewinnen.",
+    "ctaButton": "Termin vereinbaren"
+  }
+}
