@@ -29,13 +29,17 @@ if (!article.value) {
   throw createError({ statusCode: 404, statusMessage: 'Article not found' })
 }
 
-// SEO
-useHead({
-  title: article.value.seo?.title || article.value.title,
-  meta: [
-    { name: 'description', content: article.value.seo?.description || article.value.description },
-  ],
-})
+// SEO — title/description/OG from frontmatter, plus Article structured data
+useContentSeo(article)
+useSchemaOrg([
+  defineArticle({
+    headline: article.value.seo?.title || article.value.title,
+    description: article.value.seo?.description || article.value.description,
+    image: article.value.seo?.ogImage || '/og/aaxlo-default.png',
+    datePublished: article.value.date,
+    author: article.value.author ? { name: article.value.author } : undefined,
+  }),
+])
 
 // Scroll progress — page scrolls on window, not on the .article-page div
 function updateProgress() {
@@ -98,9 +102,6 @@ function formatDate(d: string) {
 <template>
   <div ref="pageRef" class="article-page">
 
-    <!-- Skip link -->
-    <a href="#article-content" class="skip-link">{{ $t('blog.skipToContent') }}</a>
-
     <!-- Progress bar -->
     <div
       class="reading-progress"
@@ -138,8 +139,8 @@ function formatDate(d: string) {
         </div>
       </aside>
 
-      <!-- Main content -->
-      <main id="article-content" class="article-main">
+      <!-- Article content (page-level <main> landmark lives in app.vue) -->
+      <article id="article-content" class="article-main">
 
         <!-- Hero -->
         <header class="article-hero">
@@ -190,7 +191,7 @@ function formatDate(d: string) {
           </div>
         </footer>
 
-      </main>
+      </article>
     </div>
   </div>
 </template>
@@ -346,7 +347,7 @@ function formatDate(d: string) {
   font-family: var(--font);
   font-size: 9px;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   border: 0.5px solid var(--color-accent);
@@ -444,7 +445,7 @@ function formatDate(d: string) {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 600;
-  color: var(--color-cream);
+  color: var(--color-dark);
   background: var(--color-accent);
   text-decoration: none;
   padding: 14px 28px;

@@ -26,7 +26,7 @@ defineProps<{
   font-family: var(--font);
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.08em;
   flex-shrink: 0;
   line-height: 1.8;

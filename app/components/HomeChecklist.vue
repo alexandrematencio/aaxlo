@@ -208,7 +208,7 @@ onMounted(() => {
   position: relative;
   background: var(--color-white);
   padding: 120px clamp(32px, 6vw, 96px);
-  border-top: 0.5px solid #24272e;
+  /* No border-top: the hero's .hero-nav above owns the shared delimiter */
   display: flex;
   justify-content: center;
 }
@@ -229,7 +229,10 @@ onMounted(() => {
   border-top: none;
   padding: 16px;
 }
-.checklist-cell:first-child {
+/* Only the headline cell (first in the container) opens the top edge.
+   The summary cell inside .checklist-bottom sits flush under the last
+   card, whose border-bottom already draws the shared line. */
+.checklist-container > .checklist-cell:first-child {
   border-top: 0.5px solid #24272e;
 }
 
@@ -318,7 +321,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .fix-text {
@@ -337,7 +340,7 @@ onMounted(() => {
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   text-decoration: none;
   margin-top: 4px;
   transition: color 0.2s;

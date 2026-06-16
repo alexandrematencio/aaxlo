@@ -1,4 +1,5 @@
 import { gsap } from 'gsap'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 /**
  * "The Forge" — cinematic scroll-reveal system.
@@ -60,6 +61,14 @@ export function initScrollReveal(el, pattern = 'curtain-tear', options = {}) {
     onRevealed = null,
   } = options
 
+  // Reduced motion: show the section immediately, no clip-path animation.
+  if (prefersReducedMotion()) {
+    el.style.visibility = 'visible'
+    el.style.clipPath = 'none'
+    if (onRevealed) onRevealed()
+    return
+  }
+
   const config = patterns[pattern] || patterns['curtain-tear']
   let revealed = false
 
@@ -106,6 +115,9 @@ export function initScrollReveal(el, pattern = 'curtain-tear', options = {}) {
  */
 export function initScrollExit(el) {
   if (!el) return
+
+  // Reduced motion: no scroll-driven scale/opacity compression.
+  if (prefersReducedMotion()) return
 
   const observer = new IntersectionObserver(
     (entries) => {
