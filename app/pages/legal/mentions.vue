@@ -6,6 +6,12 @@ const localePath = useLocalePath()
 const { data: legalData } = await useLocalizedContent('/legal')
 
 const section = computed(() => legalData.value?.mentions)
+
+// Some locales (EN, PT, RU) have no legal-notice regime, so they carry no
+// `mentions` block. The footer link is hidden there; a direct URL hit redirects home.
+if (!section.value) {
+  await navigateTo(localePath('/'))
+}
 useContentSeo(() => ({
   seo: {
     title: section.value?.title ? `${section.value.title} — AAXLO` : 'AAXLO',

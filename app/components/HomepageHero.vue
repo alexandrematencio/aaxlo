@@ -85,7 +85,7 @@ function showFinalState() {
 
   gsap.set(el.querySelector('.hero-sub'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   if (glyphMaskRef.value) gsap.set(glyphMaskRef.value, { opacity: 0 })
-  gsap.set(el.querySelector('.hero-cta'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
+  gsap.set(el.querySelectorAll('.hero-cta'), { clipPath: 'inset(-0.1em 0% -0.25em 0)' })
   el.querySelectorAll('.nav-cell').forEach(c => {
     gsap.set(c, { clipPath: 'inset(0 0 0 0)' })
   })
@@ -104,8 +104,8 @@ function runAnimation() {
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
 
   /* 1. CTA reveal */
-  tl.to(el.querySelector('.hero-cta'), {
-    clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2,
+  tl.to(el.querySelectorAll('.hero-cta'), {
+    clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.2, stagger: 0.06,
   }, '-=0.05')
 
   /* 3. Nav cells reveal, staggered */
@@ -336,15 +336,27 @@ watch(() => props.animate, (val) => {
               <path d="M20.537 0.24321C19.616 0.0922522 18.685 0.0100639 17.754 0L36 18.2458C35.99 17.3149 35.908 16.384 35.757 15.4631L20.537 0.24321Z" fill="#FF8270"/>
             </svg>
           </div>
-          <a
-            :href="localePath('/audit')"
-            class="hero-cta tw-hide"
-            data-umami-event="audit-cta-click"
-            data-umami-event-location="hero-primary"
-            @click.prevent="navigateWithStripes(localePath('/audit'))"
-          >
-            {{ content?.cta }}
-          </a>
+          <div class="hero-cta-group">
+            <a
+              :href="localePath('/audit')"
+              class="hero-cta tw-hide"
+              data-umami-event="audit-cta-click"
+              data-umami-event-location="hero-primary"
+              @click.prevent="navigateWithStripes(localePath('/audit'))"
+            >
+              {{ content?.cta }}
+            </a>
+            <a
+              href="https://cal.com/aaxlo"
+              class="hero-cta hero-cta--secondary tw-hide"
+              target="_blank"
+              rel="noopener"
+              data-umami-event="book-call-click"
+              data-umami-event-location="hero-secondary"
+            >
+              {{ $t('footer.bookCall') }}
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -560,6 +572,20 @@ watch(() => props.animate, (val) => {
   color: var(--color-cream);
 }
 
+/* ── CTA group (primary + secondary) ── */
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Secondary CTA — outline/ghost so coral stays the sole accent.
+   Inherits the dark border + diagonal dark-wipe hover from .hero-cta. */
+.hero-cta--secondary {
+  background: transparent;
+}
+
 /* ── BOTTOM HALF — Nav ── */
 .hero-nav {
   position: relative;
@@ -740,6 +766,13 @@ watch(() => props.animate, (val) => {
   .hero-cta {
     padding: 14px 32px;
     font-size: 14px;
+    text-align: center;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 12px;
   }
   .hero-nav-grid {
     grid-template-columns: 1fr;
