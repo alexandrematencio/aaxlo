@@ -246,7 +246,7 @@ onUnmounted(() => {
         data-umami-event="audit-cta-click"
         data-umami-event-location="header-mobile"
       >
-        <span class="mobile-header-cta-label">{{ $t('nav.freeAudit') }}</span>
+        <span class="mobile-header-cta-label">{{ $t('nav.freeAuditShort') }}</span>
         <span class="mobile-header-cta-wipe" aria-hidden="true"></span>
       </NuxtLink>
 
@@ -262,7 +262,7 @@ onUnmounted(() => {
           data-umami-event="audit-cta-click"
           data-umami-event-location="header-desktop"
         >
-          <span class="cta-label">{{ $t('nav.freeAudit') }}</span>
+          <span class="cta-label">{{ $t('nav.freeAuditShort') }}</span>
           <span class="cta-wipe" aria-hidden="true"></span>
         </NuxtLink>
 
@@ -314,7 +314,7 @@ onUnmounted(() => {
               data-umami-event="contact-cta-click"
               data-umami-event-location="mobile-menu"
               @click="closeMobile"
-            >{{ $t('nav.freeAudit') }}</NuxtLink>
+            >{{ $t('nav.freeAuditShort') }}</NuxtLink>
             <button
               class="mobile-lang"
               type="button"

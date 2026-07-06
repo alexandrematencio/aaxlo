@@ -10,6 +10,7 @@ const section = ref(null)
 const scrollArrow = ref(null)
 
 let scrollHandler = null
+let arrowCall = null
 
 function showFinalState() {
   const el = section.value
@@ -77,6 +78,22 @@ onMounted(() => {
   const titleCell = el.querySelector('.emotional-cell')
   const revealed = new Set()
 
+  // Centralised arrow control. Every show/hide first kills any in-flight arrow
+  // tween — GSAP's default overwrite is false, so a live fade-in would otherwise
+  // keep ticking each frame and override a plain gsap.set(opacity: 0), leaving
+  // the arrow stuck visible on a fast scroll.
+  const hideArrow = () => {
+    if (!scrollArrow.value) return
+    gsap.killTweensOf(scrollArrow.value)
+    gsap.set(scrollArrow.value, { opacity: 0 })
+  }
+  const showArrow = (anchor) => {
+    if (!scrollArrow.value) return
+    gsap.killTweensOf(scrollArrow.value)
+    positionArrow(container, anchor)
+    gsap.to(scrollArrow.value, { opacity: 1, duration: 0.3, ease: 'power2.out' })
+  }
+
   // Alternate slide direction: right, left, right
   const slideDirections = [1, -1, 1]
   const slideOffset = Math.min(120, window.innerWidth * 0.3)
@@ -100,7 +117,9 @@ onMounted(() => {
             clipPath: 'inset(-0.1em 0% -0.25em 0)', duration: 0.15, ease: 'steps(26)',
           }, '-=0.1')
 
-          if (scrollArrow.value) {
+          // Only hint below the title if a fast scroll hasn't already started
+          // revealing blocks — otherwise the scroll handler owns the arrow.
+          if (scrollArrow.value && revealed.size === 0) {
             tl.call(() => positionArrow(container, titleCell))
             tl.to(scrollArrow.value, { opacity: 1, duration: 0.4, ease: 'power2.out' }, '+=0.15')
           }
@@ -135,34 +154,44 @@ onMounted(() => {
 
     const progress = Math.min(scrolled / totalScrollDist, 1)
 
+    // Reveal every cell whose threshold was crossed this frame. A fast scroll
+    // can cross several at once — collect the highest one so the arrow is driven
+    // by the latest reveal only, never by a stale per-cell callback.
+    let lastRevealed = -1
     for (let i = 0; i < cellCount; i++) {
       if (revealed.has(i)) continue
       if (progress < triggers[i]) break
 
       revealed.add(i)
-      const cell = slideCells[i]
-      const isLast = revealed.size >= cellCount
+      lastRevealed = i
 
-      // Hide arrow during slide-in
-      if (scrollArrow.value) {
-        gsap.set(scrollArrow.value, { opacity: 0 })
-      }
-
-      gsap.to(cell, {
+      gsap.to(slideCells[i], {
         opacity: 1,
         x: 0,
         duration: 0.9,
         ease: 'power3.out',
-        onComplete() {
-          if (!isLast && scrollArrow.value) {
-            positionArrow(container, cell)
-            gsap.to(scrollArrow.value, { opacity: 1, duration: 0.3, ease: 'power2.out' })
-          }
-          // Last block done — deactivate the section
-          if (isLast) {
-            deactivateSection(el)
-          }
-        },
+      })
+    }
+
+    if (lastRevealed >= 0) {
+      // A block is sliding in — hide the arrow (killing any in-flight fade, incl.
+      // the intro fade-in, so a stale tween can't fight the hide) and cancel any
+      // reappearance queued by a previous frame so only the latest reveal wins.
+      hideArrow()
+      if (arrowCall) { arrowCall.kill(); arrowCall = null }
+
+      const allDone = revealed.size >= cellCount
+      const cell = slideCells[lastRevealed]
+
+      arrowCall = gsap.delayedCall(0.9, () => {
+        arrowCall = null
+        if (allDone) {
+          // All blocks in — leave the arrow hidden and collapse the section.
+          deactivateSection(el)
+        } else {
+          // Reappear just below the block that finished sliding in.
+          showArrow(cell)
+        }
       })
     }
 
@@ -179,6 +208,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (scrollHandler) {
     window.removeEventListener('scroll', scrollHandler)
+  }
+  if (arrowCall) {
+    arrowCall.kill()
+    arrowCall = null
   }
 })
 </script>
