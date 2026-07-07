@@ -5,7 +5,15 @@ import type { Collections } from '@nuxt/content'
 const localePath = useLocalePath()
 const { locale, t } = useI18n()
 
-useHead({ title: t('blog.pageTitle') })
+useSeoMeta({
+  title: () => t('blog.pageTitle'),
+  description: () => t('blog.subtitle'),
+  ogTitle: () => t('blog.pageTitle'),
+  ogDescription: () => t('blog.subtitle'),
+  ogImage: '/og/aaxlo-default.png',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+})
 const pageRef = ref<HTMLElement | null>(null)
 
 const { data: articles } = await useAsyncData(
@@ -194,7 +202,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
 }
 .blog-headline {
@@ -274,7 +282,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 10px;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   padding: 5px 12px;
@@ -482,7 +490,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 9px;
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.12em;
   border: 0.5px solid var(--color-accent);
   padding: 2px 7px;
@@ -532,7 +540,7 @@ onMounted(() => {
 }
 .article-card:hover .card-arrow {
   transform: translate(4px, -4px);
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /* ── RESPONSIVE ── */

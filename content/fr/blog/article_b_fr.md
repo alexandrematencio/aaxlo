@@ -5,6 +5,10 @@ date: "2026-03-10"
 author: "AAXLO Editorial"
 category: "STRATEGY"
 readTime: "10 min"
+seo:
+  title: "L'IA pour les petites entreprises : la feuille de route — AAXLO"
+  description: "Une feuille de route sans jargon pour adopter l'IA sans perdre votre identité — des étapes concrètes, applicables dès aujourd'hui."
+  ogImage: "/og/aaxlo-default.png"
 ---
 
 ::ArticleLead

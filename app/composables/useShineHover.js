@@ -1,4 +1,5 @@
 import { gsap } from 'gsap'
+import { prefersReducedMotion } from '~/composables/usePrefersReducedMotion'
 
 const SPARKLE_COUNT = 8
 
@@ -9,6 +10,10 @@ export function useShineHover(containerRef, selector = '[data-shine]') {
   const cleanups = []
 
   onMounted(() => {
+    // Reduced motion: no shine sweep, sparkle burst, or animated colour swap.
+    // CSS :hover styles still provide a static affordance.
+    if (prefersReducedMotion()) return
+
     const container = containerRef.value
     if (!container) return
 

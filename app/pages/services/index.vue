@@ -5,10 +5,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { data: servicesData } = await useLocalizedContent('/services')
 
-useHead({
-  title: servicesData.value?.seo?.title,
-  meta: [{ name: 'description', content: servicesData.value?.seo?.description }],
-})
+useContentSeo(servicesData)
 
 const page = ref(null)
 
@@ -123,7 +120,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -200,7 +197,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   transition: color 0.4s;
@@ -241,7 +238,7 @@ onMounted(() => {
 .svc-arrow {
   font-family: var(--font);
   font-size: 20px;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   margin-top: auto;
   position: relative;
   z-index: 1;
@@ -249,7 +246,7 @@ onMounted(() => {
 }
 .svc-card:hover .svc-arrow {
   transform: translateX(6px);
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /* ── CTA ── */

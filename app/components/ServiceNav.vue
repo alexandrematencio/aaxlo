@@ -126,7 +126,7 @@ onMounted(() => {
 }
 
 .sn-tab--active .sn-index {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .sn-tab--active .sn-label {

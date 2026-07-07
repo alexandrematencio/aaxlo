@@ -5,6 +5,10 @@ date: "2026-03-10"
 author: "AAXLO Editorial"
 category: "STRATEGY"
 readTime: "10 min"
+seo:
+  title: "AI for Small Business: A Practical Roadmap — AAXLO"
+  description: "A jargon-free roadmap for small businesses to adopt AI without losing what makes them distinct — practical steps you can actually use."
+  ogImage: "/og/aaxlo-default.png"
 ---
 
 ::ArticleLead

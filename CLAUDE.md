@@ -135,3 +135,17 @@ Font: Switzer (FontShare CDN), fallback Inter. Mobile breakpoint: 860px.
 2. Create `content/{code}/` folder with all `.md` files (copy from `content/en/`)
 3. The locale is already registered in `nuxt.config.ts` — no config changes needed for EN/FR/ES/DE/PT/RU/VI
 4. For a new locale not in the list, add it to **both** `nuxt.config.ts` `i18n.locales` **and** `content.config.ts` (a new `content_{code}` collection is required — collections are statically defined per-locale)
+
+
+When compacting, preserve:
+- current task goal
+- files changed
+- commands already run
+- failing tests and exact errors
+- decisions made
+- next action list
+
+Drop:
+- old exploration paths
+- repeated logs
+- irrelevant discussion

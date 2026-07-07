@@ -1,9 +1,11 @@
 {
   "nav": {
+    "home": "Home",
     "services": "Services",
     "about": "About",
     "blog": "Blog",
     "freeAudit": "Get your free audit",
+    "freeAuditShort": "Free audit",
     "backToServices": "← ALL SERVICES"
   },
   "services_dropdown": {
@@ -114,6 +116,25 @@
   },
   "lang": {
     "switchTo": "Switch language to {lang}"
+  },
+  "splash": {
+    "scrollHint": "Scroll to forge",
+    "skipAnimation": "Skip animation"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "skipIntro": "Skip intro animation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainMenu": "Main menu",
+    "expandServices": "Expand services submenu",
+    "close": "Close"
+  },
+  "privacy_notice": {
+    "consent": "I agree to AAXLO processing my details to respond to my request.",
+    "notice": "Your details are used only to handle your request — never sold or shared.",
+    "link": "Privacy policy",
+    "required": "Please confirm you agree to the privacy policy."
   },
   "blog": {
     "pageTitle": "Blog — AAXLO",

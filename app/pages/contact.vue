@@ -6,10 +6,7 @@ const localePath = useLocalePath()
 const { track } = useUmami()
 const { data: contactData } = await useLocalizedContent('/contact')
 
-useHead({
-  title: contactData.value?.seo?.title,
-  meta: [{ name: 'description', content: contactData.value?.seo?.description }],
-})
+useContentSeo(contactData)
 
 const page = ref(null)
 
@@ -20,8 +17,15 @@ const form = reactive({
 })
 
 const submitted = ref(false)
+const consent = ref(false)
+const consentError = ref(false)
 
 function handleSubmit() {
+  if (!consent.value) {
+    consentError.value = true
+    return
+  }
+  consentError.value = false
   submitted.value = true
   track('contact-form-submit', { locale: locale.value })
 }
@@ -88,11 +92,28 @@ onMounted(() => {
                   :placeholder="$t('contact_form.messagePlaceholder')"
                 ></textarea>
               </div>
+              <div class="form-consent">
+                <label class="consent-check">
+                  <input
+                    v-model="consent"
+                    type="checkbox"
+                    required
+                    :aria-invalid="consentError"
+                    :aria-describedby="consentError ? 'consent-error' : undefined"
+                  />
+                  <span>{{ $t('privacy_notice.consent') }}</span>
+                </label>
+                <p class="form-privacy-note">
+                  {{ $t('privacy_notice.notice') }}
+                  <NuxtLink :to="localePath('/legal/privacy')" class="privacy-inline-link">{{ $t('privacy_notice.link') }}</NuxtLink>
+                </p>
+                <span v-if="consentError" id="consent-error" class="consent-error" role="alert">{{ $t('privacy_notice.required') }}</span>
+              </div>
               <button type="submit" class="form-submit">{{ $t('contact_form.submit') }}</button>
             </form>
           </div>
 
-          <div v-else class="form-success">
+          <div v-else class="form-success" role="status" aria-live="polite">
             <h3 class="success-title">{{ $t('contact_form.successTitle') }}</h3>
             <p class="success-text">{{ $t('contact_form.successText') }} <strong>{{ form.email }}</strong>.</p>
             <NuxtLink :to="localePath('/')" class="success-link">{{ $t('contact_form.backHome') }}</NuxtLink>
@@ -131,7 +152,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
@@ -195,7 +216,6 @@ onMounted(() => {
   background: var(--color-cream);
   border: 0.5px solid #24272e;
   padding: 14px 16px;
-  outline: none;
   transition: border-color 0.3s;
 }
 .form-input::placeholder,
@@ -205,13 +225,54 @@ onMounted(() => {
 }
 .form-input:focus,
 .form-textarea:focus {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent-text);
 }
 
 .form-textarea {
   resize: vertical;
   min-height: 140px;
   line-height: 1.5;
+}
+
+.form-consent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-dark);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.consent-check input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  flex-shrink: 0;
+}
+.form-privacy-note {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+.privacy-inline-link {
+  color: var(--color-accent-text);
+  text-decoration: underline;
+}
+.consent-error {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--color-accent-text);
+  font-weight: 500;
 }
 
 .form-submit {
@@ -258,7 +319,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   text-decoration: none;
 }
 
@@ -304,7 +365,7 @@ onMounted(() => {
   transition: color 0.3s;
 }
 .info-link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 /* ── RESPONSIVE ── */

@@ -5,10 +5,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { data: aboutData } = await useLocalizedContent('/about')
 
-useHead({
-  title: aboutData.value?.seo?.title,
-  meta: [{ name: 'description', content: aboutData.value?.seo?.description }],
-})
+useContentSeo(aboutData)
 
 const page = ref(null)
 useShineHover(page, '.cta-btn')
@@ -139,7 +136,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
@@ -157,7 +154,7 @@ onMounted(() => {
 /* ── STORY ── */
 .story-section {
   padding: 96px 80px;
-  border-top: 0.5px solid #24272e;
+  /* No border-top: the hero's border-bottom above owns the shared delimiter */
 }
 
 .story-grid {
@@ -191,7 +188,7 @@ onMounted(() => {
   font-family: var(--font);
   font-size: 11px;
   font-weight: 300;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 48px;

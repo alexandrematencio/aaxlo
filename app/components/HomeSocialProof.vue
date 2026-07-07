@@ -176,7 +176,7 @@ onMounted(() => {
   transition: color 0.3s;
 }
 .social-cta:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 @media (max-width: 768px) {
