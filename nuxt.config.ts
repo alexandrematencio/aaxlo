@@ -5,14 +5,18 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/content', '@nuxtjs/i18n', '@nuxtjs/seo'],
 
+  // Empty defaults on purpose: values MUST come from NUXT_-prefixed env vars at
+  // RUNTIME (NUXT_AAXLO_FUNNEL_DB_HOST, NUXT_N8N_AUDIT_WEBHOOK_URL, ...) via
+  // Nitro's automatic override. Never use process.env here — it gets baked into
+  // the image at build time, which is empty in the Docker build stage.
   runtimeConfig: {
-    aaxloFunnelDbHost: process.env.AAXLO_FUNNEL_DB_HOST,
-    aaxloFunnelDbPort: process.env.AAXLO_FUNNEL_DB_PORT,
-    aaxloFunnelDbName: process.env.AAXLO_FUNNEL_DB_NAME,
-    aaxloFunnelDbUser: process.env.AAXLO_FUNNEL_DB_USER,
-    aaxloFunnelDbPassword: process.env.AAXLO_FUNNEL_DB_PASSWORD,
-    n8nAuditWebhookUrl: process.env.N8N_AUDIT_WEBHOOK_URL,
-    n8nAuditWebhookSecret: process.env.N8N_AUDIT_WEBHOOK_SECRET,
+    aaxloFunnelDbHost: '',
+    aaxloFunnelDbPort: '',
+    aaxloFunnelDbName: '',
+    aaxloFunnelDbUser: '',
+    aaxloFunnelDbPassword: '',
+    n8nAuditWebhookUrl: '',
+    n8nAuditWebhookSecret: '',
   },
 
   // Canonical site identity — feeds canonical URLs, OG tags, sitemap and robots.
