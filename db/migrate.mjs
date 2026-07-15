@@ -6,12 +6,16 @@ import postgres from 'postgres'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+// The app reads these via NUXT_-prefixed vars (Nitro runtime override); accept
+// both spellings here so the script works with either .env layout.
+const env = (name) => process.env[`NUXT_${name}`] || process.env[name]
+
 const sql = postgres({
-  host: process.env.AAXLO_FUNNEL_DB_HOST,
-  port: Number(process.env.AAXLO_FUNNEL_DB_PORT || 5432),
-  database: process.env.AAXLO_FUNNEL_DB_NAME,
-  user: process.env.AAXLO_FUNNEL_DB_USER,
-  password: process.env.AAXLO_FUNNEL_DB_PASSWORD,
+  host: env('AAXLO_FUNNEL_DB_HOST'),
+  port: Number(env('AAXLO_FUNNEL_DB_PORT') || 5432),
+  database: env('AAXLO_FUNNEL_DB_NAME'),
+  user: env('AAXLO_FUNNEL_DB_USER'),
+  password: env('AAXLO_FUNNEL_DB_PASSWORD'),
   ssl: false,
 })
 

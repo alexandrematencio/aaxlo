@@ -31,7 +31,7 @@ No test runner or linter is configured. `npm run postinstall` runs `nuxt prepare
 
 ### i18n Setup
 - **Strategy**: `prefix` — all URLs prefixed with locale (`/en/services`, `/fr/services`)
-- **Locales**: EN, FR (populated), ES, DE, PT, RU, VI (placeholder)
+- **Locales**: EN, FR, ES, DE, PT, RU, VI — all populated (EN/FR also carry the newest audit-funnel keys; other locales fall back to English for those)
 - **Locale detection**: Browser language → cookie-persisted, root `/` redirects to detected locale
 - **UI strings**: `i18n/locales/en.json`, `fr.json` — nav labels, form strings, buttons, validation
 - **Page content**: `content/en/*.md`, `content/fr/*.md` — marketing copy, FAQs, features, SEO meta
@@ -96,8 +96,24 @@ Available components: `ArticleLead`, `ArticleHeading`, `ArticleParagraph`, `Arti
 
 **Article scroll-context gotcha:** the `.article-page` wrapper in `app/pages/blog/[slug].vue` is *not* a scroll container — it has no `overflow:auto` and no fixed height, so the document scrolls on `window`. Anything that needs scroll position on an article page (reading-progress bar, scroll spies, sticky offsets) must read `window.scrollY` / `document.documentElement.scrollHeight` and listen on `window`, not on `pageRef.value`. Listener attachment must also live OUTSIDE the `if (animsPlayed.value) return` one-shot guard, otherwise it stops re-binding on second-and-later article visits in the same session.
 
+### Audit Funnel & Admin (server side)
+The site has a server layer (Nitro, under `server/`) powering the audit lead funnel:
+
+- **Flow**: audit form (`AuditFlow.vue`, full page + popup modes) → `POST /api/audit/start` → lead stored in the funnel Postgres DB + n8n webhook dispatched → client navigates to `/audit/processing/[id]`, which polls `GET /api/audit/status/[id]` → teaser result (`AuditTeaserResult.vue`) with hot-lead detection (`server/utils/hot-lead.ts`).
+- **No in-repo admin**: an `/admin/leads` dashboard existed briefly (July 2026) but was removed — lead management lives in a separate CRM (based on Twenty), fed from the n8n pipeline. Don't rebuild admin UI here.
+- **Env vars** (in `.env`, gitignored — never commit): `NUXT_AAXLO_FUNNEL_DB_*` (Postgres), `NUXT_N8N_AUDIT_WEBHOOK_URL/SECRET`. The `NUXT_` prefix is mandatory: `runtimeConfig` values in `nuxt.config.ts` are baked at `npm run build` time (empty in the Docker build stage), and only `NUXT_`-prefixed env vars override them at container runtime via Nitro. Never write `process.env.X` in `runtimeConfig`. In production these reach the container via `env_file` in `/srv/aaxlo/docker-compose.yml` on the VPS — a new env var needs the VPS `.env` updated too, or the API breaks silently in prod only.
+
+### Booking CTA policy
+All "book a call" CTAs across the site (hero, header nav, footer, contact page, audit teaser — every locale) must point to the single Google Calendar link `https://calendar.app.google/1DvE3jXRrw5kEK567`. It appears in components, `content/*/footer.md` + `contact.md`, and `audit_teaser.booking_url` in the locale JSONs — when changing it, grep for `calendar.app.google` and update every occurrence.
+
+### Header behaviors (AppHeader.vue)
+- **Language picker**: dropdown listing all 7 locales (desktop) + language row in the mobile overlay. Don't reintroduce a binary EN/FR toggle.
+- **Book-a-call nav CTA**: hidden until the visitor scrolls past ~one viewport (the hero), then persists for the session via `useState('bookCallRevealed')`. It deliberately does NOT have the `nav-link` class — `runHeaderReveal()` grabs all `.nav-link` elements and would reveal it on load.
+- **Locale-stable nav widths**: Services/About cells have `min-width` pinned to their longest translation so the nav doesn't shift between locales. If translations change, these may need a nudge (degrades gracefully).
+
 ### Directory Layout
-- `app/pages/` — File-based routes (homepage, services/*, legal/*, audit, contact, blog)
+- `app/pages/` — File-based routes (homepage, services/*, legal/*, audit, admin, contact, blog)
+- `server/` — Nitro API routes (`api/audit/*`, `api/admin/*`, `api/auth/*`), admin auth middleware, DB/n8n/hot-lead utils
 - `app/components/` — Vue SFCs using `<script setup>` syntax
 - `app/composables/` — Reusable logic (animation systems, shared state, content fetching)
 - `app/plugins/` — Client-side GSAP plugin registration

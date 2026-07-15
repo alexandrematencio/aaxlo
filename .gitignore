@@ -26,3 +26,5 @@ app/pages/splash-lab-2.vue
 app/pages/splash-lab-3.vue
 app/pages/splash-lab-3-2.vue
 app/pages/splash-pace-test.vue
+# Claude Code local (per-user) settings
+**/.claude/settings.local.json
