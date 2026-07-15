@@ -83,6 +83,7 @@ async function submitPopup() {
     return
   }
   consentError.value = false
+  errors.submit = ''
   track('audit-popup-submit', { locale: locale.value })
   try {
     const res = await $fetch('/api/audit/start', {
@@ -101,7 +102,7 @@ async function submitPopup() {
     await navigateTo(localePath(`/audit/processing/${res.audit_id}`))
   } catch (err) {
     console.error('[audit] start failed', err)
-    errors.email = t('audit_form.submitError')
+    errors.submit = t('audit_form.submitError')
   }
 }
 
@@ -253,6 +254,7 @@ async function goNext() {
       return
     }
     consentError.value = false
+    errors.submit = ''
     track('audit-flow-submit', { locale: locale.value })
     try {
       const res = await $fetch('/api/audit/start', {
@@ -270,7 +272,7 @@ async function goNext() {
       await navigateTo(localePath(`/audit/processing/${res.audit_id}`))
     } catch (err) {
       console.error('[audit] start failed', err)
-      errors.email = t('audit_form.submitError')
+      errors.submit = t('audit_form.submitError')
     }
     return
   }
@@ -511,6 +513,7 @@ onMounted(() => {
                 <span v-if="consentError" id="popup-consent-error" class="flow-error" role="alert">{{ $t('privacy_notice.required') }}</span>
               </div>
               <button type="submit" class="popup-submit">{{ $t('audit_form.submit') }}</button>
+              <span v-if="errors.submit" class="flow-error" role="alert">{{ errors.submit }}</span>
             </form>
           </div>
         </div>
@@ -604,6 +607,7 @@ onMounted(() => {
           <span v-if="consentError" id="flow-consent-error" class="flow-error" role="alert">{{ $t('privacy_notice.required') }}</span>
         </div>
         <button type="button" class="flow-next flow-next--submit" @click="goNext">{{ $t('audit_form.submit') }}</button>
+        <span v-if="errors.submit" class="flow-error" role="alert">{{ errors.submit }}</span>
       </div>
 
       <!-- Success State -->

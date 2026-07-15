@@ -100,8 +100,8 @@ Available components: `ArticleLead`, `ArticleHeading`, `ArticleParagraph`, `Arti
 The site has a server layer (Nitro, under `server/`) powering the audit lead funnel:
 
 - **Flow**: audit form (`AuditFlow.vue`, full page + popup modes) → `POST /api/audit/start` → lead stored in the funnel Postgres DB + n8n webhook dispatched → client navigates to `/audit/processing/[id]`, which polls `GET /api/audit/status/[id]` → teaser result (`AuditTeaserResult.vue`) with hot-lead detection (`server/utils/hot-lead.ts`).
-- **Admin**: `/admin/leads` (filters + status actions) behind Google OAuth via `nuxt-auth-utils` (`server/api/auth/google.get.ts`, `server/middleware/admin-auth.ts`, `admin` layout). Note: a separate CRM/Command Center is being built outside this repo — check before growing the in-repo admin.
-- **Env vars** (in `.env`, gitignored — never commit): `AAXLO_FUNNEL_DB_*` (Postgres), `N8N_AUDIT_WEBHOOK_URL/SECRET`, `NUXT_OAUTH_GOOGLE_CLIENT_ID/SECRET`, `NUXT_SESSION_PASSWORD`. Bound in `nuxt.config.ts` `runtimeConfig` (except the `NUXT_*` ones, which nuxt-auth-utils reads directly).
+- **No in-repo admin**: an `/admin/leads` dashboard existed briefly (July 2026) but was removed — lead management lives in a separate CRM (based on Twenty), fed from the n8n pipeline. Don't rebuild admin UI here.
+- **Env vars** (in `.env`, gitignored — never commit): `AAXLO_FUNNEL_DB_*` (Postgres), `N8N_AUDIT_WEBHOOK_URL/SECRET`. Bound in `nuxt.config.ts` `runtimeConfig`. In production these reach the container via `env_file` in `/srv/aaxlo/docker-compose.yml` on the VPS — a new env var needs the VPS `.env` updated too, or the API breaks silently in prod only.
 
 ### Booking CTA policy
 All "book a call" CTAs across the site (hero, header nav, footer, contact page, audit teaser — every locale) must point to the single Google Calendar link `https://calendar.app.google/1DvE3jXRrw5kEK567`. It appears in components, `content/*/footer.md` + `contact.md`, and `audit_teaser.booking_url` in the locale JSONs — when changing it, grep for `calendar.app.google` and update every occurrence.

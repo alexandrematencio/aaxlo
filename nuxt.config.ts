@@ -3,7 +3,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxtjs/i18n', '@nuxtjs/seo', 'nuxt-auth-utils'],
+  modules: ['@nuxt/content', '@nuxtjs/i18n', '@nuxtjs/seo'],
 
   runtimeConfig: {
     aaxloFunnelDbHost: process.env.AAXLO_FUNNEL_DB_HOST,
@@ -13,8 +13,6 @@ export default defineNuxtConfig({
     aaxloFunnelDbPassword: process.env.AAXLO_FUNNEL_DB_PASSWORD,
     n8nAuditWebhookUrl: process.env.N8N_AUDIT_WEBHOOK_URL,
     n8nAuditWebhookSecret: process.env.N8N_AUDIT_WEBHOOK_SECRET,
-    // nuxt-auth-utils auto-reads NUXT_OAUTH_GOOGLE_CLIENT_ID/SECRET and NUXT_SESSION_PASSWORD
-    // from process.env — no explicit binding needed here
   },
 
   // Canonical site identity — feeds canonical URLs, OG tags, sitemap and robots.
