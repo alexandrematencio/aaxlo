@@ -17,7 +17,7 @@ info:
     text: "Toàn cầu"
   - title: "Bạn muốn trao đổi trực tiếp hơn?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Đặt lịch gọi miễn phí 15 phút →"
     external: true
   - title: "Hay bạn muốn một bản đánh giá miễn phí?"

@@ -17,7 +17,7 @@ info:
     text: "Worldwide"
   - title: "Prefer to talk?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Book a free 15-min call →"
     external: true
   - title: "Want a free audit instead?"

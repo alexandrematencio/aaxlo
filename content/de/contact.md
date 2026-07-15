@@ -17,7 +17,7 @@ info:
     text: "Weltweit"
   - title: "Lieber persönlich sprechen?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Kostenloses 15-Min-Gespräch buchen →"
     external: true
   - title: "Lieber ein kostenloses Audit?"

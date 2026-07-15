@@ -145,7 +145,7 @@ onMounted(() => {
           <h4 class="footer-col-title">{{ $t('footer.contactTitle') }}</h4>
           <ul class="footer-links">
             <li><a :href="`mailto:${footerContent?.email || 'hi@aaxlo.com'}`">Email: {{ footerContent?.email || 'hi@aaxlo.com' }}</a></li>
-            <li><a :href="footerContent?.bookingUrl || 'https://cal.com/aaxlo'" target="_blank" rel="noopener">{{ $t('footer.bookCall') }}</a></li>
+            <li><a :href="footerContent?.bookingUrl || 'https://calendar.app.google/1DvE3jXRrw5kEK567'" target="_blank" rel="noopener">{{ $t('footer.bookCall') }}</a></li>
           </ul>
         </div>
       </div>
