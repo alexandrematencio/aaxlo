@@ -87,6 +87,7 @@
     "copyright": "© 2026 AAXLO"
   },
   "lang": {
+    "choose": "Chọn ngôn ngữ",
     "switchTo": "Chuyển ngôn ngữ sang {lang}"
   },
   "splash": {

@@ -17,7 +17,7 @@ info:
     text: "По всему миру"
   - title: "Предпочитаете поговорить?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Записаться на бесплатный звонок на 15 мин →"
     external: true
   - title: "Лучше бесплатный аудит?"

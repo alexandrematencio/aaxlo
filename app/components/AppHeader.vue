@@ -16,6 +16,17 @@ const servicesWrap = ref(null)
 // Check if splash screen is playing — if so, delay header animation
 const splashPlayed = useState('splashPlayed', () => false)
 
+// Book-a-call nav CTA: hidden until the visitor scrolls past the first viewport
+// (the hero), then stays for the rest of the session (useState survives navigation).
+const bookCallRevealed = useState('bookCallRevealed', () => false)
+
+function onBookCallScroll() {
+  if (window.scrollY > window.innerHeight * 0.9) {
+    bookCallRevealed.value = true
+    window.removeEventListener('scroll', onBookCallScroll)
+  }
+}
+
 let dropdownTimeout = null
 
 const services = computed(() => [
@@ -26,12 +37,30 @@ const services = computed(() => [
   { label: t('services_dropdown.consulting.label'), desc: t('services_dropdown.consulting.desc'), to: localePath('/services/consulting') },
 ])
 
-const otherLocales = computed(() => locales.value.filter(l => l.code !== locale.value))
+// ── Language picker ──
+const langOpen = ref(false)
+const langWrap = ref(null)
 
-function toggleLang() {
-  const target = locale.value === 'en' ? 'fr' : 'en'
-  track('lang-toggle', { from: locale.value, to: target })
-  navigateTo(switchLocalePath(target))
+function switchLang(code) {
+  langOpen.value = false
+  if (code === locale.value) return
+  track('lang-switch', { from: locale.value, to: code })
+  navigateTo(switchLocalePath(code))
+}
+
+function closeLangNow() {
+  langOpen.value = false
+}
+function onLangKeydown(e) {
+  if (e.key === 'Escape' && langOpen.value) {
+    closeLangNow()
+    langWrap.value?.querySelector('.lang-toggle')?.focus()
+  }
+}
+function onLangFocusOut(e) {
+  if (!langWrap.value) return
+  if (e.relatedTarget && langWrap.value.contains(e.relatedTarget)) return
+  langOpen.value = false
 }
 
 function openDropdown() {
@@ -155,6 +184,11 @@ function runHeaderReveal() {
 }
 
 onMounted(() => {
+  if (!bookCallRevealed.value) {
+    window.addEventListener('scroll', onBookCallScroll, { passive: true })
+    onBookCallScroll()
+  }
+
   const route = useRoute()
   const isHomepage = route.name?.toString().startsWith('index')
 
@@ -181,6 +215,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  window.removeEventListener('scroll', onBookCallScroll)
   document.body.style.overflow = ''
 })
 </script>
@@ -235,8 +270,21 @@ onUnmounted(() => {
           </Transition>
         </div>
 
-        <NuxtLink :to="localePath('/about')" class="nav-link tw-hide">{{ $t('nav.about') }}</NuxtLink>
+        <NuxtLink :to="localePath('/about')" class="nav-link nav-cell-about tw-hide">{{ $t('nav.about') }}</NuxtLink>
         <NuxtLink :to="localePath('/blog')" class="nav-link tw-hide">{{ $t('nav.blog') }}</NuxtLink>
+
+        <!-- Book-a-call CTA — revealed after scrolling past the hero, then persistent -->
+        <Transition name="bookcall">
+          <a
+            v-if="bookCallRevealed"
+            href="https://calendar.app.google/1DvE3jXRrw5kEK567"
+            class="nav-book-call"
+            target="_blank"
+            rel="noopener"
+            data-umami-event="book-call-click"
+            data-umami-event-location="header-nav"
+          >{{ $t('footer.bookCall') }}</a>
+        </Transition>
       </nav>
 
       <!-- Mobile CTA (between logo and burger) -->
@@ -252,9 +300,44 @@ onUnmounted(() => {
 
       <!-- Right side -->
       <div class="header-right">
-        <button class="lang-toggle tw-hide" @click="toggleLang" :aria-label="$t('lang.switchTo', { lang: locale === 'en' ? 'Français' : 'English' })">
-          {{ locale.toUpperCase() }}
-        </button>
+        <div
+          ref="langWrap"
+          class="lang-wrap"
+          @keydown="onLangKeydown"
+          @focusout="onLangFocusOut"
+        >
+          <button
+            class="lang-toggle tw-hide"
+            :aria-label="$t('lang.choose')"
+            aria-haspopup="true"
+            :aria-expanded="langOpen"
+            @click="langOpen = !langOpen"
+          >
+            {{ locale.toUpperCase() }}
+            <svg class="chevron" :class="{ open: langOpen }" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <Transition name="dropdown">
+            <div v-if="langOpen" class="dropdown lang-dropdown">
+              <div class="dropdown-inner">
+                <button
+                  v-for="l in locales"
+                  :key="l.code"
+                  type="button"
+                  class="lang-item"
+                  :class="{ current: l.code === locale }"
+                  :aria-current="l.code === locale ? 'true' : undefined"
+                  @click="switchLang(l.code)"
+                >
+                  <span class="lang-item-code">{{ l.code.toUpperCase() }}</span>
+                  <span class="lang-item-name">{{ l.name }}</span>
+                </button>
+              </div>
+            </div>
+          </Transition>
+        </div>
 
         <NuxtLink
           :to="localePath('/audit')"
@@ -315,12 +398,18 @@ onUnmounted(() => {
               data-umami-event-location="mobile-menu"
               @click="closeMobile"
             >{{ $t('nav.freeAuditShort') }}</NuxtLink>
-            <button
-              class="mobile-lang"
-              type="button"
-              :aria-label="$t('lang.switchTo', { lang: locale === 'en' ? 'Français' : 'English' })"
-              @click="toggleLang"
-            >{{ locale === 'en' ? 'FR' : 'EN' }}</button>
+            <div class="mobile-lang-row" role="group" :aria-label="$t('lang.choose')">
+              <button
+                v-for="l in locales"
+                :key="l.code"
+                type="button"
+                class="mobile-lang"
+                :class="{ current: l.code === locale }"
+                :aria-label="$t('lang.switchTo', { lang: l.name })"
+                :aria-current="l.code === locale ? 'true' : undefined"
+                @click="closeMobile(); switchLang(l.code)"
+              >{{ l.code.toUpperCase() }}</button>
+            </div>
           </div>
         </nav>
       </div>
@@ -405,6 +494,7 @@ onUnmounted(() => {
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   padding: 0 24px;
   height: 100%;
@@ -412,8 +502,59 @@ onUnmounted(() => {
   transition: color 0.2s;
 }
 
+/* Fixed cell widths sized to each label's longest translation (DE "Leistungen",
+   ES "Quiénes somos") so the nav doesn't shift when the locale changes.
+   Blog is 4 chars in every locale and needs no minimum. */
+.services-trigger .nav-link {
+  min-width: 160px;
+}
+
+.nav-cell-about {
+  min-width: 172px;
+}
+
 .nav-link:hover {
   color: var(--color-accent, #ff8270);
+}
+
+/* ─── Book-a-call nav CTA ─── */
+.nav-book-call {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-accent, #ff8270);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 100%;
+  border-right: 0.5px solid #24272e;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-book-call:hover {
+  color: var(--color-dark, #24272e);
+  background: var(--color-cream, #fff1ef);
+}
+
+/* Typewriter clip reveal, matching the header's runHeaderReveal() style */
+.bookcall-enter-active {
+  transition: clip-path 0.35s steps(12);
+}
+
+.bookcall-enter-from {
+  clip-path: inset(-0.1em 100% -0.25em 0);
+}
+
+.bookcall-enter-to {
+  clip-path: inset(-0.1em 0% -0.25em 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookcall-enter-active {
+    transition: none;
+  }
 }
 
 .chevron {
@@ -500,8 +641,16 @@ onUnmounted(() => {
   height: 100%;
 }
 
-/* ─── Language toggle ─── */
+/* ─── Language picker ─── */
+.lang-wrap {
+  position: relative;
+  height: 100%;
+}
+
 .lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font, 'Switzer', sans-serif);
   font-size: 12px;
   font-weight: 600;
@@ -517,6 +666,57 @@ onUnmounted(() => {
 }
 
 .lang-toggle:hover {
+  color: var(--color-dark, #24272e);
+}
+
+.lang-dropdown {
+  left: auto;
+  right: -0.5px;
+  width: 200px;
+}
+
+.lang-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  font-family: var(--font, 'Switzer', sans-serif);
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 0.5px solid #24272e;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lang-item:last-child {
+  border-bottom: none;
+}
+
+.lang-item:hover {
+  background: var(--color-cream, #fff1ef);
+}
+
+.lang-item.current {
+  background: var(--color-cream, #fff1ef);
+}
+
+.lang-item-code {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-accent, #ff8270);
+  min-width: 22px;
+}
+
+.lang-item.current .lang-item-code {
+  color: var(--color-dark, #24272e);
+}
+
+.lang-item-name {
+  font-size: 13px;
+  font-weight: 300;
   color: var(--color-dark, #24272e);
 }
 
@@ -671,11 +871,16 @@ onUnmounted(() => {
   letter-spacing: 0.05em;
 }
 
+.mobile-lang-row {
+  display: flex;
+  width: 100%;
+}
+
 .mobile-lang {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  flex: 1;
   font-family: var(--font, 'Switzer', sans-serif);
   font-size: 12px;
   font-weight: 300;
@@ -685,8 +890,19 @@ onUnmounted(() => {
   background: none;
   border: 0.5px solid #24272e;
   border-top: none;
-  padding: 12px 14px;
+  border-left: none;
+  padding: 12px 0;
   cursor: pointer;
+}
+
+.mobile-lang:first-child {
+  border-left: 0.5px solid #24272e;
+}
+
+.mobile-lang.current {
+  color: var(--color-dark, #24272e);
+  font-weight: 600;
+  background: var(--color-cream, #fff1ef);
 }
 
 /* ─── Mobile header CTA ─── */
@@ -744,7 +960,7 @@ onUnmounted(() => {
   }
   .header-nav,
   .header-cta,
-  .lang-toggle {
+  .lang-wrap {
     display: none;
   }
 

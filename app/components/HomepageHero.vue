@@ -347,7 +347,7 @@ watch(() => props.animate, (val) => {
               {{ content?.cta }}
             </a>
             <a
-              href="https://cal.com/aaxlo"
+              href="https://calendar.app.google/1DvE3jXRrw5kEK567"
               class="hero-cta hero-cta--secondary tw-hide"
               target="_blank"
               rel="noopener"

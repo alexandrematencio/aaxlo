@@ -17,7 +17,7 @@ info:
     text: "Mundial"
   - title: "Prefere conversar?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Agende uma conversa gratuita de 15 min →"
     external: true
   - title: "Prefere uma auditoria gratuita?"

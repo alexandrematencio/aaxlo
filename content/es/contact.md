@@ -17,7 +17,7 @@ info:
     text: "Todo el mundo"
   - title: "¿Prefieres hablarlo?"
     type: "link"
-    href: "https://cal.com/aaxlo"
+    href: "https://calendar.app.google/1DvE3jXRrw5kEK567"
     text: "Reserva una llamada gratuita de 15 min →"
     external: true
   - title: "¿Prefieres una auditoría gratuita?"

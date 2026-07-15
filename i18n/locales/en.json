@@ -57,7 +57,35 @@
     "successTitle": "We're on it.",
     "successText": "Your personalized audit will land in {email} within 24 hours.",
     "successTrust": "No commitment. No card. No calls unless you ask.",
-    "backHome": "← Back to homepage"
+    "backHome": "← Back to homepage",
+    "submitError": "Something went wrong. Try again in a moment."
+  },
+  "audit_processing": {
+    "title": "Scanning your business",
+    "subtitle": "This usually takes 2–4 minutes. Stay on the page — we'll show your scores live.",
+    "step_gbp": "Google Business Profile",
+    "step_website": "Website",
+    "step_reviews": "Reviews",
+    "step_social": "Social presence",
+    "step_scoring": "Scoring",
+    "status_running": "Running",
+    "status_done": "Done",
+    "error_title": "Something went wrong",
+    "error_body": "We couldn't complete this audit. Check your inbox in a few minutes or contact us at recon{'@'}aaxlo.com."
+  },
+  "audit_teaser": {
+    "label": "Recon report",
+    "headline_prefix": "{business} scores",
+    "score_label_overall": "Overall",
+    "score_label_gbp": "Google Profile",
+    "score_label_website": "Website",
+    "score_label_reviews": "Reviews",
+    "score_label_social": "Social",
+    "inbox_note": "Your full report is on its way. Expect recon{'@'}aaxlo.com in your inbox within the hour.",
+    "upsell_label": "Get the full roadmap",
+    "upsell_body": "The Paid Deep Audit (€497) turns these scores into a 90-day prioritized action plan — and 50% of it credits toward any engagement above €2,000.",
+    "upsell_cta": "Book a 15-min walkthrough",
+    "booking_url": "https://calendar.app.google/1DvE3jXRrw5kEK567"
   },
   "contact_form": {
     "name": "Name *",
@@ -87,6 +115,7 @@
     "copyright": "© 2026 AAXLO"
   },
   "lang": {
+    "choose": "Choose language",
     "switchTo": "Switch language to {lang}"
   },
   "splash": {
