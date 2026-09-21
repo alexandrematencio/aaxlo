@@ -1,1 +1,0 @@
-import{_ as t}from"./B-ZrGEl0.js";import{H as r,o as e}from"./CYNrzgSs.js";/* empty css        *//* empty css        */import"./Bklkr96w.js";const f={__name:"terms",setup(m){return(_,a)=>{const o=t;return e(),r(o,{block:"terms"})}}};export{f as default};

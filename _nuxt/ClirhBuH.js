@@ -1,0 +1,1 @@
+import{_ as r}from"./DNzzR0tW.js";import{H as t,o as a}from"./CV9mdcjg.js";/* empty css        *//* empty css        */import"./CHK8XujY.js";const f={__name:"privacy",setup(c){return(e,p)=>{const o=r;return a(),t(o,{block:"privacy"})}}};export{f as default};
