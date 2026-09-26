@@ -1,0 +1,1 @@
+import{_ as t}from"./BKuxFTwz.js";import{A as r,o as p}from"./DCIurkmG.js";import"./DqO9JRof.js";import"./CazHmWdt.js";/* empty css        */import"./2mdtrvfc.js";import"./DykfnNK2.js";/* empty css        */import"./BXUMpfm0.js";import"./DPu-X6iC.js";import"./vqLeKK5W.js";const w={__name:"web",setup(e){return(m,_)=>{const o=t;return p(),r(o,{slug:"web"})}}};export{w as default};
