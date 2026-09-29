@@ -1,0 +1,1 @@
+import{_ as t}from"./D_TsmQws.js";import{A as e,o as r}from"./BccieHY0.js";/* empty css        *//* empty css        */import"./BkBnWaif.js";const f={__name:"mentions",setup(n){return(m,s)=>{const o=t;return r(),e(o,{block:"mentions","redirect-if-missing":""})}}};export{f as default};
